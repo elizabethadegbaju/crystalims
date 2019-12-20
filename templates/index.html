@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Crystal</title>
+    <meta name="description" content="Inventory Management Software
+cloud-based inventory management for organizations">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fredoka+One">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="{% static 'fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Features-Blue.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Footer-Clean.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Header-Blue.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Highlight-Clean.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Testimonials.css' %}">
+</head>
+
+<body id="page-top">
+<div id="wrapper">
+    <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content"></div>
+    </div>
+    <a class="stretched-link border rounded scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+</div>
+<div>
+    <div class="header-blue">
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-search">
+            <div class="container-fluid"><a class="navbar-brand" href="#">Crystal</a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
+                        class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                     id="navcol-1">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">Link</a></li>
+                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown"
+                                                         aria-expanded="false" href="#">Dropdown </a>
+                            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation"
+                                                                      href="#">First Item</a><a class="dropdown-item"
+                                                                                                role="presentation"
+                                                                                                href="#">Second Item</a><a
+                                    class="dropdown-item" role="presentation" href="#">Third Item</a></div>
+                        </li>
+                    </ul>
+                    <form class="form-inline mr-auto" target="_self">
+                        <div class="form-group"><label for="search-field"><i class="fa fa-search"></i></label><input
+                                class="form-control search-field" type="search" id="search-field" name="search"></div>
+                    </form>
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text"><a class="login"
+                                                     href="{% url 'profile' %}">Hi {{ user.first_name }}!</a></span>
+                        <a class="btn btn-light action-button" role="button" href="{% url 'logout' %}">Sign Out</a>
+                    {% else %}
+                        <span class="navbar-text"> <a class="login" href="{% url 'login' %}">Log In</a></span>
+                        <a class="btn btn-light action-button" role="button" href="#signup">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <div class="container hero">
+            <div class="row">
+                <div class="col-12 col-lg-6 col-xl-5 offset-xl-1">
+                    <h1>The revolution is here.</h1>
+                    <p>Mauris egestas tellus non ex condimentum, ac ullamcorper sapien dictum. Nam consequat neque quis
+                        sapien viverra convallis. In non tempus lorem. </p>
+                    <button class="btn btn-light btn-lg action-button" type="button">Learn More</button>
+                </div>
+                <div
+                        class="col-md-5 col-lg-5 offset-lg-1 offset-xl-0 d-none d-lg-block phone-holder">
+                    <div class="iphone-mockup"><img class="device" src="{% static 'img/iphone.svg' %}">
+                        <div class="screen"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="highlight-clean" id="signup">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Get Started</h2>
+            <p class="text-center">Add your company to the expanding list of companies using Crystal
+                Inventory Management or jump right in and register as an employee if you are one of us already! Create
+                an
+                Account below.</p>
+        </div>
+        <div class="buttons">
+            <a class="btn btn-primary" role="button" href="{% url 'register' %}">Employee</a>
+            <a class="btn btn-warning" role="button" href="{% url 'register_company' %}">Company</a>
+        </div>
+    </div>
+</div>
+<div class="features-blue">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Features</h2>
+            <p class="text-center">Nunc luctus in metus eget fringilla. Aliquam sed justo ligula. Vestibulum nibh erat,
+                pellentesque ut laoreet vitae. </p>
+        </div>
+        <div class="row features">
+            <div class="col-sm-6 col-md-4 item"><i class="fa fa-map-marker icon"></i>
+                <h3 class="name">Works everywhere</h3>
+                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                    aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+            </div>
+            <div class="col-sm-6 col-md-4 item"><i class="fa fa-clock-o icon"></i>
+                <h3 class="name">Always available</h3>
+                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                    aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+            </div>
+            <div class="col-sm-6 col-md-4 item"><i class="fa fa-list-alt icon"></i>
+                <h3 class="name">Customizable</h3>
+                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                    aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+            </div>
+            <div class="col-sm-6 col-md-4 item"><i class="fa fa-leaf icon"></i>
+                <h3 class="name">Organic</h3>
+                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                    aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+            </div>
+            <div class="col-sm-6 col-md-4 item"><i class="fa fa-plane icon"></i>
+                <h3 class="name">Fast</h3>
+                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                    aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+            </div>
+            <div class="col-sm-6 col-md-4 item"><i class="fa fa-phone icon"></i>
+                <h3 class="name">Mobile-first</h3>
+                <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                    aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="testimonials-clean">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Testimonials </h2>
+            <p class="text-center">Our customers love us! Read what they have to say below. Aliquam sed justo ligula.
+                Vestibulum nibh erat, pellentesque ut laoreet vitae.</p>
+        </div>
+        <div class="row people">
+            <div class="col-md-6 col-lg-4 item">
+                <div class="box">
+                    <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent
+                        aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+                </div>
+                <div class="author"><img class="rounded-circle" src="{% static 'img/1.jpg' %}">
+                    <h5 class="name">Ben Johnson</h5>
+                    <p class="title">CEO of Company Inc.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 item">
+                <div class="box">
+                    <p class="description">Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et
+                        interdum justo suscipit id.</p>
+                </div>
+                <div class="author"><img class="rounded-circle" src="{% static 'img/3.jpg' %}">
+                    <h5 class="name">Carl Kent</h5>
+                    <p class="title">Founder of Style Co.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 item">
+                <div class="box">
+                    <p class="description">Aliquam varius finibus est, et interdum justo suscipit. Vulputate quis leo
+                        in, vehicula rhoncus lacus. Praesent aliquam in tellus eu.</p>
+                </div>
+                <div class="author"><img class="rounded-circle" src="{% static 'img/2.jpg' %}">
+                    <h5 class="name">Emily Clark</h5>
+                    <p class="title">Owner of Creative Ltd.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer-clean">
+    <footer>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-4 col-md-3 item">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Web design</a></li>
+                        <li><a href="#">Development</a></li>
+                        <li><a href="#">Hosting</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 item">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Company</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Legacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 col-md-3 item">
+                    <h3>Careers</h3>
+                    <ul>
+                        <li><a href="#">Job openings</a></li>
+                        <li><a href="#">Employee success</a></li>
+                        <li><a href="#">Benefits</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
+                        class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a
+                        href="#"><i class="icon ion-social-instagram"></i></a>
+                    <p class="copyright">Company Name © 2017</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+<script src="{% static 'js/theme.js' %}"></script>
+</body>
+
+</html>

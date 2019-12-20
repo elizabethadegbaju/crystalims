@@ -1,0 +1,227 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% load profile_extras %}
+{% block title %}
+    Profile - Crystal
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <h3 class="text-dark mb-4">Profile</h3>
+        <div class="row mb-3">
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-body text-center shadow">
+                        <img class="rounded-circle mb-3 mt-4"
+                             src="{{ user.employee.image.url }}"
+                             width="160" height="160">
+                        <form method="POST" action="{% url 'image_upload' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input class="form-control form-control-file"
+                                       type="file" accept="image/*"
+                                       name="profile_pic">
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-sm" type="submit">Change
+                                    Photo
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="text-primary font-weight-bold m-0">Equipment Allocations</h6>
+                    </div>
+                    <div class="card-body">
+                        {% if allocations %}
+                            {% for allocation in allocations %}
+                                <h4 class="small font-weight-bold">{{ allocation.equipment|truncatechars:20 }}<span
+                                        class="float-right">{{ allocation.end_date|timeuntil }} left</span></h4>
+                                <div class="progress progress-sm mb-3">
+                                    {% if allocation.start_date|percent_date:allocation.end_date < 50 %}
+                                        <div class="progress-bar bg-success"
+                                             aria-valuenow="{{ allocation.start_date|percent_date:allocation.end_date }}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100"
+                                             style="width: {{ allocation.start_date|percent_date:allocation.end_date }}%;">
+                                            <span class="sr-only">{{ allocation.start_date|percent_date:allocation.end_date }}%</span>
+                                        </div>
+                                    {% elif allocation.start_date|percent_date:allocation.end_date < 80 %}
+                                        <div class="progress-bar bg-warning"
+                                             aria-valuenow="{{ allocation.start_date|percent_date:allocation.end_date }}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100"
+                                             style="width: {{ allocation.start_date|percent_date:allocation.end_date }}%;">
+                                            <span class="sr-only">{{ allocation.start_date|percent_date:allocation.end_date }}%</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="progress-bar bg-danger"
+                                             aria-valuenow="{{ allocation.start_date|percent_date:allocation.end_date }}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100"
+                                             style="width: {{ allocation.start_date|percent_date:allocation.end_date }}%;">
+                                            <span class="sr-only">{{ allocation.start_date|percent_date:allocation.end_date }}%</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-gray-600">
+                                <p>There is no equipment allocation associated with this account.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row mb-3 d-none">
+                    <div class="col">
+                        <div class="card text-white bg-primary shadow">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <p class="m-0">Peformance</p>
+                                        <p class="m-0"><strong>65.2%</strong></p>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                </div>
+                                <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5%
+                                    since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card text-white bg-success shadow">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <p class="m-0">Peformance</p>
+                                        <p class="m-0"><strong>65.2%</strong></p>
+                                    </div>
+                                    <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                </div>
+                                <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5%
+                                    since last month</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card shadow mb-3">
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 font-weight-bold">User Settings</p>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="{% url 'edit_user' %}">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group"><label
+                                                    for="username"><strong>Username</strong></label><input
+                                                    class="form-control" type="text"
+                                                    value="{{ user.employee.username }}"
+                                                    name="username"></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group"><label for="email"><strong>Email
+                                                Address</strong></label><input class="form-control"
+                                                                               type="email"
+                                                                               value="{{ user.email }}"
+                                                                               name="email"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group"><label for="first_name"><strong>First
+                                                Name</strong></label><input class="form-control"
+                                                                            type="text"
+                                                                            value="{{ user.first_name }}"
+                                                                            name="first_name"></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group"><label for="last_name"><strong>Last
+                                                Name</strong></label><input class="form-control"
+                                                                            type="text"
+                                                                            value="{{ user.last_name }}"
+                                                                            name="last_name"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-sm"
+                                                type="submit">Save Settings
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card shadow">
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 font-weight-bold">Branch Location Settings</p>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group"><label
+                                            for="address"><strong>Address</strong></label><input
+                                            class="form-control" type="text"
+                                            value="{{ user.employee.location.address }}"
+                                            name="address" disabled=""></div>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group"><label
+                                                    for="city"><strong>City</strong></label><input
+                                                    class="form-control" type="text"
+                                                    value="{{ user.employee.location.city }}" name="city" disabled="">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group"><label
+                                                    for="country"><strong>Country</strong></label><input
+                                                    class="form-control" type="text"
+                                                    value="{{ user.employee.location.country }}"
+                                                    name="country" disabled=""></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary btn-sm"
+                                                type="submit" disabled="">Save&nbsp;Settings
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow mb-5">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Forum Settings</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form>
+                            <div class="form-group"><label
+                                    for="signature"><strong>Signature</strong><br></label><textarea
+                                    class="form-control" rows="4" name="signature"></textarea></div>
+                            <div class="form-group">
+                                <div class="custom-control custom-switch"><input
+                                        class="custom-control-input" type="checkbox" id="formCheck-1"><label
+                                        class="custom-control-label" for="formCheck-1"><strong>Notify me
+                                    about new replies</strong></label></div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-sm"
+                                        type="submit">Save Settings
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

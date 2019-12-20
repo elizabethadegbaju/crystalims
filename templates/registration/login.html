@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Login - Crystal
+{% endblock %}
+{% block body %}
+
+    <body class="bg-gradient-primary">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-12 col-xl-10">
+                <div class="card shadow-lg o-hidden border-0 my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-flex">
+                                <div class="flex-grow-1 bg-login-image"
+                                     style="background-image: url('{% static 'img/dogs/image3.jpeg' %}');"></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h4 class="text-dark mb-4">Welcome Back!</h4>
+                                    </div>
+                                    {% if form.errors %}
+                                        <div class="alert alert-danger alert-dismissable" role="alert">
+                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            Your email and password didn't match. Please try again.
+                                        </div>
+                                    {% endif %}
+                                    {% if next %}
+                                        {% if user.is_authenticated %}
+                                            <div class="alert alert-danger alert-dismissable" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert">&times;
+                                                </button>
+                                                Your account doesn't have access to this page. To proceed, please login
+                                                with an
+                                                account that has access.
+                                            </div>
+                                        {% else %}
+                                            <div class="alert alert-danger alert-dismissable" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert">&times;
+                                                </button>
+                                                Please login to see this page.
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    <form class="user" method="POST" action="{% url 'login' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group"><input class="form-control form-control-user"
+                                                                       type="email" id="exampleInputEmail"
+                                                                       aria-describedby="emailHelp"
+                                                                       placeholder="Email Address" name="username">
+                                        </div>
+                                        <div class="form-group"><input class="form-control form-control-user"
+                                                                       type="password" id="exampleInputPassword"
+                                                                       placeholder="Password"
+                                                                       name="password"></div>
+                                        <button class="btn btn-primary btn-block text-white btn-user"
+                                                type="submit" value="login">Login
+                                        </button>
+                                        <input type="hidden" name="next" value="{{ next }}">
+                                        <hr>
+                                        <a class="btn btn-primary btn-block text-white btn-google btn-user"
+                                           role="button" href="{% url 'social:begin' 'google' %}"><i
+                                                class="fab fa-google"></i>&nbsp; Login with Google</a>
+                                        <a class="btn btn-primary btn-block text-white btn-facebook btn-user"
+                                           role="button" href="{% url 'social:begin' 'facebook' %}"><i
+                                                class="fab fa-facebook-f"></i>&nbsp; Login with
+                                            Facebook</a>
+                                        <a class="btn btn-primary btn-block text-white btn-twitter btn-user"
+                                           role="button" href="{% url 'social:begin' 'twitter' %}"><i
+                                                class="fab fa-twitter"></i>&nbsp; Login with Twitter</a>
+                                        <hr>
+                                    </form>
+                                    <div class="text-center"><a class="small" href="{% url 'password_reset' %}">Forgot
+                                        Password?</a></div>
+                                    <div class="text-center"><a class="small" href="{% url 'register' %}">Create an
+                                        Account!</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src={% static 'js/bs-charts.js' %}></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src={% static 'js/theme.js' %}></script>
+    </body>
+{% endblock %}
