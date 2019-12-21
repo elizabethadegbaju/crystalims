@@ -1,6 +1,8 @@
+from builtins import ValueError, TypeError, OverflowError
+
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -19,12 +21,11 @@ def home(request):
 
 @login_required
 def dashboard(request):
-    # if request.user.groups.get(name='Company Admins'):
-    return render(request, 'dashboard.html')
-
-
-# else:
-#     return redirect('profile')
+    user = request.user
+    if user.groups.filter(name="Company Admins"):
+        return render(request, 'dashboard.html')
+    else:
+        return redirect('profile')
 
 
 def signup(request):
@@ -107,11 +108,11 @@ def create(request):
         user.employee.company = Company.objects.get(id=company.id)
         user.employee.location = Location.objects.get(id=location.id)
         user.employee.username = first_name[:3] + "_" + last_name[:3]
-        user.employee.is_company_admin = True
-        user.employee.is_company_superuser = True
-        user.employee.is_company_verified = True
         user.employee.image = image
         user.employee.save()
+        superuser_group = Group.objects.get(name="Company Superusers")
+        admin_group = Group.objects.get(name="Company Admins")
+        user.groups.add([superuser_group, admin_group])
 
         return redirect('login')
 
@@ -163,3 +164,24 @@ def edit_user(request):
     user.last_name = last_name
     user.save()
     return redirect('profile')
+
+
+def add_employee(request):
+    if request.method == "GET":
+        return render(request, 'add_employee.html')
+    elif request.method == "POST":
+        email = request.POST['email']
+        return redirect('team')
+
+
+def add_equipment(request):
+    if request.method == "GET":
+        return render(request, 'add_equipment.html')
+    elif request.method == "POST":
+        serial = request.POST['serial']
+        description = request.POST['description']
+        price = request.POST['price']
+        vendor = request.POST['vendor']
+        condition = request.POST['condition']
+        category = request.POST['category']
+        return redirect('equipments')
