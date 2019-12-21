@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-lg-5 d-none d-lg-flex">
                         <div class="flex-grow-1 bg-register-image"
-                             style="background-image: url({% static "img/dogs/image2.jpeg" %});"></div>
+                             style="background-image: url({% static "img/register-company.png" %});"></div>
                     </div>
                     <div class="col-lg-7">
                         <div class="p-5">
@@ -115,22 +115,8 @@
                                     Account
                                 </button>
                                 <hr>
-                                <a class="btn btn-primary btn-block text-white btn-google btn-user"
-                                   role="button" href="{% url 'social:begin' 'google' %}"><i
-                                        class="fab fa-google"></i>&nbsp; Register with Google</a>
-                                <a class="btn btn-primary btn-block text-white btn-facebook btn-user"
-                                   role="button" href="{% url 'social:begin' 'facebook' %}"><i
-                                        class="fab fa-facebook-f"></i>&nbsp; Register with
-                                    Facebook</a>
-                                <a class="btn btn-primary btn-block text-white btn-twitter btn-user"
-                                   role="button" href="{% url 'social:begin' 'twitter' %}"><i
-                                        class="fab fa-twitter"></i>&nbsp; Register with Twitter</a>
-                                <hr>
                                 <input type="hidden" name="next" value="{{ next }}">
                             </form>
-                            <div class="text-center"><a class="small" href="{% url 'password_reset' %}">Forgot
-                                Password?</a>
-                            </div>
                             <div class="text-center"><a class="small" href="{% url 'login' %}">Already have an account?
                                 Login!</a></div>
                         </div>

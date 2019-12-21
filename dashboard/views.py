@@ -22,7 +22,7 @@ def home(request):
 @login_required
 def dashboard(request):
     user = request.user
-    if user.groups.filter(name="Company Admins"):
+    if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         return render(request, 'dashboard.html')
     else:
         return redirect('profile')
@@ -167,21 +167,37 @@ def edit_user(request):
 
 
 def add_employee(request):
-    if request.method == "GET":
-        return render(request, 'add_employee.html')
-    elif request.method == "POST":
-        email = request.POST['email']
+    user = request.user
+    if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
+        if request.method == "GET":
+            return render(request, 'add_employee.html')
+        elif request.method == "POST":
+            email = request.POST['email']
+            return redirect('team')
+    else:
         return redirect('team')
 
 
 def add_equipment(request):
-    if request.method == "GET":
-        return render(request, 'add_equipment.html')
-    elif request.method == "POST":
-        serial = request.POST['serial']
-        description = request.POST['description']
-        price = request.POST['price']
-        vendor = request.POST['vendor']
-        condition = request.POST['condition']
-        category = request.POST['category']
+    user = request.user
+    if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
+        if request.method == "GET":
+            return render(request, 'add_equipment.html')
+        elif request.method == "POST":
+            serial = request.POST['serial']
+            description = request.POST['description']
+            price = request.POST['price']
+            vendor = request.POST['vendor']
+            condition = request.POST['condition']
+            category = request.POST['category']
+            return redirect('equipments')
+    else:
         return redirect('equipments')
+
+
+def allocations(request):
+    user = request.user
+    if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
+        return render(request, 'allocations.html', {'allocations': allocations})
+    else:
+        return redirect('dashboard')
