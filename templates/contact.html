@@ -1,40 +1,120 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+{% block title %}
+    Contact Us - Crystal
+{% endblock %}
 
-<body>
-    <div class="card mx-auto shadow-lg col-md-4">
-        <form id="gform" action="https://script.google.com/macros/s/AKfycby5cYbQsDzow0SBJCXGX3iSa6N1sq4M14JFBuLZCA/exec"
-            method="POST">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" name="name" placeholder="John Doe" class="form-control" required="true" />
+{% block body %}
+
+    <body class="bg-gradient-primary">
+    <div class="container">
+        <div class="card shadow-lg o-hidden border-0 my-5">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-flex">
+                        <div class="flex-grow-1 bg-register-image"
+                             style="background-image: url({% static "img/dogs/image2.jpeg" %});"></div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h4 class="text-dark mb-4">Create an Employee Account!</h4>
+                            </div>
+                            {% if form.errors %}
+                                <div class="alert alert-danger alert-dismissable" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    There is an account associated with that email address.
+                                </div>
+                            {% endif %}
+                            {% if next %}
+                                {% if user.is_authenticated %}
+                                    <div class="alert alert-danger alert-dismissable" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        Your account doesn't have access to this page. To proceed, please login with an
+                                        account that has access.
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-danger alert-dismissable" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        Please login to see this page.
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            <form class="user" method="POST" action="{% url 'register' %}"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user"
+                                                                              type="text" id="exampleFirstName"
+                                                                              placeholder="First Name" name="first_name"
+                                                                              required=""></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="text"
+                                                                 id="exampleFirstName" placeholder="Last Name"
+                                                                 name="last_name" required="">
+                                    </div>
+                                </div>
+                                <div class="form-group"><input class="form-control form-control-user" type="email"
+                                                               id="exampleInputEmail" aria-describedby="emailHelp"
+                                                               placeholder="Email Address"
+                                                               name="email" required=""></div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user"
+                                                                              type="password" id="examplePasswordInput"
+                                                                              placeholder="Password"
+                                                                              name="password" required=""></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password"
+                                                                 id="exampleRepeatPasswordInput"
+                                                                 placeholder="Repeat Password"
+                                                                 name="password_repeat" required=""></div>
+                                </div>
+                                <div class="form-group">
+                                    <select class="custom-select form-control" required=""
+                                            autofocus="" name="company">
+                                        {% for company in companies %}
+                                            <option value="{{ company.id }}">{{ company.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>Profile
+                                    Image:&nbsp;</label><input class="form-control form-control-file"
+                                                               type="file" accept="image/*"
+                                                               name="profile_pic" required=""></div>
+                                <button
+                                        class="btn btn-primary btn-block text-white btn-user" type="submit">Register
+                                    Account
+                                </button>
+                                <hr>
+                                <a class="btn btn-primary btn-block text-white btn-google btn-user"
+                                   role="button" href="{% url 'social:begin' 'google' %}"><i
+                                        class="fab fa-google"></i>&nbsp; Register with Google</a>
+                                <a class="btn btn-primary btn-block text-white btn-facebook btn-user"
+                                   role="button" href="{% url 'social:begin' 'facebook' %}"><i
+                                        class="fab fa-facebook-f"></i>&nbsp; Register with
+                                    Facebook</a>
+                                <a class="btn btn-primary btn-block text-white btn-twitter btn-user"
+                                   role="button" href="{% url 'social:begin' 'twitter' %}"><i
+                                        class="fab fa-twitter"></i>&nbsp; Register with Twitter</a>
+                                <hr>
+                                <input type="hidden" name="next" value="{{ next }}">
+                            </form>
+                            <div class="text-center"><a class="small" href="{% url 'password_reset' %}">Forgot
+                                Password?</a>
+                            </div>
+                            <div class="text-center"><a class="small" href="{% url 'login' %}">Already have an account?
+                                Login!</a></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="email" name="email" placeholder="example@example.com" class="form-control"
-                    required="true" />
-            </div>
-            <div class="form-group">
-                <label for="message">Message</label>
-                <textarea name="message" placeholder="Enter your message here" class="form-control"
-                    required="true"></textarea>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Submit" class="form-control btnPrimary" />
-            </div>
-        </form>
+        </div>
     </div>
-    <script data-cfasync="false" type="text/javascript"
-        src="https://cdn.rawgit.com/dwyl/html-form-send-email-via-google-script-without-server/master/form-submission-handler.js"></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="{% static 'js/bs-charts.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    </body>
 
-</html>
+{% endblock %}
