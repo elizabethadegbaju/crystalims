@@ -184,3 +184,5 @@ class AssetLog(models.Model):
     year = models.IntegerField()
     assets = models.FloatField()
 
+    def __str__(self):
+        return self.company.name + " " + self.month + " " + str(self.year)

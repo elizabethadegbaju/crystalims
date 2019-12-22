@@ -9,6 +9,7 @@ from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
@@ -25,9 +26,17 @@ def dashboard(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         most_requested = Equipment.objects.annotate(num_allocations=Count('allocation')).order_by('-num_allocations')[
-                         :5]
+                         :10]
         assets_value = Equipment.objects.aggregate(Sum('price'))
-        return render(request, 'dashboard.html', {'most_requested': most_requested, 'assets_value': assets_value})
+        equipments_count = Equipment.objects.filter(company=user.employee.company).count()
+        categories_count = Category.objects.filter(company=user.employee.company).count()
+        assets_monthly_value = AssetLog.objects.filter(company=user.employee.company, year=timezone.now().year)
+        assets_mv = {}
+        for monthly_value in assets_monthly_value:
+            assets_mv[monthly_value.month] = monthly_value.assets
+        return render(request, 'dashboard.html', {'most_requested': most_requested, 'assets_value': assets_value,
+                                                  'equipments_count': equipments_count,
+                                                  'categories_count': categories_count, 'assets_mv': assets_mv})
     else:
         return redirect('profile')
 
@@ -201,7 +210,7 @@ def add_equipment(request):
             location = request.POST['location']
             equipment = Equipment.objects.create(serial=serial, description=description, price=price, vendor=vendor,
                                                  condition='E', category_id=category, location_id=location,
-                                                 company=user.employee.company_id)
+                                                 company=user.employee.company)
             equipment.save()
             return redirect('equipments')
     else:

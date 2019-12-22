@@ -16,5 +16,5 @@ urlpatterns = [
     path('equipments/<int:pk>/', views.equipment, name='equipment'),
     path('equipments/new/', views.add_equipment, name='add_equipment'),
     path('allocations/', views.allocations, name='allocations'),
-    path('equipments/new/', views.add_category, name='add_category'),
+    path('categories/new/', views.add_category, name='add_category'),
 ]
