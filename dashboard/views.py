@@ -189,14 +189,20 @@ def add_equipment(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
-            return render(request, 'add_equipment.html')
+            locations = Location.objects.filter(company=user.employee.company)
+            categories = Category.objects.filter(company=user.employee.company)
+            return render(request, 'add_equipment.html', {'locations': locations, 'categories': categories})
         elif request.method == "POST":
             serial = request.POST['serial']
             description = request.POST['description']
             price = request.POST['price']
             vendor = request.POST['vendor']
-            condition = request.POST['condition']
             category = request.POST['category']
+            location = request.POST['location']
+            equipment = Equipment.objects.create(serial=serial, description=description, price=price, vendor=vendor,
+                                                 condition='E', category_id=category, location_id=location,
+                                                 company=user.employee.company_id)
+            equipment.save()
             return redirect('equipments')
     else:
         return redirect('equipments')
@@ -208,3 +214,11 @@ def allocations(request):
         return render(request, 'allocations.html', {'allocations': allocations})
     else:
         return redirect('dashboard')
+
+
+def add_category(request):
+    company = request.user.employee.company
+    name = request.POST['category']
+    category = Category.objects.create(name=name, company=company)
+    category.save()
+    return redirect('equipments')

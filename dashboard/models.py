@@ -108,7 +108,6 @@ class Category(models.Model):
     """This represents an equipment category in our system."""
     name = models.CharField(max_length=20, help_text='New category')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name + " - " + self.company.name

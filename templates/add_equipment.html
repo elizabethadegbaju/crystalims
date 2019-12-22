@@ -8,34 +8,26 @@
     <div class="container">
         <div class="card shadow mb-3">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Register a New Employee</p>
+                <p class="text-primary m-0 font-weight-bold">Add a New Equipment</p>
             </div>
             <div class="card-body">
-                <form method="POST" action="{% url 'add_employee' %}">
+                <form method="POST" action="{% url 'add_equipment' %}">
                     {% csrf_token %}
+                    <div class="form-group">
+                        <label for="description"><strong>Description</strong></label>
+                        <input class="form-control"
+                               type="text"
+                               placeholder="Enter Equipment Details"
+                               name="description" required=""></div>
                     <div class="form-row">
                         <div class="col">
-                            <div class="form-group"><label for="first_name"><strong>First
-                                Name</strong></label><input class="form-control"
-                                                            type="text"
-                                                            placeholder="John"
-                                                            name="first_name" required=""></div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group"><label for="last_name"><strong>Last
-                                Name</strong></label><input class="form-control"
-                                                            type="text"
-                                                            placeholder="Doe"
-                                                            name="last_name" required=""></div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col">
-                            <div class="form-group"><label for="email"><strong>Email
-                                Address</strong></label><input class="form-control"
-                                                               type="email"
-                                                               placeholder="johndoe@example.com"
-                                                               name="email" required=""></div>
+                            <div class="form-group">
+                                <label for="serial"><strong>Serial Number</strong></label>
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="Enter Serial Number"
+                                        name="serial" required=""></div>
                         </div>
                         <div class="col">
                             <div class="form-group">
@@ -49,9 +41,58 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="price"><strong>Price</strong></label>
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="Price of Equipment"
+                                        name="price" required=""></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="category"><strong>Category</strong></label><select
+                                    class="custom-select form-control" required=""
+                                    autofocus="" name="category">
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="vendor"><strong>Vendor</strong></label>
+                        <input class="form-control"
+                               type="text"
+                               placeholder="Email Address of Vendor (Optional)"
+                               name="vendor"></div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-sm"
-                                type="submit">Register Employee
+                                type="submit">Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card shadow mb-3">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 font-weight-bold">Add a New Category</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'add_category' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="category"><strong>Name</strong></label>
+                        <input class="form-control"
+                               type="text"
+                               placeholder="Enter New Equipment Category"
+                               name="category" required=""></div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm"
+                                type="submit">Submit
                         </button>
                     </div>
                 </form>
