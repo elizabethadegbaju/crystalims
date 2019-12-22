@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -23,7 +24,10 @@ def home(request):
 def dashboard(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
-        return render(request, 'dashboard.html')
+        most_requested = Equipment.objects.annotate(num_allocations=Count('allocation')).order_by('-num_allocations')[
+                         :5]
+        assets_value = Equipment.objects.aggregate(Sum('price'))
+        return render(request, 'dashboard.html', {'most_requested': most_requested, 'assets_value': assets_value})
     else:
         return redirect('profile')
 
@@ -170,9 +174,12 @@ def add_employee(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
-            return render(request, 'add_employee.html')
+            locations = Location.objects.filter(company=user.employee.company)
+            return render(request, 'add_employee.html', {'locations': locations})
         elif request.method == "POST":
             email = request.POST['email']
+            location = request.POST['location']
+
             return redirect('team')
     else:
         return redirect('team')

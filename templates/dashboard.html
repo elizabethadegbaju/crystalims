@@ -17,10 +17,10 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
-                                    <span>Earnings (monthly)</span></div>
+                                    <span>Equipments</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0"><span>$40,000</span></div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
+                            <div class="col-auto"><i class="fas fa-cogs fa-2x text-gray-300"></i></div>
                         </div>
                     </div>
                 </div>
@@ -31,8 +31,9 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
-                                    <span>Earnings (annual)</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>$215,000</span></div>
+                                    <span>Value of Assets</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>&#8358;{{ assets_value.price__sum }}</span></div>
                             </div>
                             <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
@@ -46,20 +47,20 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
-                                    <span>Tasks</span></div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="text-dark font-weight-bold h5 mb-0 mr-3">
-                                            <span>50%</span></div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-info" aria-valuenow="50"
-                                                 aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-                                                <span class="sr-only">50%</span></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <span>Categories</span></div>
+                                {#                                <div class="row no-gutters align-items-center">#}
+                                {#                                    <div class="col-auto">#}
+                                <div class="text-dark font-weight-bold h5 mb-0 mr-3">
+                                    <span>50%</span></div>
+                                {#                                    </div>#}
+                                {#                                    <div class="col">#}
+                                {#                                        <div class="progress progress-sm">#}
+                                {#                                            <div class="progress-bar bg-info" aria-valuenow="50"#}
+                                {#                                                 aria-valuemin="0" aria-valuemax="100" style="width: 50%;">#}
+                                {#                                                <span class="sr-only">50%</span></div>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
                             </div>
                             <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                             </div>
@@ -86,7 +87,7 @@
             <div class="col-lg-7 col-xl-8">
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="text-primary font-weight-bold m-0">Earnings Overview</h6>
+                        <h6 class="text-primary font-weight-bold m-0">Assets Value Overview</h6>
                         <div class="dropdown no-arrow">
                             <button class="btn btn-link btn-sm dropdown-toggle"
                                     data-toggle="dropdown" aria-expanded="false" type="button"><i
@@ -106,7 +107,7 @@
                     <div class="card-body">
                         <div class="chart-area">
                             <canvas
-                                    data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
+                                    data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Assets Value&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;,&quot;10000&quot;,&quot;20000&quot;,&quot;15000&quot;,&quot;25000&quot;,&quot;0&quot;,&quot;10000&quot;,&quot;5000&quot;,&quot;15000&quot;],&quot;backgroundColor&quot;:&quot;rgba(240, 173, 78, 0.2)&quot;,&quot;borderColor&quot;:&quot;rgba(240, 173, 78, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
                         </div>
                     </div>
                 </div>
@@ -134,13 +135,13 @@
                     <div class="card-body">
                         <div class="chart-area">
                             <canvas
-                                    data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
+                                    data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Allocated&quot;,&quot;Free&quot;,&quot;Pending&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#e74a3b&quot;,&quot;#1cc88a&quot;,&quot;#f6c23e&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
                         </div>
                         <div class="text-center small mt-4"><span class="mr-2"><i
-                                class="fas fa-circle text-primary"></i>&nbsp;Allocated</span><span
+                                class="fas fa-circle text-danger"></i>&nbsp;Allocated</span><span
                                 class="mr-2"><i
                                 class="fas fa-circle text-success"></i>&nbsp;Free</span><span
-                                class="mr-2"><i class="fas fa-circle text-info"></i>&nbsp;Pending</span>
+                                class="mr-2"><i class="fas fa-circle text-warning"></i>&nbsp;Pending</span>
                         </div>
                     </div>
                 </div>
@@ -150,38 +151,31 @@
             <div class="col-lg-6 mb-4">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="text-primary font-weight-bold m-0">Projects</h6>
+                        <h6 class="text-primary font-weight-bold m-0">Condition of Equipments</h6>
                     </div>
                     <div class="card-body">
-                        <h4 class="small font-weight-bold">Server migration<span
+                        <h4 class="small font-weight-bold">Very Poor<span
                                 class="float-right">20%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0"
                                  aria-valuemax="100" style="width: 20%;"><span class="sr-only">20%</span>
                             </div>
                         </div>
-                        <h4 class="small font-weight-bold">Sales tracking<span
+                        <h4 class="small font-weight-bold">Fair<span
                                 class="float-right">40%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0"
                                  aria-valuemax="100" style="width: 40%;"><span class="sr-only">40%</span>
                             </div>
                         </div>
-                        <h4 class="small font-weight-bold">Customer Database<span
-                                class="float-right">60%</span></h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0"
-                                 aria-valuemax="100" style="width: 60%;"><span class="sr-only">60%</span>
-                            </div>
-                        </div>
-                        <h4 class="small font-weight-bold">Payout Details<span
+                        <h4 class="small font-weight-bold">Good<span
                                 class="float-right">80%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0"
                                  aria-valuemax="100" style="width: 80%;"><span class="sr-only">80%</span>
                             </div>
                         </div>
-                        <h4 class="small font-weight-bold">Account setup<span
+                        <h4 class="small font-weight-bold">Excellent<span
                                 class="float-right">Complete!</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0"
@@ -240,80 +234,39 @@
                     </ul>
                 </div>
             </div>
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <p class="text-primary m-0 font-weight-bold">Employee Info</p>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 text-nowrap">
-                            <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
-                                <label>Show&nbsp;<select
-                                        class="form-control form-control-sm custom-select custom-select-sm">
-                                    <option value="10" selected="">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>&nbsp;</label></div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input
-                                    type="search" class="form-control form-control-sm"
-                                    aria-controls="dataTable" placeholder="Search"></label></div>
-                        </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold">Most Requested Equipments</p>
                     </div>
-                    <div class="table-responsive table mt-2" id="dataTable" role="grid"
-                         aria-describedby="dataTable_info">
-                        <table class="table dataTable my-0" id="dataTable">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Office</th>
-                                <th>Email</th>
-                                <th>Last Login</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for employee in team %}
+                    <div class="card-body">
+                        <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table dataTable my-0" id="dataTable">
+                                <thead>
                                 <tr>
-                                    <td><img class="rounded-circle mr-2" width="30" height="30"
-                                             src="{{ employee.image.url }}">{{ employee.user.first_name }} {{ employee.user.last_name }}
-                                    </td>
-                                    <td>{{ employee.location.name }}</td>
-                                    <td>{{ employee.user.email }}</td>
-                                    <td>{{ employee.user.last_login|timesince }} ago</td>
+                                    <th>Serial</th>
+                                    <th>Description</th>
+                                    <th>Number of Requests</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td><strong>Name</strong></td>
-                                <td><strong>Office</strong></td>
-                                <td><strong>Email</strong></td>
-                                <td><strong>Last Login</strong></td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 align-self-center">
-                            <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
-                                Showing 1 to 10 of 27</p>
+                                </thead>
+                                <tbody>
+                                {% for equipment in most_requested %}
+                                    <tr>
+                                        <td>{{ equipment.serial }}</td>
+                                        <td>{{ equipment.description|truncatechars:20 }}</td>
+                                        <td>{{ equipment.num_allocations }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-md-6">
-                            <nav
-                                    class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                <ul class="pagination">
-                                    <li class="page-item disabled"><a class="page-link" href="#"
-                                                                      aria-label="Previous"><span
-                                            aria-hidden="true">«</span></a></li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
-                                            aria-hidden="true">»</span></a></li>
-                                </ul>
-                            </nav>
+                        <div class="row">
+                            <div class="col-md-6 align-self-center">
+                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
+                                    Showing Top Five Equipments</p>
+                            </div>
                         </div>
                     </div>
                 </div>

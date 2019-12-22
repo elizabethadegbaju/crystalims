@@ -162,3 +162,26 @@ class Allocation(models.Model):
         else:
             status = "Pending"
         return status + " - " + self.equipment.serial + " - " + self.user.email
+
+
+class AssetLog(models.Model):
+    """This represents the total assets value for a month in our system."""
+    MONTHS = [
+        ('Jan', 'January'),
+        ('Feb', 'February'),
+        ('Mar', 'March'),
+        ('Apr', 'April'),
+        ('May', 'May'),
+        ('Jun', 'June'),
+        ('Jul', 'July'),
+        ('Aug', 'August'),
+        ('Sep', 'September'),
+        ('Oct', 'October'),
+        ('Nov', 'November'),
+        ('Dec', 'December')
+    ]
+    company = models.ForeignKey(Company,models.CASCADE)
+    month = models.CharField(max_length=20, choices=MONTHS)
+    year = models.IntegerField()
+    assets = models.FloatField()
+
