@@ -2,7 +2,6 @@ from builtins import ValueError, TypeError, OverflowError
 
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.db.models import Count, Sum
@@ -24,19 +23,49 @@ def home(request):
 @login_required
 def dashboard(request):
     user = request.user
+    company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         most_requested = Equipment.objects.annotate(num_allocations=Count('allocation')).order_by('-num_allocations')[
                          :10]
         assets_value = Equipment.objects.aggregate(Sum('price'))
-        equipments_count = Equipment.objects.filter(company=user.employee.company).count()
-        categories_count = Category.objects.filter(company=user.employee.company).count()
-        assets_monthly_value = AssetLog.objects.filter(company=user.employee.company, year=timezone.now().year)
+        pending_requests = Allocation.objects.filter(equipment__location__company=company,
+                                                     approver__isnull=True).count()
+        pending_equipments = Allocation.objects.filter(equipment__location__company=company,
+                                                       approver__isnull=True).order_by(
+            'equipment_id').distinct().count()
+        allocated_equipments = Allocation.objects.filter(equipment__location__company=company, approved=True,
+                                                         returned=False,
+                                                         start_date__lte=timezone.now().date()).count()
+        equipments_count = Equipment.objects.filter(location__company=company).count()
+        free_equipments = equipments_count - (pending_equipments + allocated_equipments)
+        categories_count = Category.objects.filter(company=company).count()
+        assets_monthly_value = AssetLog.objects.filter(company=company, year=timezone.now().year)
+        excellent_condition = Equipment.objects.filter(location__company=company, condition='E').count()
+        excellent_condition_percentage = round((excellent_condition / equipments_count) * 100, 1)
+        good_condition = Equipment.objects.filter(location__company=company, condition='G').count()
+        good_condition_percentage = round((good_condition / equipments_count) * 100, 1)
+        fair_condition = Equipment.objects.filter(location__company=company, condition='F').count()
+        fair_condition_percentage = round((fair_condition / equipments_count) * 100, 1)
+        very_poor_condition = Equipment.objects.filter(location__company=company, condition='VP').count()
+        very_poor_condition_percentage = round((very_poor_condition / equipments_count) * 100, 1)
         assets_mv = {}
         for monthly_value in assets_monthly_value:
             assets_mv[monthly_value.month] = monthly_value.assets
-        return render(request, 'dashboard.html', {'most_requested': most_requested, 'assets_value': assets_value,
-                                                  'equipments_count': equipments_count,
-                                                  'categories_count': categories_count, 'assets_mv': assets_mv})
+        context = {'company': company,
+                   'most_requested': most_requested,
+                   'assets_value': assets_value,
+                   'equipments_count': equipments_count,
+                   'pending_requests': pending_requests,
+                   'pending_equipments': pending_equipments,
+                   'allocated_equipments': allocated_equipments,
+                   'free_equipments': free_equipments,
+                   'categories_count': categories_count,
+                   'assets_mv': assets_mv,
+                   'excellent_condition_percentage': excellent_condition_percentage,
+                   'good_condition_percentage': good_condition_percentage,
+                   'fair_condition_percentage': fair_condition_percentage,
+                   'very_poor_condition_percentage': very_poor_condition_percentage}
+        return render(request, 'dashboard.html', context)
     else:
         return redirect('profile')
 
@@ -78,9 +107,9 @@ def signup(request):
 
 def equipments(request):
     if request.method == "GET":
-        company = request.user.employee.company
-        equipments = Equipment.objects.filter(company=company)
-        return render(request, 'equipments.html', {'equipments': equipments})
+        company = request.user.employee.location.company
+        equipments = Equipment.objects.filter(location__company=company)
+        return render(request, 'equipments.html', {'company': company, 'equipments': equipments})
 
 
 def equipment(request, pk):
@@ -123,15 +152,13 @@ def create(request):
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
-        superuser_group = Group.objects.get(name="Company Superusers")
-        admin_group = Group.objects.get(name="Company Admins")
-        user.groups.add([superuser_group, admin_group])
+        user.groups.set(['superuser_group', 'admin_group'])
 
         return redirect('login')
 
 
 def team(request):
-    team = Employee.objects.filter(company=request.user.employee.company)
+    team = Employee.objects.filter(location__company=request.user.employee.location.company)
     return render(request, 'team.html', {'team': team})
 
 
@@ -183,7 +210,7 @@ def add_employee(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
-            locations = Location.objects.filter(company=user.employee.company)
+            locations = Location.objects.filter(company=user.employee.location.company)
             return render(request, 'add_employee.html', {'locations': locations})
         elif request.method == "POST":
             email = request.POST['email']
@@ -198,8 +225,8 @@ def add_equipment(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
-            locations = Location.objects.filter(company=user.employee.company)
-            categories = Category.objects.filter(company=user.employee.company)
+            locations = Location.objects.filter(company=user.employee.location.company)
+            categories = Category.objects.filter(company=user.employee.location.company)
             return render(request, 'add_equipment.html', {'locations': locations, 'categories': categories})
         elif request.method == "POST":
             serial = request.POST['serial']
@@ -210,7 +237,7 @@ def add_equipment(request):
             location = request.POST['location']
             equipment = Equipment.objects.create(serial=serial, description=description, price=price, vendor=vendor,
                                                  condition='E', category_id=category, location_id=location,
-                                                 company=user.employee.company)
+                                                 company=user.employee.location.company)
             equipment.save()
             return redirect('equipments')
     else:
@@ -226,8 +253,18 @@ def allocations(request):
 
 
 def add_category(request):
-    company = request.user.employee.company
+    company = request.user.employee.location.company
     name = request.POST['category']
     category = Category.objects.create(name=name, company=company)
     category.save()
     return redirect('equipments')
+
+
+def messages(request):
+    return render(request, 'messages.html')
+
+
+def recent_messages(request):
+    user = request.user
+    messages = Message.objects.filter(to_user=user).order_by('-date_sent')
+    return messages

@@ -9,6 +9,7 @@ urlpatterns = [
     path('profile/image-upload/', views.image_upload, name="image_upload"),
     path('profile/edit/', views.edit_user, name="edit_user"),
     path('profile/', views.profile, name='profile'),
+    path('messages/', views.messages, name='messages'),
     path('team/', views.team, name='team'),
     path('team/new/', views.add_employee, name='add_employee'),
     path('team/<int:pk>/', views.team_member, name='team_member'),

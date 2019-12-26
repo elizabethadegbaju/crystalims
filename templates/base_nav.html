@@ -13,6 +13,8 @@
                         class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'profile' %}"><i
                         class="fas fa-user"></i><span>Profile</span></a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'messages' %}"><i
+                        class="fas fa-envelope"></i><span>Messages</span></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'team' %}"><i
                         class="fas fa-users"></i><span>Team</span></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'add_employee' %}"><i
@@ -113,54 +115,25 @@
                                 class="badge badge-danger badge-counter">7</span></a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in"
                                  role="menu">
-                                <h6 class="dropdown-header">alerts center</h6>
-                                <a class="d-flex align-items-center dropdown-item" href="#">
-                                    <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                               src={% static "img/avatars/avatar4.jpeg" %}>
-                                        <div class="bg-success status-indicator"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate"><span>Hi there! I am wondering if you can
-                                            help me with a problem I've been having.</span></div>
-                                        <p class="small text-gray-500 mb-0">Emily Fowler - 58m</p>
-                                    </div>
-                                </a>
-                                <a class="d-flex align-items-center dropdown-item" href="#">
-                                    <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                               src={% static "img/avatars/avatar2.jpeg" %}>
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate"><span>I have the photos that you ordered last
-                                            month!</span></div>
-                                        <p class="small text-gray-500 mb-0">Jae Chun - 1d</p>
-                                    </div>
-                                </a>
-                                <a class="d-flex align-items-center dropdown-item" href="#">
-                                    <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                               src={% static "img/avatars/avatar3.jpeg" %}>
-                                        <div class="bg-warning status-indicator"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate"><span>Last month's report looks great, I am
-                                            very happy with the progress so far, keep up the good
-                                            work!</span></div>
-                                        <p class="small text-gray-500 mb-0">Morgan Alvarez - 2d</p>
-                                    </div>
-                                </a>
-                                <a class="d-flex align-items-center dropdown-item" href="#">
-                                    <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                               src={% static "img/avatars/avatar5.jpeg" %}>
-                                        <div class="bg-success status-indicator"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate"><span>Am I a good boy? The reason I ask is
-                                            because someone told me that people say this to all dogs, even
-                                            if they aren't good...</span></div>
-                                        <p class="small text-gray-500 mb-0">Chicken the Dog · 2w</p>
-                                    </div>
-                                </a><a class="text-center dropdown-item small text-gray-500" href="#">Show All
-                                Alerts</a>
+                                <h6 class="dropdown-header">Inbox</h6>
+                                {% for message in request.session.messages|slice:5 %}
+                                    <a class="d-flex align-items-center dropdown-item" href="#">
+                                        <div class="dropdown-list-image mr-3"><img class="rounded-circle"
+                                                                                   src={{ message.from_user.image.url }}>
+                                            <div class="bg-success status-indicator"></div>
+                                        </div>
+                                        <div class="font-weight-bold">
+                                            <div class="text-truncate"><span>{{ message.text|truncatewords:15 }}</span>
+                                            </div>
+                                            <p class="small text-gray-500 mb-0">{{ message.from_user.first_name }} {{ message.from_user.last_name }}
+                                                - {{ message.date_sent|timesince }}</p>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+
+                                <a class="text-center dropdown-item small text-gray-500" href="{% url 'messages' %}">Show
+                                    All
+                                    Messages</a>
                             </div>
                         </div>
                         <div class="shadow dropdown-list dropdown-menu dropdown-menu-right"

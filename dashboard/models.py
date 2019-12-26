@@ -1,3 +1,4 @@
+import factory.django
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.db.models.signals import post_save
@@ -86,7 +87,6 @@ class Employee(models.Model):
     username = models.CharField(max_length=20)
     image = models.ImageField(upload_to=user_directory_path)
     email_verified = models.BooleanField(default=False)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
     location = models.ForeignKey(Location, on_delete=models.PROTECT, default=1)
 
     def __str__(self):
@@ -129,7 +129,6 @@ class Equipment(models.Model):
     condition = models.CharField(max_length=20,
                                  choices=POSSIBLE_EQUIPMENT_CONDITIONS)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -144,11 +143,12 @@ class Allocation(models.Model):
                              related_name='equipment_allocations')
     start_date = models.DateField()
     end_date = models.DateField()
+    date_applied = models.DateTimeField(auto_now=True)
+    returned = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     approver = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
-        limit_choices_to={'groups__pk': 1},
         related_name='allocations_overseen',
         blank=True,
         null=True)
@@ -179,10 +179,92 @@ class AssetLog(models.Model):
         ('Nov', 'November'),
         ('Dec', 'December')
     ]
-    company = models.ForeignKey(Company,models.CASCADE)
+    company = models.ForeignKey(Company, models.CASCADE)
     month = models.CharField(max_length=20, choices=MONTHS)
     year = models.IntegerField()
     assets = models.FloatField()
 
     def __str__(self):
         return self.company.name + " " + self.month + " " + str(self.year)
+
+
+class Message(models.Model):
+    from_user = models.ForeignKey(User, models.DO_NOTHING, related_name="sent_messages")
+    to_user = models.ForeignKey(User, models.DO_NOTHING, related_name="inbox_messages")
+    text = models.TextField()
+    date_sent = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.date_sent) + " " + self.from_user.get_full_name() + ">" + self.to_user.get_full_name()
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+
+    first_name = factory.Faker('first_name')
+    last_name = factory.Faker('last_name')
+    email = factory.Faker('email')
+
+
+class CompanyFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Company
+
+    name = factory.Faker('company')
+
+
+class LocationFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Location
+
+    name = factory.Faker('city')
+    address = factory.Faker('address')
+    city = factory.Faker('city')
+    country = factory.Faker('country')
+    company = factory.SubFactory(CompanyFactory)
+
+
+class EmployeeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Employee
+
+    email_verified = factory.Faker('boolean', chance_of_getting_true=70)
+    location = factory.SubFactory(LocationFactory)
+
+
+class CategoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Category
+
+    name = factory.Faker('word')
+    company = factory.SubFactory(CompanyFactory)
+
+
+class EquipmentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Equipment
+
+    serial = factory.Faker('ean')
+    description = factory.Faker('sentence')
+    condition = factory.Faker('word', ext_word_list=['E', 'VP', 'G', 'F'])
+    price = factory.Faker('pyint', min_value=10000, max_value=10000000, step=10)
+    location = factory.SubFactory(LocationFactory)
+    category = factory.SubFactory(CategoryFactory)
+
+
+class AllocationFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Allocation
+
+    equipment = factory.SubFactory(EquipmentFactory)
+    user = factory.SubFactory(UserFactory)
+    approver = factory.SubFactory(UserFactory)
+    start_date = factory.Faker('date')
+    end_date = factory.Faker('date')
+    returned = factory.Faker('boolean', chance_of_getting_true=500)
+    approved = factory.Faker('boolean', chance_of_getting_true=70)
+
+# class AssetLogFactory(factory.django.DjangoModelFactory):
+#     class Meta:
+#         model = AssetLog
