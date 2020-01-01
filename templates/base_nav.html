@@ -105,9 +105,10 @@
                                  role="menu">
                                 <h6 class="dropdown-header">Inbox</h6>
                                 {% for message in unread_messages %}
-                                    <a class="d-flex align-items-center dropdown-item" href="#">
+                                    <a class="d-flex align-items-center dropdown-item"
+                                       href="{% url 'message' message.id %}">
                                         <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                                   src={{ message.from_user.image.url }}>
+                                                                                   src={{ message.from_user.employee.image.url }}>
                                             <div class="bg-success status-indicator"></div>
                                         </div>
                                         <div class="font-weight-bold">
