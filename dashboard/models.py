@@ -124,8 +124,7 @@ class Equipment(models.Model):
     serial = models.CharField(max_length=20, primary_key=True)
     description = models.TextField(help_text="Enter details on equipment")
     price = models.IntegerField()
-    vendor = models.EmailField(name="Vendor's Email Address",
-                               help_text="Enter Vendor's email address")
+    vendor = models.EmailField(help_text="Enter Vendor's email address")
     condition = models.CharField(max_length=20,
                                  choices=POSSIBLE_EQUIPMENT_CONDITIONS)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -150,8 +149,7 @@ class Allocation(models.Model):
         User,
         on_delete=models.DO_NOTHING,
         related_name='allocations_overseen',
-        blank=True,
-        null=True)
+        default=1)
 
     def __str__(self):
         if self.approved:
@@ -193,6 +191,7 @@ class Message(models.Model):
     to_user = models.ForeignKey(User, models.DO_NOTHING, related_name="inbox_messages")
     text = models.TextField()
     date_sent = models.DateTimeField(auto_now=True)
+    read = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.date_sent) + " " + self.from_user.get_full_name() + ">" + self.to_user.get_full_name()

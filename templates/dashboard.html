@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="d-sm-flex justify-content-between align-items-center mb-4">
             <h3 class="text-dark mb-0">{{ company.name }} Dashboard</h3><a
-                class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="#"><i
+                class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="{% url 'export_pdf' %}"><i
                 class="fas fa-download fa-sm text-white-50"></i>&nbsp;Generate Report</a>
         </div>
         <div class="row">
@@ -266,6 +266,46 @@
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
                                     Showing Top Ten Equipments</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="text-primary font-weight-bold m-0">Equipments by Category</h6>
+                        <div class="dropdown no-arrow">
+                            <button class="btn btn-link btn-sm dropdown-toggle"
+                                    data-toggle="dropdown" aria-expanded="false" type="button"><i
+                                    class="fas fa-ellipsis-v text-gray-400"></i></button>
+                            <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in"
+                                 role="menu">
+                                <p class="text-center dropdown-header">dropdown header:</p><a
+                                    class="dropdown-item" role="presentation" href="#">&nbsp;Action</a><a
+                                    class="dropdown-item" role="presentation" href="#">&nbsp;Another
+                                action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item"
+                                   role="presentation" href="#">&nbsp;Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas
+                                    data-bs-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[{% for category in categories %}&quot;{{ category.name }}&quot;
+
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[
+                                            {% for category in categories %}&quot;{% cycle '#5bc0de' '#894f62' '#f6c23e' '#e74a3b' '#1cc88a' as bgcolors %}&quot;
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;borderColor&quot;:[
+                                            {% for category in categories %}&quot;{% cycle '#ffffff' '#ffffff' as bordercolors %}&quot;
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;data&quot;:[{% for category in categories %}&quot;{{ category.equipment__count }}&quot;
+
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
+                        </div>
+                        <div class="text-center small mt-4"><span class="mr-2"><i
+                                class="fas fa-circle text-danger"></i>&nbsp;Allocated</span><span
+                                class="mr-2"><i
+                                class="fas fa-circle text-success"></i>&nbsp;Free</span><span
+                                class="mr-2"><i class="fas fa-circle text-warning"></i>&nbsp;Pending</span>
                         </div>
                     </div>
                 </div>

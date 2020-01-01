@@ -13,3 +13,12 @@ def percent_date(value, arg):
         used = timezone.now().date() - value
         fraction = used / total
         return fraction
+
+
+# @register.filter
+# def is_company_superuser(value):
+#     value.
+
+@register.filter
+def count(value):
+    return len(value)

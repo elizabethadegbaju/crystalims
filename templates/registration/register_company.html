@@ -43,7 +43,7 @@
                             {% endif %}
                             <form class="user" method="POST" action="{% url 'register_company' %}" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <div class="card-header">
+                                <div class="card-header mb-3">
                                     <h5 class="text-primary">Superuser Details</h5>
                                 </div>
                                 <div class="form-group row">
@@ -83,7 +83,7 @@
                                     Image:&nbsp;</label><input class="form-control form-control-file"
                                                                type="file" accept="image/*"
                                                                name="profile_pic" required=""></div>
-                                <div class="card-header">
+                                <div class="card-header mb-3">
                                     <h5 class="text-primary">Company Details</h5>
                                 </div>
                                 <div class="form-group">
@@ -111,7 +111,7 @@
                                            name="company_country" required="">
                                 </div>
                                 <button
-                                        class="btn btn-primary btn-block text-white btn-user" type="submit">Register
+                                        class="btn btn-outline-warning btn-block btn-user" type="submit">Register
                                     Account
                                 </button>
                                 <hr>
