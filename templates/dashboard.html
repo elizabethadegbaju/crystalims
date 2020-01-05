@@ -1,5 +1,5 @@
 {% extends 'base_nav.html' %}
-
+{% load humanize %}
 {% block title %}
     Dashboard - Crystal
 {% endblock %}
@@ -18,7 +18,8 @@
                             <div class="col mr-2">
                                 <div class="text-uppercase text-primary font-weight-bold text-xs mb-1">
                                     <span>Equipments</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ equipments_count }}</span>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>{{ equipments_count|intcomma }}</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-cogs fa-2x text-gray-300"></i></div>
@@ -34,7 +35,7 @@
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
                                     <span>Value of Assets</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0">
-                                    <span>&#8358;{{ assets_value.price__sum }}</span></div>
+                                    <span>&#8358;{{ assets_value.price__sum|intcomma }}</span></div>
                             </div>
                             <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
@@ -50,7 +51,7 @@
                                 <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
                                     <span>Categories</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0 mr-3">
-                                    <span>{{ categories_count }}</span></div>
+                                    <span>{{ categories_count|intcomma }}</span></div>
                             </div>
                             <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                             </div>
@@ -65,7 +66,8 @@
                             <div class="col mr-2">
                                 <div class="text-uppercase text-warning font-weight-bold text-xs mb-1">
                                     <span>Pending Requests</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><span>{{ pending_requests }}</span>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>{{ pending_requests|intcomma }}</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i class="fas fa-comments fa-2x text-gray-300"></i></div>
@@ -78,7 +80,7 @@
             <div class="col-lg-7 col-xl-8">
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="text-primary font-weight-bold m-0">Assets Value Overview</h6>
+                        <h6 class="text-primary font-weight-bold m-0">Overview of New Assets Value in {{ year }}</h6>
                         <div class="dropdown no-arrow">
                             <button class="btn btn-link btn-sm dropdown-toggle"
                                     data-toggle="dropdown" aria-expanded="false" type="button"><i

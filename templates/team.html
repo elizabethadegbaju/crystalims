@@ -15,13 +15,16 @@
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
                         <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
-                            <label>Show&nbsp;<select
-                                    class="form-control form-control-sm custom-select custom-select-sm">
-                                <option value="10" selected="">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>&nbsp;</label></div>
+                            <form method="get" action="{% url 'team' %}">
+                                <label>Show&nbsp;<select name="num"
+                                                         class="form-control form-control-sm custom-select custom-select-sm">
+                                    <option value="10" selected="">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>&nbsp;</label>
+                            </form>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input
@@ -65,21 +68,34 @@
                 <div class="row">
                     <div class="col-md-6 align-self-center">
                         <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
-                            Showing 1 to 10 of 27</p>
+                            Showing 1 to {{ team|count }} of {{ team.paginator.count }}</p>
                     </div>
                     <div class="col-md-6">
                         <nav
                                 class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                             <ul class="pagination">
-                                <li class="page-item disabled"><a class="page-link" href="#"
-                                                                  aria-label="Previous"><span
-                                        aria-hidden="true">«</span></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
-                                        aria-hidden="true">»</span></a></li>
+                                {% if team.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ team.previous_page_number }}"
+                                           aria-label="Previous">
+                                            {% else %}
+                                    <li class="page-item disabled">
+                                    <a class="page-link" href="#"
+                                       aria-label="Previous">
+                                {% endif %}<span aria-hidden="true">«</span></a></li>
+                                <li class="page-item"><p class="page-link" style="background-color: white!important;">
+                                    Page {{ team.number }} of {{ team.paginator.num_pages }}.</p></li>
+                                {% if team.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ team.next_page_number }}"
+                                           aria-label="Next">
+                                            {% else %}
+                                    <li class="page-item disabled">
+                                    <a class="page-link" href="#"
+                                       aria-label="Next">
+                                {% endif %}<span aria-hidden="true">»</span></a></li>
                             </ul>
+
                         </nav>
                     </div>
                 </div>

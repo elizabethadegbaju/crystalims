@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -53,6 +54,7 @@ def dashboard(request):
         fair_condition_percentage = round((fair_condition / equipments_count) * 100, 1)
         very_poor_condition = Equipment.objects.filter(location__company=company, condition='VP').count()
         very_poor_condition_percentage = round((very_poor_condition / equipments_count) * 100, 1)
+        year = timezone.now().year
         assets_mv = {}
         for monthly_value in assets_monthly_value:
             assets_mv[monthly_value.month] = monthly_value.assets
@@ -72,7 +74,8 @@ def dashboard(request):
                    'excellent_condition_percentage': excellent_condition_percentage,
                    'good_condition_percentage': good_condition_percentage,
                    'fair_condition_percentage': fair_condition_percentage,
-                   'very_poor_condition_percentage': very_poor_condition_percentage}
+                   'very_poor_condition_percentage': very_poor_condition_percentage,
+                   'year': year}
         return render(request, 'dashboard.html', context)
     else:
         return redirect('profile')
@@ -130,10 +133,12 @@ def equipment(request, pk):
     user = request.user
     if request.method == "GET":
         equipment = Equipment.objects.get(id=pk)
+        allocations = Allocation.objects.filter(equipment=equipment)
         unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by('-date_sent')
         alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
-        return render(request, 'equipment.html', {'equipment': equipment, 'unread_messages': unread_messages,
-                                                  'alerts': alerts})
+        return render(request, 'equipment.html',
+                      {'equipment': equipment, 'allocations': allocations, 'unread_messages': unread_messages,
+                       'alerts': alerts})
 
 
 @login_required
@@ -185,7 +190,14 @@ def team(request):
     user = request.user
     unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by('-date_sent')
     alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
-    team = Employee.objects.filter(location__company=user.employee.location.company)
+    team_list = Employee.objects.filter(location__company=user.employee.location.company)
+    if "num" in request.GET.keys():
+        number = int(request.GET["num"])
+    else:
+        number = 10
+    paginator = Paginator(team_list, number)
+    page = request.GET.get('page')
+    team = paginator.get_page(page)
     return render(request, 'team.html', {'team': team, 'unread_messages': unread_messages,
                                          'alerts': alerts})
 
@@ -207,13 +219,26 @@ def activate(request, uidb64, token):
 
 @login_required
 def team_member(request, pk):
-    user = request.user
     if request.method == "GET":
-        unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by('-date_sent')
-        alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
-        team_member = User.objects.get(id=pk)
-        return render(request, 'profile.html', {'team_member': team_member, 'unread_messages': unread_messages,
-                                                'alerts': alerts})
+        user = User.objects.get(id=pk)
+        logged_in_user = request.user
+        unread_messages = Message.objects.filter(to_user=logged_in_user, from_user_id__gte=2, read=False).order_by(
+            '-date_sent')
+        alerts = Message.objects.filter(from_user_id=1, to_user=logged_in_user).order_by('-date_sent')
+        if user.employee.location.company_id == logged_in_user.employee.location.company_id:
+            allocations = Allocation.objects.filter(user=user)
+            return render(request, 'profile.html', {'allocations': allocations, 'unread_messages': unread_messages,
+                                                    'alerts': alerts, 'user': user})
+        else:
+            return redirect('page_not_found')
+
+
+def error(request):
+    user = request.user
+    unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by(
+        '-date_sent')
+    alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
+    return render(request, '404.html', {'unread_messages': unread_messages, 'alerts': alerts})
 
 
 @login_required
@@ -265,6 +290,7 @@ def add_employee(request):
 @login_required
 def add_equipment(request):
     user = request.user
+    company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
             unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by(
@@ -282,9 +308,16 @@ def add_equipment(request):
             vendor = request.POST['vendor']
             category = request.POST['category']
             location = request.POST['location']
+            months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            year = timezone.now().year
+            month = months[timezone.now().month - 1]
             equipment = Equipment.objects.create(serial=serial, description=description, price=price, vendor=vendor,
                                                  condition='E', category_id=category, location_id=location)
             equipment.save()
+            month_asset = AssetLog.objects.get_or_create(company=company, year=year, month=month)[0]
+            assets = month_asset.assets + float(price)
+            month_asset.assets = assets
+            month_asset.save()
             return redirect('equipments')
     else:
         return redirect('equipments')
@@ -309,7 +342,7 @@ def add_category(request):
     name = request.POST['category']
     category = Category.objects.create(name=name, company=company)
     category.save()
-    return redirect('equipments')
+    return redirect('add_equipment')
 
 
 @login_required
@@ -388,7 +421,8 @@ def message(request, pk):
     user = request.user
     unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by('-date_sent')
     alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
-    return render(request, {'unread_messages': unread_messages, 'alerts': alerts})
+    message = Message.objects.get(pk=pk)
+    return render(request, 'message.html', {'unread_messages': unread_messages, 'alerts': alerts, 'message': message})
 
 
 def send_message(request):

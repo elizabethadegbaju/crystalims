@@ -129,6 +129,7 @@ class Equipment(models.Model):
                                  choices=POSSIBLE_EQUIPMENT_CONDITIONS)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return self.description
@@ -180,7 +181,7 @@ class AssetLog(models.Model):
     company = models.ForeignKey(Company, models.CASCADE)
     month = models.CharField(max_length=20, choices=MONTHS)
     year = models.IntegerField()
-    assets = models.FloatField()
+    assets = models.FloatField(default=0)
 
     def __str__(self):
         return self.company.name + " " + self.month + " " + str(self.year)

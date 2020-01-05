@@ -13,8 +13,8 @@ urlpatterns = [
     path('messages/<int:pk>/', views.message, name='message'),
     path('messages/send/', views.send_message, name='send'),
     path('team/', views.team, name='team'),
-    path('user/new/', views.add_employee, name='add_employee'),
-    path('user/<int:pk>/', views.team_member, name='team_member'),
+    path('team/new/', views.add_employee, name='add_employee'),
+    path('team/<int:pk>/', views.team_member, name='team_member'),
     path('equipments/', views.equipments, name='equipments'),
     path('equipments/new/', views.add_equipment, name='add_equipment'),
     path('equipments/<int:pk>/', views.equipment, name='equipment'),
@@ -22,4 +22,5 @@ urlpatterns = [
     path('categories/new/', views.add_category, name='add_category'),
     path('locations/new/', views.add_location, name='add_location'),
     path('dashboard/export/', views.pdf, name='export_pdf'),
+    path('user_not_found/', views.error, name='page_not_found'),
 ]
