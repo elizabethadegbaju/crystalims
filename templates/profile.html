@@ -1,5 +1,6 @@
 {% extends 'base_nav.html' %}
 {% load static %}
+{% load humanize %}
 {% load profile_extras %}
 {% block title %}
     Profile - Crystal
@@ -37,8 +38,8 @@
                     <div class="card-body">
                         {% if allocations %}
                             {% for allocation in allocations %}
-                                <h4 class="small font-weight-bold">{{ allocation.equipment|truncatechars:20 }}<span
-                                        class="float-right">{{ allocation.end_date|timeuntil }} left</span></h4>
+                                <h4 class="small font-weight-bold">{{ allocation.equipment|truncatechars:30 }}<span
+                                        class="float-right">End Date: {{ allocation.end_date|naturalday }}</span></h4>
                                 <div class="progress progress-sm mb-3">
                                     {% if allocation.start_date|percent_date:allocation.end_date < 50 %}
                                         <div class="progress-bar bg-success"

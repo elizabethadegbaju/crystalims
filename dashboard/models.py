@@ -86,8 +86,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, models.CASCADE)
     username = models.CharField(max_length=20)
     image = models.ImageField(upload_to=user_directory_path)
-    email_verified = models.BooleanField(default=False)
-    location = models.ForeignKey(Location, on_delete=models.PROTECT, default=1)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.user.email

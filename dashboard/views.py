@@ -47,13 +47,19 @@ def dashboard(request):
         alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
         assets_monthly_value = AssetLog.objects.filter(company=company, year=timezone.now().year)
         excellent_condition = Equipment.objects.filter(location__company=company, condition='E').count()
-        excellent_condition_percentage = round((excellent_condition / equipments_count) * 100, 1)
         good_condition = Equipment.objects.filter(location__company=company, condition='G').count()
-        good_condition_percentage = round((good_condition / equipments_count) * 100, 1)
         fair_condition = Equipment.objects.filter(location__company=company, condition='F').count()
-        fair_condition_percentage = round((fair_condition / equipments_count) * 100, 1)
         very_poor_condition = Equipment.objects.filter(location__company=company, condition='VP').count()
-        very_poor_condition_percentage = round((very_poor_condition / equipments_count) * 100, 1)
+        if equipments_count != 0:
+            excellent_condition_percentage = round((excellent_condition / equipments_count) * 100, 1)
+            good_condition_percentage = round((good_condition / equipments_count) * 100, 1)
+            fair_condition_percentage = round((fair_condition / equipments_count) * 100, 1)
+            very_poor_condition_percentage = round((very_poor_condition / equipments_count) * 100, 1)
+        else:
+            excellent_condition_percentage = 0
+            good_condition_percentage = 0
+            fair_condition_percentage = 0
+            very_poor_condition_percentage = 0
         year = timezone.now().year
         assets_mv = {}
         for monthly_value in assets_monthly_value:
@@ -108,12 +114,14 @@ def signup(request):
             'token': account_activation_token.make_token(user),
         })
         to_email = email
-        send_mail(mail_subject, message, from_email="admin@crystalims.com", recipient_list=[to_email])
-        user.employee.company = company
+        send_mail(mail_subject, message, from_email="admin@crystalims.com", recipient_list=[to_email],
+                  fail_silently=False, )
+        user.employee.location = Location.objects.filter(company_id=company_id).first()
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
-        return HttpResponse('Account created successfully and activation link sent to email address.')
+        return HttpResponse(
+            'Account has been created successfully. Look out for the activation link sent to your email address.')
 
 
 @login_required
@@ -175,12 +183,12 @@ def create(request):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
-        user.employee.company = Company.objects.get(id=company.id)
+        user.employee.location.company = Company.objects.get(id=company.id)
         user.employee.location = Location.objects.get(id=location.id)
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
-        user.groups.set(['superuser_group', 'admin_group'])
+        user.groups.set([2])
 
         return redirect('login')
 
@@ -190,7 +198,7 @@ def team(request):
     user = request.user
     unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by('-date_sent')
     alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
-    team_list = Employee.objects.filter(location__company=user.employee.location.company)
+    team_list = Employee.objects.filter(location__company=user.employee.location.company).order_by('-user__last_login')
     if "num" in request.GET.keys():
         number = int(request.GET["num"])
     else:
@@ -211,7 +219,8 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
+        user.groups.set([3])
+        login(request, user, 'django.contrib.auth.backends.ModelBackend')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
@@ -348,7 +357,7 @@ def add_category(request):
 @login_required
 def messages(request):
     user = request.user
-    employees = Employee.objects.filter(location__company=user.employee.location.company)
+    employees = Employee.objects.filter(location__company=user.employee.location.company).order_by('user__first_name')
     unread_messages = Message.objects.filter(to_user=user, from_user_id__gte=2, read=False).order_by('-date_sent')
     alerts = Message.objects.filter(from_user_id=1, to_user=user).order_by('-date_sent')
     inbox = Message.objects.filter(to_user=user, from_user_id__gte=2).order_by('-date_sent')

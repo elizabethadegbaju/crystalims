@@ -1,8 +1,14 @@
 {% extends 'base_nav.html' %}
 {% load static %}
+{% load humanize %}
 {% load profile_extras %}
 {% block title %}
     Team - Crystal
+{% endblock %}
+{% block styles %}
+    <style>
+
+    </style>
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
@@ -16,7 +22,7 @@
                     <div class="col-md-6 text-nowrap">
                         <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
                             <form method="get" action="{% url 'team' %}">
-                                <label>Show&nbsp;<select name="num"
+                                <label>Show&nbsp;<select name="num" onchange="this.form.submit()"
                                                          class="form-control form-control-sm custom-select custom-select-sm">
                                     <option value="10" selected="">10</option>
                                     <option value="25">25</option>
@@ -45,13 +51,17 @@
                         </thead>
                         <tbody>
                         {% for employee in team %}
-                            <tr>
-                                <td><img class="rounded-circle mr-2" width="30" height="30"
-                                         src="{{ employee.image.url }}">{{ employee.user.first_name }} {{ employee.user.last_name }}
+                            <tr class="position-relative">
+                                <td>
+                                    <a class="stretched-link text-gray-600" style="text-decoration: none"
+                                       href="{% url 'team_member' employee.user.id %}"><img
+                                            class="rounded-circle mr-2" width="30" height="30"
+                                            src="{{ employee.image.url }}">{{ employee.user.first_name }} {{ employee.user.last_name }}
+                                    </a>
                                 </td>
                                 <td>{{ employee.location.name }}</td>
                                 <td>{{ employee.user.email }}</td>
-                                <td>{{ employee.user.last_login|timesince }} ago</td>
+                                <td>{{ employee.user.last_login|naturaltime }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
