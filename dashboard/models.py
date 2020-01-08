@@ -1,8 +1,10 @@
 import factory.django
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.mail import send_mail
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -130,6 +132,19 @@ class Equipment(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
+    def order(self, quantity):
+        company = self.location.company.name
+        mail_subject = 'Order placement for {0}.'.format(company)
+        message = render_to_string('acc_activate_email.html', {
+            'upc': self.serial,
+            'description': self.description,
+            'quantity': quantity,
+            'company': company
+        })
+        to_email = self.vendor
+        send_mail(mail_subject, message, from_email="admin@crystalims.com", recipient_list=[to_email],
+                  fail_silently=False, )
+
     def __str__(self):
         return self.description
 
@@ -143,7 +158,7 @@ class Allocation(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     date_applied = models.DateTimeField(auto_now=True)
-    returned = models.BooleanField(default=False)
+    checked_in = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     approver = models.ForeignKey(
         User,

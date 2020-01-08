@@ -21,11 +21,14 @@
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Welcome Back!</h4>
                                     </div>
-                                    {% if form.errors %}
-                                        <div class="alert alert-danger alert-dismissable" role="alert">
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            Your email and password didn't match. Please try again.
-                                        </div>
+                                    {% if form.non_field_errors %}
+                                        {% for error in form.non_field_errors %}
+                                            <div class="alert alert-danger alert-dismissable" role="alert">
+                                                <button type="button" class="close" data-dismiss="alert">&times;
+                                                </button>
+                                                {{ error|striptags }}
+                                            </div>
+                                        {% endfor %}
                                     {% endif %}
                                     {% if next %}
                                         {% if user.is_authenticated %}

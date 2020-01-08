@@ -22,5 +22,6 @@ urlpatterns = [
     path('categories/new/', views.add_category, name='add_category'),
     path('locations/new/', views.add_location, name='add_location'),
     path('dashboard/export/', views.pdf, name='export_pdf'),
-    path('user_not_found/', views.error, name='page_not_found'),
+    path('user-not-found/', views.error, name='page_not_found'),
+    path('place-order/', views.place_order, name='place_order'),
 ]

@@ -24,10 +24,11 @@ from dashboard import views
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('', include('dashboard.urls')),
-                  path('accounts/activate/<slug:uidb64>/<slug:token>/', views.activate, name="activate"),
-                  path('accounts/register/', views.signup, name="register"),
-                  path('accounts/register-company/', views.create, name="register_company"),
+                  path('activate/<slug:uidb64>/<slug:token>/', views.activate, name="activate"),
+                  path('register/', views.signup, name="register"),
+                  path('register-company/', views.create, name="register_company"),
                   # path('accounts/login/', views.login, name="login"),
-                  path('accounts/', include('django.contrib.auth.urls')),
+                  path('', include('django.contrib.auth.urls')),
+                  path('password/', views.change_password, name="change_password"),
                   url(r'^oauth/', include('social_django.urls', namespace="social")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

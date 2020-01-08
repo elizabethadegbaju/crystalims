@@ -40,7 +40,7 @@ EMAIL_HOST_USER = 'adeotunadegbaju@gmail.com'
 EMAIL_HOST_PASSWORD = 'flowerpothead981'
 EMAIL_PORT = 587
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'crystalinventorymanagementsystem-env.zx3sytpbnp.us-east-2.elasticbeanstalk.com']
 
 ADMINS = [('Elizabeth', 'adeotunadegbaju@gmail.com')]
 # Application definition
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'dashboard',
     'social_django',
     'django.contrib.humanize',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

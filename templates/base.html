@@ -7,12 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>{% block title %}
 
-        {% endblock %}</title>
+    {% endblock %}</title>
     <meta name="description" content="Inventory Management Software
 cloud-based inventory management for organizations">
     <link rel="stylesheet" href={% static 'bootstrap/css/bootstrap.min.css' %}>
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     {% block styles %}
 
@@ -26,20 +26,21 @@ cloud-based inventory management for organizations">
 
         {% endblock %}
         <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                {% block topnav %}
 
-            {% block topnav %}
+                {% endblock %}
+                {% block content %}
 
-            {% endblock %}
-            {% block content %}
-
-            {% endblock %}
-
+                {% endblock %}
+            </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
                     <div class="text-center my-auto copyright"><span>Copyright © Crystal 2019</span></div>
                 </div>
             </footer>
-        </div><a class="border rounded scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        </div>
+        <a class="border rounded scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>

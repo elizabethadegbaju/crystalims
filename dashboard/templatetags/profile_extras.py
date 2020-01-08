@@ -4,6 +4,11 @@ from django.utils import timezone
 register = template.Library()
 
 
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    return user.groups.filter(name=group_name).exists()
+
+
 @register.filter
 def percent_date(value, arg):
     if timezone.now().date() >= arg:
@@ -14,10 +19,6 @@ def percent_date(value, arg):
         fraction = used / total
         return fraction
 
-
-# @register.filter
-# def is_company_superuser(value):
-#     value.
 
 @register.filter
 def count(value):
