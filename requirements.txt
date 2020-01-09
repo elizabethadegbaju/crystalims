@@ -53,7 +53,6 @@ python-dateutil==2.8.0
 python-social-auth==0.3.6
 python3-openid==3.1.0
 pytz==2019.3
-pywin32==227
 PyYAML==3.13
 redis==2.10.6
 reportlab==3.5.32
