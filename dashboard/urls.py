@@ -17,11 +17,12 @@ urlpatterns = [
     path('team/<int:pk>/', views.team_member, name='team_member'),
     path('equipments/', views.equipments, name='equipments'),
     path('equipments/new/', views.add_equipment, name='add_equipment'),
-    path('equipments/<int:pk>/', views.equipment, name='equipment'),
+    path('equipments/<slug:pk>/', views.equipment, name='equipment'),
     path('allocations/', views.allocations, name='allocations'),
     path('categories/new/', views.add_category, name='add_category'),
     path('locations/new/', views.add_location, name='add_location'),
     path('dashboard/export/', views.pdf, name='export_pdf'),
     path('user-not-found/', views.error, name='page_not_found'),
     path('place-order/', views.place_order, name='place_order'),
+    path('verify/<int:pk>/', views.verify, name='verify'),
 ]

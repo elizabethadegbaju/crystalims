@@ -1,5 +1,13 @@
 {% autoescape off %}
     Hi {{ user.first_name }},
-    Your account has successfully created. Please click below link to activate your account.
+    Your account has successfully created on Crystal. Activation of accounts on Crystal is in two stages:
+    1. User email verification.
+    2. Company Admin verification of user.
+    Accounts not verified by the Company Admin within fourteen (14) days will be deleted from our database.
+    Please click below link to verify your email address.
     http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+    Copy and paste in your browser if you cannot click on the link.
+
+    Kind Regards,
+    The Crystal Team
 {% endautoescape %}

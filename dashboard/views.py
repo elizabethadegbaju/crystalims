@@ -106,7 +106,7 @@ def signup(request):
         user.is_active = False
         user.save()
         current_site = get_current_site(request)
-        mail_subject = 'Activate your {0} employee account on Crystal.'.format(company.name)
+        mail_subject = 'Verify your {0} employee account on Crystal.'.format(company.name)
         message = render_to_string('acc_activate_email.html', {
             'user': user,
             'domain': current_site.domain,
@@ -121,7 +121,7 @@ def signup(request):
         user.employee.image = image
         user.employee.save()
         return HttpResponse(
-            'Account has been created successfully. Look out for the activation link sent to your email address.')
+            'Account has been created successfully. Look out for the verification link sent to your email address.')
 
 
 @login_required
@@ -130,7 +130,16 @@ def equipments(request):
         user = request.user
         alerts, unread_messages = unread_messages_notification(user)
         company = user.employee.location.company
-        equipments = Equipment.objects.filter(location__company=company)
+
+        equipments_list = Equipment.objects.filter(location__company=company).order_by(
+            'description')
+        if "num" in request.GET.keys():
+            number = int(request.GET["num"])
+        else:
+            number = 10
+        paginator = Paginator(equipments_list, number)
+        page = request.GET.get('page')
+        equipments = paginator.get_page(page)
         return render(request, 'equipments.html',
                       {'company': company, 'equipments': equipments, 'unread_messages': unread_messages,
                        'alerts': alerts})
@@ -145,7 +154,7 @@ def unread_messages_notification(user):
 def equipment(request, pk):
     user = request.user
     if request.method == "GET":
-        equipment = Equipment.objects.get(id=pk)
+        equipment = Equipment.objects.get(serial=pk)
         allocations = equipment.allocation_set.all()
         alerts, unread_messages = unread_messages_notification(user)
         return render(request, 'equipment.html',
@@ -361,6 +370,7 @@ def messages(request):
                    'employees': employees})
 
 
+@login_required
 def add_location(request):
     company = request.user.employee.location.company
     name = request.POST['name']
@@ -372,6 +382,7 @@ def add_location(request):
     return redirect('add_equipment')
 
 
+@login_required
 def pdf(request):
     user = request.user
     company = user.employee.location.company
@@ -420,13 +431,22 @@ def pdf(request):
     return Render.render('dashboard.html', params)
 
 
+@login_required
 def message(request, pk):
     user = request.user
     alerts, unread_messages = unread_messages_notification(user)
     message = Message.objects.get(pk=pk)
-    return render(request, 'message.html', {'unread_messages': unread_messages, 'alerts': alerts, 'message': message})
+    if user == message.to_user | user == message.from_user:
+        if user == message.to_user:
+            message.read = True
+            message.save()
+        return render(request, 'message.html',
+                      {'unread_messages': unread_messages, 'alerts': alerts, 'message': message})
+    else:
+        return redirect('page_not_found')
 
 
+@login_required
 def send_message(request):
     to_user = request.POST['to_user']
     message = request.POST['message']
@@ -435,6 +455,7 @@ def send_message(request):
     return redirect('messages')
 
 
+@login_required
 def place_order(request):
     quantity = request.GET['quantity']
     equipment_id = request.GET['equipment']
@@ -458,3 +479,9 @@ def change_password(request):
     return render(request, 'registration/password_change_form.html', {
         'form': form
     })
+
+
+def verify(request, pk):
+    user = User.objects.get(id=pk)
+    user.groups.set([3])
+    return redirect(dashboard)

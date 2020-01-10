@@ -1,6 +1,6 @@
 {% extends 'base_nav.html' %}
 {% block title %}
-    User Not Found - Crystal
+    404 Error - Crystal
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
@@ -8,9 +8,9 @@
             <div class="error mx-auto" data-text="404">
                 <p class="m-0">404</p>
             </div>
-            <p class="text-dark mb-5 lead">User Not Found</p>
+            <p class="text-dark mb-5 lead">End of the Line</p>
             <p class="text-black-50 mb-0">It looks like you found a glitch in the matrix...</p><a
-                href="{% url 'dashboard' %}">← Back to Dashboard</a>
+                href="{% url 'dashboard' %}">← Return to Profile</a>
         </div>
     </div>
 {% endblock %}

@@ -15,13 +15,16 @@
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
                         <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
-                            <label>Show&nbsp;<select
-                                    class="form-control form-control-sm custom-select custom-select-sm">
-                                <option value="10" selected="">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>&nbsp;</label></div>
+                            <form method="get" action="{% url 'equipments' %}">
+                                <label>Show&nbsp;<select name="num" onchange="this.form.submit()"
+                                                         class="form-control form-control-sm custom-select custom-select-sm">
+                                    <option value="10" selected="">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>&nbsp;</label>
+                            </form>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input
@@ -44,14 +47,19 @@
                         </thead>
                         <tbody>
                         {% for equipment in equipments %}
-                            <tr>
-                                <td>{{ equipment.serial }}</td>
+                            <tr class="position-relative">
+                                <td>
+                                    <a class="stretched-link text-gray-600" style="text-decoration: none"
+                                       href="{% url 'equipment' equipment.serial %}">{{ equipment.serial }}</a>
+                                </td>
                                 <td>{{ equipment.description }}</td>
                                 <td>{{ equipment.condition }}</td>
                                 <td>{{ equipment.category.name }}</td>
                                 <td>{{ equipment.location.name }}</td>
                                 <td>{{ equipment.quantity }}</td>
                             </tr>
+                        {% empty %}
+                            <p>There are no equipments in this company.</p>
                         {% endfor %}
                         </tbody>
                         <tfoot>
@@ -61,6 +69,7 @@
                             <td><strong>Condition</strong></td>
                             <td><strong>Category</strong></td>
                             <td><strong>Location</strong></td>
+                            <td><strong>Quantity</strong></td>
                         </tr>
                         </tfoot>
                     </table>
@@ -68,21 +77,34 @@
                 <div class="row">
                     <div class="col-md-6 align-self-center">
                         <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
-                            Showing 1 to 10 of 27</p>
+                            Showing 1 to {{ equipments|count }} of {{ equipments.paginator.count }}</p>
                     </div>
                     <div class="col-md-6">
                         <nav
                                 class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                             <ul class="pagination">
-                                <li class="page-item disabled"><a class="page-link" href="#"
-                                                                  aria-label="Previous"><span
-                                        aria-hidden="true">«</span></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span
-                                        aria-hidden="true">»</span></a></li>
+                                {% if equipments.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ equipments.previous_page_number }}"
+                                           aria-label="Previous">
+                                            {% else %}
+                                    <li class="page-item disabled">
+                                    <a class="page-link" href="#"
+                                       aria-label="Previous">
+                                {% endif %}<span aria-hidden="true">«</span></a></li>
+                                <li class="page-item"><p class="page-link" style="background-color: white!important;">
+                                    Page {{ equipments.number }} of {{ equipments.paginator.num_pages }}.</p></li>
+                                {% if equipments.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ equipments.next_page_number }}"
+                                           aria-label="Next">
+                                            {% else %}
+                                    <li class="page-item disabled">
+                                    <a class="page-link" href="#"
+                                       aria-label="Next">
+                                {% endif %}<span aria-hidden="true">»</span></a></li>
                             </ul>
+
                         </nav>
                     </div>
                 </div>

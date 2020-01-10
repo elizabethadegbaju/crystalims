@@ -48,6 +48,10 @@ class User(AbstractUser):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
     email = models.EmailField(_('email address'), unique=True)
+    is_active = models.BooleanField(_("active"), default=False, help_text=_(
+        'Designates whether this user should be treated as active. '
+        'Unselect this instead of deleting accounts.'
+    ), )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -205,7 +209,7 @@ class Message(models.Model):
     from_user = models.ForeignKey(User, models.DO_NOTHING, related_name="sent_messages")
     to_user = models.ForeignKey(User, models.DO_NOTHING, related_name="inbox_messages")
     text = models.TextField()
-    date_sent = models.DateTimeField(auto_now=True)
+    date_sent = models.DateTimeField(auto_created=True)
     read = models.BooleanField(default=False)
 
     def __str__(self):

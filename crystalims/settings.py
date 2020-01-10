@@ -89,6 +89,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
             ],
         },
     },
@@ -183,7 +185,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_ROOT = 'static'
+# STATIC_ROOT = 'static'
 MEDIA_ROOT = 'media'
 STATIC_URL = '/static/'
+if os.getenv('GAE_APPLICATION', None):
+    STATIC_ROOT = 'static'
+else:
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'

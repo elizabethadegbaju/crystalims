@@ -12,7 +12,7 @@
             </a>
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                {% if user|has_group:"Company Superusers" %}
+                {% if request.user|has_group:"Company Superusers" %}
                     <li class="nav-item" role="presentation"><a class="nav-link active" href="{% url 'dashboard' %}"><i
                             class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                 {% endif %}
@@ -26,7 +26,7 @@
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'equipments' %}"><i
                         class="fas fa-cogs"></i><span>Equipment</span></a></li>
 
-                {% if user|has_group:"Company Admins" or user|has_group:"Company Superusers" %}
+                {% if request.user|has_group:"Company Admins" or user|has_group:"Company Superusers" %}
                     <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'add_employee' %}"><i
                             class="fas fa-user-plus"></i><span>Add Employee</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'add_equipment' %}"><i
@@ -115,7 +115,8 @@
                                 <a class="d-flex align-items-center dropdown-item"
                                    href="{% url 'message' message.id %}">
                                     <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                               src={{ message.from_user.employee.image }}>
+                                                                               src=
+                                            {{ MEDIA_URL }}{{ message.from_user.employee.image|urlencode }}>
                                         <div class="bg-success status-indicator"></div>
                                     </div>
                                     <div class="font-weight-bold">
