@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "crystal-ims",
+  "private_key_id": "eba453ba4522374ca8726cfb5ff5c919f797770f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDLOZyWmXBbJ1Qz\naOdxtu1sh2hVOX+QSi22WjLSfEoxkTAV5JcOxvGO9qeC3R9PbpRekbio3skzMklX\nRD4rSg8CrGBHLw2evSGmX2QIIF0rzM3ahUiRrZhwJO0sDYUwO32z9XUrf+b8V+Mj\noQGRceJxjVH30q5WyTTQQzk98i7Eh2Lot8pzLcA/xjTP2GN/Q8DMsRxy7Jkw5hhP\ny3970qo53iHaUSaIxmUVyeaU7TKEQm3CYXGcb3swtfRcZFsdXGCKdaz+L0wRQ7C9\ng9dQeNi86oBtGn3U0jkKV5nr9KBW/asOaE7DIjYRchciXxeFJLGt06sTjaD5d0Pc\ncKyApD/RAgMBAAECggEAAd0EEQnUhf/WnbQObzRiRlAr7KAe1prytiaeK0Z/ENsU\n1rAmX59pjP1Skt7l9kuV9uBqK4fQNQ524RYO/3gDd2uCMUgYQ8Zv93KndaWdhRT9\njDPg2VxL0GqeQnzYDEjdwbEnj/lxWKRe2kkT8E2PHUOfWhQN8ipdHoDtsCI3O8Kn\n1+vH9DqZCTWTtZfJvxvO3HKg/KlbXKHBZ04FksXzdMnT8WMWh5qyCsqcGJVR+RWe\nuP8bfNH0t550Zp4wrOYn9XDoYFsZ7g0r4ygHkfgXZbOlxN8BBHiDyjxGRcezdCn6\nyxdffoPIlZMlBl8T2cAspxCuIunUYnZ1MGBCrSQMgwKBgQDpoCXCvT9iypvJ2LXO\nLEja7Qr2zGi/VOb0mehr3t1pJlyoWcj78a/3N+5nZu019XXRqqy1TS/HVwYURNfc\nspoMsuz4VPyDAx7rlM804DAyHGi8pGkN0odDDRP21Z6kiEi/MQfxdueToxtqedYZ\nZbkOY0fwlS4/RYm25KMb1tmJUwKBgQDesCCW79lKqrY7bvpOj/bHQtUfhQ2eTjUP\nPEm3S4ilr+hDAbuflKYF9szulsDTRhROojzF4irPrj6AP1f3q0nzOFd9+Xiz2/T+\n9YhQ+5GO/EEQSmMuXm3IuUkLUB3RmmBUmD8ZDaeyrjATlGzzX/P3Hddu1XeUs5yV\nWKkeD6/ZywKBgQCshJk9y9gh0LHoBMKERAlsuPyOsPVszHpcB8cs2P8xJaXon5ye\nB6REb6X573Sdkuv07w7oNt5gWm/fydKJY84EMKBy5Pcum8BagKHeTuroJjhljRcS\noPNHXUHv1WF36DeoD8Ho2kA5somNP/kM+iQEbuXxz4e+K1B9oSqdZTNwhwKBgE+V\n5q/K3H+g7yvih7aYIPwp2H1BUhKnpLLjOv01E4sTiRCZh/KKb6NmBuumGRfozc0k\nkk+uetpqTZAME2ZCY1V3Z11wUUEGdVLBcYxvvB+764zk6Pljahz4izBt25pTb+YL\n21Ea3jovoqL8wstgGZLRqXLE+827O1TssNQ7iv9tAoGBAJfMTix9R/OHZ+ieuuPM\n1aajVpjYI/4QQ5OzYM37LWLwY9vTgm2AXk1P3VWYJTf2HG70lrARRJ/4sbc4f4/Z\nek+dn8y1PfdrBoQKQEQC14uK+YVHi0AyI6YNb8hHXGUiknxHMlZ1PkVcv/6Otjsz\nNsT5pqVzLTR9GMjT+4m0JnS9\n-----END PRIVATE KEY-----\n",
+  "client_email": "admin-crystal@crystal-ims.iam.gserviceaccount.com",
+  "client_id": "111262672295283823368",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/admin-crystal%40crystal-ims.iam.gserviceaccount.com"
+}

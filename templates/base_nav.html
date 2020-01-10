@@ -115,7 +115,7 @@
                                 <a class="d-flex align-items-center dropdown-item"
                                    href="{% url 'message' message.id %}">
                                     <div class="dropdown-list-image mr-3"><img class="rounded-circle"
-                                                                               src={{ message.from_user.employee.image.url }}>
+                                                                               src={{ message.from_user.employee.image }}>
                                         <div class="bg-success status-indicator"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -141,7 +141,8 @@
                                                                aria-expanded="false" href="#"><span
                             class="d-none d-lg-inline mr-2 text-gray-600 small">{{ request.user.first_name }}
                         {{ request.user.last_name }}</span><img class="border rounded-circle img-profile"
-                                                                src={{ request.user.employee.image.url }}></a>
+                                                                src="
+                                                                        {{ MEDIA_URL }}{{ request.user.employee.image|urlencode }}"></a>
                         <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu">
                             <a class="dropdown-item" role="presentation" href="{% url 'profile' %}"><i
                                     class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a

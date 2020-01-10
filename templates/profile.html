@@ -13,7 +13,7 @@
                 <div class="card mb-3">
                     <div class="card-body text-center shadow">
                         <img class="rounded-circle mb-3 mt-4"
-                             src="{{ user.employee.image.url }}"
+                             src="{{ user.employee.image }}"
                              width="160" height="160">
                         <form method="POST" action="{% url 'image_upload' %}" enctype="multipart/form-data">
                             {% csrf_token %}

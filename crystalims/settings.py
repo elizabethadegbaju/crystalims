@@ -16,8 +16,6 @@ from .config import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# GOOGLE_APPLICATION_CREDENTIALS = 'C:/Users/User/Crystal Inventory Management-191201221735.json'
-# GOOGLE_CLOUD_PROJECT = 'crystalims'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -40,10 +38,17 @@ EMAIL_HOST_USER = 'adeotunadegbaju@gmail.com'
 EMAIL_HOST_PASSWORD = 'flowerpothead981'
 EMAIL_PORT = 587
 
-ALLOWED_HOSTS = ['127.0.0.1', 'crystalinventorymanagementsystem-env.zx3sytpbnp.us-east-2.elasticbeanstalk.com']
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'crystal-ims.appspot.com'
+GS_FILE_OVERWRITE = False
+GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR, 'crystal-eba453ba4522.json')
+GOOGLE_CLOUD_PROJECT = 'crystalims'
+GS_PROJECT_ID = 'crystal-ims'
+
+ALLOWED_HOSTS = ['127.0.0.1', 'crystalinventorymanagementsystem-env.zx3sytpbnp.us-east-2.elasticbeanstalk.com',
+                 'crystal-ims.appspot.com', 'staging.crystal-ims.appspot.com']
 
 ADMINS = [('Elizabeth', 'adeotunadegbaju@gmail.com')]
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -110,7 +115,7 @@ if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/crystal-inventory-management:us-central1:crystal-inventory-management',
+            'HOST': '/cloudsql/crystal-ims:us-central1:crystal',
             'USER': 'adeotun',
             'PASSWORD': '',
             'NAME': 'crystal',
@@ -119,7 +124,7 @@ if os.getenv('GAE_APPLICATION', None):
 else:
     # Running locally so connect to either a local MySQL instance or connect
     # to Cloud SQL via the proxy.  To start the proxy via command line:
-    #    $ cloud_sql_proxy -instances=crystal-inventory-management:us-central1:crystal-inventory-management=tcp:3306
+    #    $ cloud_sql_proxy -instances=crystal-ims:us-central1:crystal=tcp:3306
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
@@ -178,7 +183,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 MEDIA_ROOT = 'media'
-MEDIA_URL = "/media/"
+STATIC_URL = '/static/'
+MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'
