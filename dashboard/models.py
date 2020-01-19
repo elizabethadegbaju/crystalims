@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -149,6 +150,16 @@ class Equipment(models.Model):
         send_mail(mail_subject, message, from_email="admin@crystalims.com", recipient_list=[to_email],
                   fail_silently=False, )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        year = timezone.now().year
+        month = months[timezone.now().month - 1]
+        month_asset = AssetLog.objects.get_or_create(company=self.location.company, year=year, month=month)[0]
+        assets = month_asset.assets + float(self.price)
+        month_asset.assets = assets
+        month_asset.save()
+
     def __str__(self):
         return self.description
 
@@ -247,7 +258,6 @@ class EmployeeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Employee
 
-    email_verified = factory.Faker('boolean', chance_of_getting_true=70)
     location = factory.SubFactory(LocationFactory)
 
 
@@ -266,7 +276,7 @@ class EquipmentFactory(factory.django.DjangoModelFactory):
     serial = factory.Faker('ean')
     description = factory.Faker('sentence')
     condition = factory.Faker('word', ext_word_list=['E', 'VP', 'G', 'F'])
-    price = factory.Faker('pyint', min_value=10000, max_value=10000000, step=10)
+    price = factory.Faker('pyint', min_value=10000, max_value=10000000, step=100)
     location = factory.SubFactory(LocationFactory)
     category = factory.SubFactory(CategoryFactory)
 
@@ -280,7 +290,7 @@ class AllocationFactory(factory.django.DjangoModelFactory):
     approver = factory.SubFactory(UserFactory)
     start_date = factory.Faker('date')
     end_date = factory.Faker('date')
-    returned = factory.Faker('boolean', chance_of_getting_true=500)
+    checked_in = factory.Faker('boolean', chance_of_getting_true=500)
     approved = factory.Faker('boolean', chance_of_getting_true=70)
 
 # class AssetLogFactory(factory.django.DjangoModelFactory):

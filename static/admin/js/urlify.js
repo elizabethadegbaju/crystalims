@@ -191,6 +191,5 @@
         s = s.replace(/-+$/g, ''); // trim any trailing hyphens
         return s.toLowerCase(); // convert to lowercase
     }
-
     window.URLify = URLify;
 })();

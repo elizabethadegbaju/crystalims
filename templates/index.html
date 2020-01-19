@@ -39,33 +39,32 @@ cloud-based inventory management for organizations">
 <div>
     <div class="header-blue">
         <nav class="navbar navbar-light navbar-expand-md navigation-clean-search">
-            <div class="container-fluid"><a class="navbar-brand" href="#">Crystal</a>
+            <div class="container-fluid"><a class="navbar-brand" href="#"><img height="100"
+                                                                               src="{% static "img/crystal-ims.png" %}"></a>
                 <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
                         class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse"
                      id="navcol-1">
-                    <ul class="nav navbar-nav">
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">Link</a></li>
-                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown"
-                                                         aria-expanded="false" href="#">Dropdown </a>
-                            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation"
-                                                                      href="#">First Item</a><a class="dropdown-item"
-                                                                                                role="presentation"
-                                                                                                href="#">Second Item</a><a
-                                    class="dropdown-item" role="presentation" href="#">Third Item</a></div>
-                        </li>
-                    </ul>
+                    {#                    <ul class="nav navbar-nav">#}
+                    {#                        <li class="nav-item" role="presentation"><a class="nav-link" href="#">Link</a></li>#}
+                    {#                        <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown"#}
+                    {#                                                         aria-expanded="false" href="#">Dropdown </a>#}
+                    {#                            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation"#}
+                    {#                                                                      href="#">First Item</a><a class="dropdown-item"#}
+                    {#                                                                                                role="presentation"#}
+                    {#                                                                                                href="#">Second Item</a><a#}
+                    {#                                    class="dropdown-item" role="presentation" href="#">Third Item</a></div>#}
+                    {#                        </li>#}
+                    {#                    </ul>#}
                     <form class="form-inline mr-auto" target="_self">
-                        <div class="form-group"><label for="search-field"><i class="fa fa-search"></i></label><input
-                                class="form-control search-field" type="search" id="search-field" name="search"></div>
                     </form>
                     {% if user.is_authenticated %}
                         <span class="navbar-text"><a class="login"
                                                      href="{% url 'profile' %}">Hi {{ user.first_name }}!</a></span>
-                        <a class="btn btn-light action-button" role="button" href="{% url 'logout' %}">Sign Out</a>
+                        <a class="btn btn-light action-button" role="button" href="{% url 'logout' %}">Log Out</a>
                     {% else %}
                         <span class="navbar-text"> <a class="login" href="{% url 'login' %}">Log In</a></span>
-                        <a class="btn btn-light action-button" role="button" href="#signup">Sign Up</a>
+                        <a class="btn btn-light action-button" role="button" href="#signup">Get Started</a>
                     {% endif %}
                 </div>
             </div>
@@ -157,7 +156,7 @@ cloud-based inventory management for organizations">
 <div class="testimonials-clean bg-gradient-warning text-white">
     <div class="container">
         <div class="intro">
-            <h2 class="text-center text-white">Testimonials </h2>
+            <h2 class="text-center text-white" style="color: white!important;">Testimonials </h2>
             <p class="text-center text-white">Our customers love us! Read what they have to say below. We are pleased to
                 find that
                 our service is such a success and can be beneficial to so many organizations.</p>
@@ -165,34 +164,33 @@ cloud-based inventory management for organizations">
         <div class="row people">
             <div class="col-md-6 col-lg-4 item">
                 <div class="box">
-                    <p class="description" style="color: #7d8285">Aenean tortor est, vulputate quis leo in, vehicula
-                        rhoncus lacus. Praesent
-                        aliquam in tellus eu gravida. Aliquam varius finibus est.</p>
+                    <p class="description" style="color: #7d8285">Crystal has simplified and enhanced our asset and
+                        inventory tracking capabilities, all while seamlessly integrating into our complex
+                        environment.</p>
                 </div>
                 <div class="author"><img class="rounded-circle" src="{% static 'img/1.jpg' %}">
-                    <h5 class="name">Ben Johnson</h5>
-                    <p class="title text-white">CEO of Estaa Hair</p>
+                    <h5 class="name" style="color: white!important;">Ben Johnson</h5>
+                    <p class="title text-white">CEO of CS Dojo</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4 item">
                 <div class="box">
-                    <p class="description" style="color: #7d8285">Praesent aliquam in tellus eu gravida. Aliquam varius
-                        finibus est, et
-                        interdum justo suscipit id.</p>
+                    <p class="description" style="color: #7d8285">I would recommend Crystal Inventory Management System
+                        to anyone because of the customer service, configurability and ease-of-use.</p>
                 </div>
                 <div class="author"><img class="rounded-circle" src="{% static 'img/3.jpg' %}">
-                    <h5 class="name">Carl Kent</h5>
+                    <h5 class="name" style="color: white!important;">Carl Kent</h5>
                     <p class="title text-white">Founder of BAC Insurance Consultants</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4 item">
                 <div class="box">
-                    <p class="description" style="color: #7d8285">Aliquam varius finibus est, et interdum justo
-                        suscipit. Vulputate quis leo
-                        in, vehicula rhoncus lacus. Praesent aliquam in tellus eu.</p>
+                    <p class="description" style="color: #7d8285">In the past, we have had tools come up missing, or
+                        supposedly broken, so this system gives us MUCH more information on tools from cradle to
+                        grave.</p>
                 </div>
                 <div class="author"><img class="rounded-circle" src="{% static 'img/2.jpg' %}">
-                    <h5 class="name">Emily Clark</h5>
+                    <h5 class="name" style="color: white!important;">Emily Clark</h5>
                     <p class="title text-white">Owner of Crystal Programming Institute</p>
                 </div>
             </div>
@@ -204,12 +202,13 @@ cloud-based inventory management for organizations">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-4 col-md-3 item">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="#">Web design</a></li>
-                        <li><a href="#">Development</a></li>
-                        <li><a href="#">Hosting</a></li>
-                    </ul>
+                    <img height="120" src="{% static "img/crystal-ims white.png" %}">
+                    {#                    <h3>Services</h3>#}
+                    {#                    <ul>#}
+                    {#                        <li><a href="#">Web design</a></li>#}
+                    {#                        <li><a href="#">Development</a></li>#}
+                    {#                        <li><a href="#">Hosting</a></li>#}
+                    {#                    </ul>#}
                 </div>
                 <div class="col-sm-4 col-md-3 item">
                     <h3>About</h3>

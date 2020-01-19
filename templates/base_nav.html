@@ -5,10 +5,9 @@
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0"
          id="page-top">
         <div class="container-fluid d-flex flex-column p-0">
-            <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+            <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand mt-3 mb-3"
                href="{% url 'home' %}">
-                <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-                <div class="sidebar-brand-text mx-3"><span>Crystal</span></div>
+                <img src="{% static "img/crystal-ims blue.png" %}" style="height: 5vw">
             </a>
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
@@ -143,6 +142,8 @@
                             class="d-none d-lg-inline mr-2 text-gray-600 small">{{ request.user.first_name }}
                         {{ request.user.last_name }}</span><img class="border rounded-circle img-profile"
                                                                 src="
+
+
                                                                         {{ MEDIA_URL }}{{ request.user.employee.image|urlencode }}"></a>
                         <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu">
                             <a class="dropdown-item" role="presentation" href="{% url 'profile' %}"><i
@@ -162,4 +163,24 @@
             </ul>
         </div>
     </nav>
+{% endblock %}
+{% block scripts %}
+    <script type="application/javascript">
+        $(function () {
+            setNavigation();
+        });
+
+        function setNavigation() {
+            var path = window.location.pathname;
+            path = path.replace(/\/$/, "");
+            path = decodeURIComponent(path);
+
+            $(".nav a").each(function () {
+                var href = $(this).attr('href');
+                if (path.substring(0, href.length) === href) {
+                    $(this).closest('li').addClass('active');
+                }
+            });
+        }
+    </script>
 {% endblock %}

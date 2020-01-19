@@ -6,7 +6,6 @@ Requires jQuery, core.js, and SelectBox.js.
 */
 (function ($) {
     'use strict';
-
     function findForm(node) {
         // returns the node of the form containing the given node
         if (node.tagName.toLowerCase() !== 'form') {

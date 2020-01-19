@@ -23,12 +23,12 @@ from dashboard import views
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('', include('dashboard.urls')),
                   path('activate/<slug:uidb64>/<slug:token>/', views.activate, name="activate"),
                   path('register/', views.signup, name="register"),
                   path('register-company/', views.create, name="register_company"),
-                  # path('accounts/login/', views.login, name="login"),
-                  path('', include('django.contrib.auth.urls')),
                   path('password/', views.change_password, name="change_password"),
-                  url(r'^oauth/', include('social_django.urls', namespace="social")),
+                  url(r'^', include('social_django.urls', namespace="social")),
+                  path('', include('django.contrib.auth.urls')),
+                  path('', include('dashboard.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+handler404 = 'dashboard.views.error_404_view'

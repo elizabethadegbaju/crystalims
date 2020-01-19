@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-flex">
                                 <div class="flex-grow-1 bg-login-image"
-                                     style="background-image: url('{% static 'img/dogs/image3.jpeg' %}');"></div>
+                                     style="background-image: url('{% static 'img/login.png' %}');"></div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
@@ -64,7 +64,7 @@
                                         <input type="hidden" name="next" value="{{ next }}">
                                         <hr>
                                         <a class="btn btn-primary btn-block text-white btn-google btn-user"
-                                           role="button" href="{% url 'social:begin' 'google' %}"><i
+                                           role="button" href="{% url 'social:begin' 'google-oauth2' %}"><i
                                                 class="fab fa-google"></i>&nbsp; Login with Google</a>
                                         <a class="btn btn-primary btn-block text-white btn-facebook btn-user"
                                            role="button" href="{% url 'social:begin' 'facebook' %}"><i

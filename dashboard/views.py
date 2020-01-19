@@ -10,7 +10,6 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils import timezone
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
@@ -133,16 +132,21 @@ def equipments(request):
 
         equipments_list = Equipment.objects.filter(location__company=company).order_by(
             'description')
-        if "num" in request.GET.keys():
-            number = int(request.GET["num"])
-        else:
-            number = 10
-        paginator = Paginator(equipments_list, number)
-        page = request.GET.get('page')
-        equipments = paginator.get_page(page)
+        equipments = pager(equipments_list, request)
         return render(request, 'equipments.html',
                       {'company': company, 'equipments': equipments, 'unread_messages': unread_messages,
                        'alerts': alerts})
+
+
+def pager(list, request):
+    if "num" in request.GET.keys():
+        number = int(request.GET["num"])
+    else:
+        number = 10
+    paginator = Paginator(list, number)
+    page = request.GET.get('page')
+    equipments = paginator.get_page(page)
+    return equipments
 
 
 def unread_messages_notification(user):
@@ -200,7 +204,7 @@ def create(request):
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
-        user.groups.set([2])
+        user.groups.set([3])
 
         return redirect('login')
 
@@ -211,13 +215,7 @@ def team(request):
     alerts, unread_messages = unread_messages_notification(user)
 
     team_list = Employee.objects.filter(location__company=user.employee.location.company).order_by('-user__last_login')
-    if "num" in request.GET.keys():
-        number = int(request.GET["num"])
-    else:
-        number = 10
-    paginator = Paginator(team_list, number)
-    page = request.GET.get('page')
-    team = paginator.get_page(page)
+    team = pager(team_list, request)
     return render(request, 'team.html', {'team': team, 'unread_messages': unread_messages,
                                          'alerts': alerts})
 
@@ -267,6 +265,10 @@ def image_upload(request):
     user.employee.save()
     return redirect('profile')
 
+
+def error_404_view(request, exception):
+    data = {"name": "crystal-ims.appspot.com"}
+    return render(request, '404.html', data)
 
 @login_required
 def edit_user(request):
@@ -322,16 +324,9 @@ def add_equipment(request):
             vendor = request.POST['vendor']
             category = request.POST['category']
             location = request.POST['location']
-            months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            year = timezone.now().year
-            month = months[timezone.now().month - 1]
             equipment = Equipment.objects.create(serial=serial, description=description, price=price, vendor=vendor,
                                                  condition='E', category_id=category, location_id=location)
             equipment.save()
-            month_asset = AssetLog.objects.get_or_create(company=company, year=year, month=month)[0]
-            assets = month_asset.assets + float(price)
-            month_asset.assets = assets
-            month_asset.save()
             return redirect('equipments')
     else:
         return redirect('equipments')
