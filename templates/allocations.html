@@ -15,7 +15,8 @@
             <div class="card-body">
                 {% if allocations %}
                     {% for allocation in allocations %}
-                        <h4 class="small font-weight-bold">{{ allocation.equipment|truncatechars:30 }}<span
+                        <h2 class="small font-weight-bold">{{ allocation.user.first_name }} {{ allocation.user.last_name }}</h2>
+                        <h4 class="small font-weight-bold">{{ allocation.equipment }}<span
                                 class="float-right">End Date: {{ allocation.end_date|naturalday }}</span></h4>
                         <div class="progress progress-sm mb-3">
                             {% if allocation.start_date|percent_date:allocation.end_date < 50 %}

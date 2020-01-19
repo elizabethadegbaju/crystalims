@@ -126,7 +126,7 @@ if os.getenv('GAE_APPLICATION', None):
 else:
     # Running locally so connect to either a local MySQL instance or connect
     # to Cloud SQL via the proxy.  To start the proxy via command line:
-    #    $ cloud_sql_proxy -instances=crystal-ims:us-central1:crystal=tcp:3306
+    #    $ vcloud_sql_proxy -instances=crystal-ims:us-central1:crystal=tcp:3306
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {
