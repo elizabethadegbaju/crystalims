@@ -147,15 +147,19 @@ class Equipment(models.Model):
             'company': company
         })
         to_email = self.vendor
-        send_mail(mail_subject, message, from_email="admin@crystalims.com", recipient_list=[to_email],
+        send_mail(mail_subject, message, from_email="admin@crystalims.com",
+                  recipient_list=[to_email],
                   fail_silently=False, )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+                  'Oct', 'Nov', 'Dec']
         year = timezone.now().year
         month = months[timezone.now().month - 1]
-        month_asset = AssetLog.objects.get_or_create(company=self.location.company, year=year, month=month)[0]
+        month_asset = \
+            AssetLog.objects.get_or_create(company=self.location.company,
+                                           year=year, month=month)[0]
         assets = month_asset.assets + float(self.price)
         month_asset.assets = assets
         month_asset.save()
@@ -217,14 +221,17 @@ class AssetLog(models.Model):
 
 
 class Message(models.Model):
-    from_user = models.ForeignKey(User, models.DO_NOTHING, related_name="sent_messages")
-    to_user = models.ForeignKey(User, models.DO_NOTHING, related_name="inbox_messages")
+    from_user = models.ForeignKey(User, models.DO_NOTHING,
+                                  related_name="sent_messages")
+    to_user = models.ForeignKey(User, models.DO_NOTHING,
+                                related_name="inbox_messages")
     text = models.TextField()
-    date_sent = models.DateTimeField(auto_created=True)
+    date_sent = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.date_sent) + " " + self.from_user.get_full_name() + ">" + self.to_user.get_full_name()
+        return str(
+            self.date_sent) + " " + self.from_user.get_full_name() + ">" + self.to_user.get_full_name()
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -276,7 +283,8 @@ class EquipmentFactory(factory.django.DjangoModelFactory):
     serial = factory.Faker('ean')
     description = factory.Faker('sentence')
     condition = factory.Faker('word', ext_word_list=['E', 'VP', 'G', 'F'])
-    price = factory.Faker('pyint', min_value=10000, max_value=10000000, step=100)
+    price = factory.Faker('pyint', min_value=10000, max_value=10000000,
+                          step=100)
     location = factory.SubFactory(LocationFactory)
     category = factory.SubFactory(CategoryFactory)
 

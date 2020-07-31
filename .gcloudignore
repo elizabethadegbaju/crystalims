@@ -13,6 +13,8 @@
 .git
 .gitignore
 
+# Virtual environment:
+venv/
 # Python pycache:
 __pycache__/
 # Ignored by the build system

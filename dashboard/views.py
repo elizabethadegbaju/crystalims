@@ -431,12 +431,13 @@ def message(request, pk):
     user = request.user
     alerts, unread_messages = unread_messages_notification(user)
     message = Message.objects.get(pk=pk)
-    if user == message.to_user | user == message.from_user:
+    if (user == message.to_user) | (user == message.from_user):
         if user == message.to_user:
             message.read = True
             message.save()
         return render(request, 'message.html',
-                      {'unread_messages': unread_messages, 'alerts': alerts, 'message': message})
+                      {'unread_messages': unread_messages, 'alerts': alerts,
+                       'message': message})
     else:
         return redirect('page_not_found')
 
@@ -446,7 +447,8 @@ def send_message(request):
     to_user = request.POST['to_user']
     message = request.POST['message']
     user = request.user
-    Message.objects.create(to_user_id=to_user, text=message, from_user_id=user.id)
+    Message.objects.create(to_user_id=to_user, text=message,
+                           from_user_id=user.id)
     return redirect('messages')
 
 

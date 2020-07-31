@@ -59,9 +59,10 @@
                             <tbody>
                             {% for message in inbox %}
                                 {% if message.read == True %}
-                                    <tr class="table-secondary position-relative">
+                                    <tr class="table-secondary"
+                                        style="transform: rotate(0);">
                                         {% else %}
-                                    <tr class="position-relative">
+                                    <tr style="transform: rotate(0);">
                                 {% endif %}
                             <td>
                                 <a class="stretched-link text-gray-600" style="text-decoration: none"
@@ -90,9 +91,11 @@
                             </thead>
                             <tbody>
                             {% for message in sent %}
-                                <tr class="table-secondary position-relative">
+                                <tr class="table-secondary"
+                                    style="transform: rotate(0);">
                                     <td>
-                                        <a class="stretched-link text-gray-600" style="text-decoration: none"
+                                        <a class="stretched-link text-gray-600"
+                                           style="text-decoration: none"
                                            href="{% url 'message' message.id %}">{{ message.to_user.first_name }} {{ message.to_user.last_name }}</a>
                                     </td>
                                     <td>{{ message.text|truncatechars:40 }}</td>

@@ -17,16 +17,22 @@
                              style="background-image: url({% static "img/register-company.png" %});"></div>
                     </div>
                     <div class="col-lg-7">
-                        <div><img src="{% static 'img/crystal-ims white.png' %}" class="d-block m-auto"
-                                  style="height:8vw">
-                        </div>
+                        <a href="{% url 'home' %}">
+                            <div><img
+                                    src="{% static 'img/crystal-ims white.png' %}"
+                                    class="d-block m-auto"
+                                    style="height:8vw">
+                            </div>
+                        </a>
                         <div class="pl-5 pr-5 pb-5">
                             <div class="text-center">
-                                <h4 class="text-dark mb-4">Create an Employee Account!</h4>
+                                <h4 class="text-dark mb-4">Create an Employee
+                                    Account!</h4>
                             </div>
                             {% if form.non_field_errors %}
                                 {% for error in form.non_field_errors %}
-                                    <div class="alert alert-danger alert-dismissable" role="alert">
+                                    <div class="alert alert-danger alert-dismissable"
+                                         role="alert">
                                         <button type="button" class="close" data-dismiss="alert">&times;
                                         </button>
                                         {{ error|striptags }}

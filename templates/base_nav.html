@@ -25,7 +25,7 @@
                 <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'equipments' %}"><i
                         class="fas fa-cogs"></i><span>Equipment</span></a></li>
 
-                {% if request.user|has_group:"Company Admins" or user|has_group:"Company Superusers" %}
+                {% if request.user|has_group:"Company Admins" or request.user|has_group:"Company Superusers" %}
                     <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'add_employee' %}"><i
                             class="fas fa-user-plus"></i><span>Add Employee</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="{% url 'add_equipment' %}"><i

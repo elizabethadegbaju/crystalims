@@ -15,9 +15,11 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                        <div id="dataTable_length" class="dataTables_length"
+                             aria-controls="dataTable">
                             <form method="get" action="{% url 'team' %}">
-                                <label>Show&nbsp;<select name="num" onchange="this.form.submit()"
+                                <label>Show&nbsp;<select name="num"
+                                                         onchange="this.form.submit()"
                                                          class="form-control form-control-sm custom-select custom-select-sm">
                                     <option value="10" selected="">10</option>
                                     <option value="25">25</option>
@@ -28,12 +30,16 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input
-                                type="search" class="form-control form-control-sm"
-                                aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-right dataTables_filter"
+                             id="dataTable_filter"><label><input
+                                type="search"
+                                class="form-control form-control-sm"
+                                aria-controls="dataTable" placeholder="Search"></label>
+                        </div>
                     </div>
                 </div>
-                <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                <div class="table-responsive table mt-2" id="dataTable"
+                     role="grid"
                      aria-describedby="dataTable_info">
                     <table class="table dataTable my-0" id="dataTable">
                         <thead>
@@ -46,13 +52,16 @@
                         </thead>
                         <tbody>
                         {% for employee in team %}
-                            <tr class="position-relative">
+                            <tr style="transform: rotate(0);">
                                 <td>
-                                    <a class="stretched-link text-gray-600" style="text-decoration: none"
+                                    <a class="stretched-link text-gray-600"
+                                       style="text-decoration: none"
                                        href="{% url 'team_member' employee.user.id %}"><img
-                                            class="rounded-circle mr-2" width="30" height="30"
+                                            class="rounded-circle mr-2"
+                                            width="30" height="30"
                                             src="
-                                                    {{ MEDIA_URL }}{{ employee.image|urlencode }}">{{ employee.user.first_name }} {{ employee.user.last_name }}
+                                                    {{ MEDIA_URL }}{{ employee.image|urlencode }}">
+                                        {{ employee.user.first_name }} {{ employee.user.last_name }}
                                     </a>
                                 </td>
                                 <td>{{ employee.location.name }}</td>
@@ -73,8 +82,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 align-self-center">
-                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">
-                            Showing 1 to {{ team|count }} of {{ team.paginator.count }}</p>
+                        <p id="dataTable_info" class="dataTables_info"
+                           role="status" aria-live="polite">
+                            Showing 1 to {{ team|count }}
+                            of {{ team.paginator.count }}</p>
                     </div>
                     <div class="col-md-6">
                         <nav
@@ -82,24 +93,30 @@
                             <ul class="pagination">
                                 {% if team.has_previous %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ team.previous_page_number }}"
+                                        <a class="page-link"
+                                           href="?page={{ team.previous_page_number }}"
                                            aria-label="Previous">
                                             {% else %}
                                     <li class="page-item disabled">
                                     <a class="page-link" href="#"
                                        aria-label="Previous">
-                                {% endif %}<span aria-hidden="true">«</span></a></li>
-                                <li class="page-item"><p class="page-link" style="background-color: white!important;">
-                                    Page {{ team.number }} of {{ team.paginator.num_pages }}.</p></li>
+                                {% endif %}<span aria-hidden="true">«</span>
+                                </a></li>
+                                <li class="page-item"><p class="page-link"
+                                                         style="background-color: white!important;">
+                                    Page {{ team.number }}
+                                    of {{ team.paginator.num_pages }}.</p></li>
                                 {% if team.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ team.next_page_number }}"
+                                        <a class="page-link"
+                                           href="?page={{ team.next_page_number }}"
                                            aria-label="Next">
                                             {% else %}
                                     <li class="page-item disabled">
                                     <a class="page-link" href="#"
                                        aria-label="Next">
-                                {% endif %}<span aria-hidden="true">»</span></a></li>
+                                {% endif %}<span aria-hidden="true">»</span>
+                                </a></li>
                             </ul>
 
                         </nav>
