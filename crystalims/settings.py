@@ -31,6 +31,13 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
+SOCIAL_AUTH_TWITTER_KEY = '8SvoFgdWewZmHgVyNRbc115yq'
+SOCIAL_AUTH_TWITTER_SECRET = '91rNgDAMylDXBUbOUDIOz6inyha2xwWQ5Ymi1UrTARC2RPrBVH'
+SOCIAL_AUTH_FACEBOOK_KEY = '896788630844040'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'daaf3638224607798832c3be53f65a9a'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '336008437255-df9o38359lkk7n26jsslhas7dh9v2g25.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Z0e3jXZDhRmKWhYGOdCP0u3C'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -38,7 +45,7 @@ EMAIL_HOST_USER = 'adeotunadegbaju@gmail.com'
 EMAIL_HOST_PASSWORD = 'flowerpothead981'
 EMAIL_PORT = 587
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'crystal-ims.appspot.com'
 GS_FILE_OVERWRITE = False
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR,
@@ -89,10 +96,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
                 "django.template.context_processors.media",
                 "django.template.context_processors.static",
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },

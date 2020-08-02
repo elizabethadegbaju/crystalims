@@ -25,7 +25,9 @@
                                     <span>{{ equipments_count|intcomma }}</span>
                                 </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-cogs fa-2x text-gray-300"></i></div>
+                            <div class="col-auto"><i
+                                    class="fas fa-cogs fa-2x text-gray-300"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -38,9 +40,11 @@
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
                                     <span>Value of Assets</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0">
-                                    <span>&#8358;{{ assets_value.price__sum|intcomma }}</span></div>
+                                    <span>&#8358;{{ assets_value.price__sum|intcomma }}</span>
+                                </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <div class="col-auto"><i
+                                    class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -54,9 +58,11 @@
                                 <div class="text-uppercase text-info font-weight-bold text-xs mb-1">
                                     <span>Categories</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0 mr-3">
-                                    <span>{{ categories_count|intcomma }}</span></div>
+                                    <span>{{ categories_count|intcomma }}</span>
+                                </div>
                             </div>
-                            <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            <div class="col-auto"><i
+                                    class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -169,38 +175,50 @@
                     </div>
                     <div class="card-body">
                         <h4 class="small font-weight-bold">Very Poor<span
-                                class="float-right">{{ very_poor_condition_percentage }}%</span></h4>
+                                class="float-right">{{ very_poor_condition_percentage }}%</span>
+                        </h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-danger" aria-valuenow="{{ very_poor_condition_percentage }}"
+                            <div class="progress-bar bg-danger"
+                                 aria-valuenow="{{ very_poor_condition_percentage }}"
                                  aria-valuemin="0"
-                                 aria-valuemax="100" style="width: {{ very_poor_condition_percentage }}%;"><span
+                                 aria-valuemax="100"
+                                 style="width: {{ very_poor_condition_percentage }}%;"><span
                                     class="sr-only">{{ very_poor_condition_percentage }}%</span>
                             </div>
                         </div>
                         <h4 class="small font-weight-bold">Fair<span
-                                class="float-right">{{ fair_condition_percentage }}%</span></h4>
+                                class="float-right">{{ fair_condition_percentage }}%</span>
+                        </h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" aria-valuenow="{{ fair_condition_percentage }}"
+                            <div class="progress-bar bg-warning"
+                                 aria-valuenow="{{ fair_condition_percentage }}"
                                  aria-valuemin="0"
-                                 aria-valuemax="100" style="width: {{ fair_condition_percentage }}%;"><span
+                                 aria-valuemax="100"
+                                 style="width: {{ fair_condition_percentage }}%;"><span
                                     class="sr-only">{{ fair_condition_percentage }}%</span>
                             </div>
                         </div>
                         <h4 class="small font-weight-bold">Good<span
-                                class="float-right">{{ good_condition_percentage }}%</span></h4>
+                                class="float-right">{{ good_condition_percentage }}%</span>
+                        </h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-info" aria-valuenow="{{ good_condition_percentage }}"
+                            <div class="progress-bar bg-info"
+                                 aria-valuenow="{{ good_condition_percentage }}"
                                  aria-valuemin="0"
-                                 aria-valuemax="100" style="width: {{ good_condition_percentage }}%;"><span
+                                 aria-valuemax="100"
+                                 style="width: {{ good_condition_percentage }}%;"><span
                                     class="sr-only">{{ good_condition_percentage }}%</span>
                             </div>
                         </div>
                         <h4 class="small font-weight-bold">Excellent<span
-                                class="float-right">{{ excellent_condition_percentage }}%</span></h4>
+                                class="float-right">{{ excellent_condition_percentage }}%</span>
+                        </h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-success" aria-valuenow="{{ excellent_condition_percentage }}"
+                            <div class="progress-bar bg-success"
+                                 aria-valuenow="{{ excellent_condition_percentage }}"
                                  aria-valuemin="0"
-                                 aria-valuemax="100" style="width: {{ excellent_condition_percentage }}%;"><span
+                                 aria-valuemax="100"
+                                 style="width: {{ excellent_condition_percentage }}%;"><span
                                     class="sr-only">{{ excellent_condition_percentage }}%</span>
                             </div>
                         </div>
@@ -304,19 +322,17 @@
                             <canvas
                                     data-bs-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[{% for category in categories %}&quot;{{ category.name }}&quot;
 
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[
                                             {% for category in categories %}&quot;{% cycle '#5bc0de' '#894f62' '#f6c23e' '#e74a3b' '#1cc88a' as bgcolors %}&quot;
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;borderColor&quot;:[
                                             {% for category in categories %}&quot;{% cycle '#ffffff' '#ffffff' as bordercolors %}&quot;
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;data&quot;:[{% for category in categories %}&quot;{{ category.equipment__count }}&quot;
 
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
-                        </div>
-                        <div class="text-center small mt-4"><span class="mr-2"><i
-                                class="fas fa-circle text-danger"></i>&nbsp;Allocated</span><span
-                                class="mr-2"><i
-                                class="fas fa-circle text-success"></i>&nbsp;Free</span><span
-                                class="mr-2"><i class="fas fa-circle text-warning"></i>&nbsp;Pending</span>
                         </div>
                     </div>
                 </div>

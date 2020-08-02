@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -23,11 +22,14 @@ from dashboard import views
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  path('activate/<slug:uidb64>/<slug:token>/', views.activate, name="activate"),
+                  path('activate/<slug:uidb64>/<slug:token>/', views.activate,
+                       name="activate"),
                   path('register/', views.signup, name="register"),
-                  path('register-company/', views.create, name="register_company"),
-                  path('password/', views.change_password, name="change_password"),
-                  url(r'^', include('social_django.urls', namespace="social")),
+                  path('register-company/', views.create,
+                       name="register_company"),
+                  path('password/', views.change_password,
+                       name="change_password"),
+                  path('oauth/', include('social_django.urls')),
                   path('', include('django.contrib.auth.urls')),
                   path('', include('dashboard.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
