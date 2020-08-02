@@ -1,8 +1,8 @@
 .header-blue {
-  background: linear-gradient(135deg, #172a74, #21a9af);
-  background-color: #184e8e;
-  padding-bottom: 80px;
-  font-family: 'Source Sans Pro', sans-serif;
+    background: linear-gradient(170deg, #0c0b0b, #e74c32);
+    background-color: #0c0b0b;
+    padding-bottom: 80px;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 @media (min-width:768px) {
@@ -34,7 +34,7 @@
 }
 
 .header-blue .navbar .navbar-brand:hover {
-  color: #f0f0f0;
+    color: #f6f6f6;
 }
 
 .header-blue .navbar .navbar-collapse {

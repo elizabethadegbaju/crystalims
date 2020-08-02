@@ -4,19 +4,27 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Home - Crystal</title>
     <meta name="description" content="Inventory Management Software
 cloud-based inventory management for organizations">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fredoka+One">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{% static 'fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Fredoka+One">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet"
+          href="{% static 'fonts/fontawesome5-overrides.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/Features-Blue.css' %}">
     <link rel="stylesheet" href="{% static 'css/Footer-Clean.css' %}">
     <link rel="stylesheet" href="{% static 'css/Header-Blue.css' %}">
@@ -34,14 +42,17 @@ cloud-based inventory management for organizations">
     <div class="d-flex flex-column" id="content-wrapper">
         <div id="content"></div>
     </div>
-    <a class="stretched-link border rounded scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    <a class="stretched-link border rounded scroll-to-top" href="#page-top"><i
+            class="fas fa-angle-up"></i></a>
 </div>
 <div>
     <div class="header-blue">
         <nav class="navbar navbar-light navbar-expand-md navigation-clean-search">
-            <div class="container-fluid"><a class="navbar-brand" href="#"><img height="100"
-                                                                               src="{% static "img/crystal-ims.png" %}"></a>
-                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
+            <div class="container-fluid"><a class="navbar-brand" href="#"><img
+                    height="100"
+                    src="{% static "img/crystal-ims.png" %}"></a>
+                <button data-toggle="collapse" class="navbar-toggler"
+                        data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
                         class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse"
                      id="navcol-1">
@@ -61,10 +72,13 @@ cloud-based inventory management for organizations">
                     {% if user.is_authenticated %}
                         <span class="navbar-text"><a class="login"
                                                      href="{% url 'profile' %}">Hi {{ user.first_name }}!</a></span>
-                        <a class="btn btn-light action-button" role="button" href="{% url 'logout' %}">Log Out</a>
+                        <a class="btn btn-light action-button" role="button"
+                           href="{% url 'logout' %}">Log Out</a>
                     {% else %}
-                        <span class="navbar-text"> <a class="login" href="{% url 'login' %}">Log In</a></span>
-                        <a class="btn btn-light action-button" role="button" href="#signup">Get Started</a>
+                        <span class="navbar-text"> <a class="login"
+                                                      href="{% url 'login' %}">Log In</a></span>
+                        <a class="btn btn-light action-button" role="button"
+                           href="#signup">Get Started</a>
                     {% endif %}
                 </div>
             </div>
@@ -73,13 +87,16 @@ cloud-based inventory management for organizations">
             <div class="row">
                 <div class="col-12 col-lg-6 col-xl-5 offset-xl-1">
                     <h1>The revolution is here.</h1>
-                    <p>An inventory management software that has all the cloud computing capabilities in addition to
+                    <p>An inventory management software that has all the cloud
+                        computing capabilities in addition to
                         management of your organization’s inventories.</p>
-                    <a class="btn btn-light btn-lg action-button" role="button" href="#features">Learn More</a>
+                    <a class="btn btn-light btn-lg action-button" role="button"
+                       href="#features">Learn More</a>
                 </div>
                 <div
                         class="col-md-5 col-lg-5 offset-lg-1 offset-xl-0 d-none d-lg-block phone-holder">
-                    <div class="iphone-mockup"><img class="device" src="{% static 'img/iphone.svg' %}">
+                    <div class="iphone-mockup"><img class="device"
+                                                    src="{% static 'img/iphone.svg' %}">
                         <div class="screen"></div>
                     </div>
                 </div>
@@ -91,13 +108,17 @@ cloud-based inventory management for organizations">
     <div class="container">
         <div class="intro">
             <h2 class="text-center">Get Started</h2>
-            <p class="text-center">Add your company to the expanding list of companies using Crystal Inventory
-                Management or jump right in and register as an employee if you are one of us already! Create an Account
+            <p class="text-center">Add your company to the expanding list of
+                companies using Crystal Inventory
+                Management or jump right in and register as an employee if you
+                are one of us already! Create an Account
                 below.</p>
         </div>
         <div class="buttons">
-            <a class="btn btn-primary" role="button" href="{% url 'register' %}">Employee</a>
-            <a class="btn btn-warning" role="button" href="{% url 'register_company' %}">Company</a>
+            <a class="btn btn-primary" role="button"
+               href="{% url 'register' %}">Employee</a>
+            <a class="btn btn-outline-primary" role="button"
+               href="{% url 'register_company' %}">Company</a>
         </div>
     </div>
 </div>
@@ -105,93 +126,134 @@ cloud-based inventory management for organizations">
     <div class="container">
         <div class="intro">
             <h2 class="text-center">Why Crystal Inventory Management?</h2>
-            <p class="text-center">Crystal Inventory Management brings on the services and resources that companies
-                require to strike back weakness and encourage competence in their business.</p>
+            <p class="text-center">Crystal Inventory Management brings on the
+                services and resources that companies
+                require to strike back weakness and encourage competence in
+                their business.</p>
         </div>
         <div class="row features">
-            <div class="col-sm-6 col-md-4 item"><i class="fa fa-arrow-up icon"></i>
+            <div class="col-sm-6 col-md-4 item"><i
+                    class="fa fa-arrow-up icon"></i>
                 <h3 class="name">Upgradeable and Scalable Software</h3>
-                <p class="description">Crystal Inventory Management allows users to pay for the features needed now and
-                    seamlessly upgrade when demands increase in the future. In addition to stress-free upgrades, we work
-                    in the background to make sure things continue to run smoothly and are usually available to answer
+                <p class="description">Crystal Inventory Management allows
+                    users to pay for the features needed now and
+                    seamlessly upgrade when demands increase in the future. In
+                    addition to stress-free upgrades, we work
+                    in the background to make sure things continue to run
+                    smoothly and are usually available to answer
                     questions or provide assistance when necessary. </p>
             </div>
-            <div class="col-sm-6 col-md-4 item"><i class="fa fa-clock-o icon"></i>
+            <div class="col-sm-6 col-md-4 item"><i
+                    class="fa fa-clock-o icon"></i>
                 <h3 class="name">Real-Time Inventory Control</h3>
-                <p class="description">Instead of combing through piles of reports from different systems and
-                    departments or worse – making “educated” guesses – Crystal Inventory Management lets users view up
-                    to the minute data on inventory levels through easy to understand reports and dashboards. </p>
+                <p class="description">Instead of combing through piles of
+                    reports from different systems and
+                    departments or worse – making “educated” guesses – Crystal
+                    Inventory Management lets users view up
+                    to the minute data on inventory levels through easy to
+                    understand reports and dashboards. </p>
             </div>
-            <div class="col-sm-6 col-md-4 item"><i class="fa fa-list-alt icon"></i>
+            <div class="col-sm-6 col-md-4 item"><i
+                    class="fa fa-list-alt icon"></i>
                 <h3 class="name">Up-To-Date Inventory Reports</h3>
-                <p class="description">With Crystal Inventory Management, Inventory reports are automatically generated.
+                <p class="description">With Crystal Inventory Management,
+                    Inventory reports are automatically generated.
                     By knowing
-                    your peaks and troughs, you can make strategic decisions like upgrading some products, changing
-                    quantity ordered, or ditching them altogether to focus on something new.</p>
+                    your peaks and troughs, you can make strategic decisions
+                    like upgrading some products, changing
+                    quantity ordered, or ditching them altogether to focus on
+                    something new.</p>
             </div>
-            <div class="col-sm-6 col-md-4 item"><i class="fa fa-map-marker icon"></i>
-                <h3 class="name">Manage Operations from Anywhere in The World</h3>
-                <p class="description">Crystal Inventory Management enables users to be able to operate their business
-                    any time, any place. With this cloud-based inventory management system, users can manage multiple
+            <div class="col-sm-6 col-md-4 item"><i
+                    class="fa fa-map-marker icon"></i>
+                <h3 class="name">Manage Operations from Anywhere in The
+                    World</h3>
+                <p class="description">Crystal Inventory Management enables
+                    users to be able to operate their business
+                    any time, any place. With this cloud-based inventory
+                    management system, users can manage multiple
                     warehouses wherever they are with ease. </p>
             </div>
-            <div class="col-sm-6 col-md-4 item"><i class="fa fa-plane icon"></i>
-                <h3 class="name">Faster Installation and Easier Employee Training</h3>
-                <p class="description">You don't need to install software on each and every computer your team uses and
-                    have a dedicated IT department to keep that software running. With Crystal Inventory Management,
-                    everyone can understand the basics and start using it on day one. No additional employees or special
+            <div class="col-sm-6 col-md-4 item"><i
+                    class="fa fa-plane icon"></i>
+                <h3 class="name">Faster Installation and Easier Employee
+                    Training</h3>
+                <p class="description">You don't need to install software on
+                    each and every computer your team uses and
+                    have a dedicated IT department to keep that software
+                    running. With Crystal Inventory Management,
+                    everyone can understand the basics and start using it on
+                    day one. No additional employees or special
                     hardware is required.</p>
             </div>
             <div class="col-sm-6 col-md-4 item"><i class="fa fa-lock icon"></i>
                 <h3 class="name">Protection from Data Loss</h3>
-                <p class="description">Keeping your critical data safe, secure, and intact is very important. It is so
-                    easy to accidentally delete files, visit an infected website, or suffer from inevitable hardware
-                    failure. Investing in a cloud-based inventory management solution helps in protecting from data
-                    loss. It is far cheaper to invest in Crystal Inventory Management software than to pay to recover
-                    lost data, or worse, lose customers and go out of business.</p>
+                <p class="description">Keeping your critical data safe, secure,
+                    and intact is very important. It is so
+                    easy to accidentally delete files, visit an infected
+                    website, or suffer from inevitable hardware
+                    failure. Investing in a cloud-based inventory management
+                    solution helps in protecting from data
+                    loss. It is far cheaper to invest in Crystal Inventory
+                    Management software than to pay to recover
+                    lost data, or worse, lose customers and go out of
+                    business.</p>
             </div>
         </div>
     </div>
 </div>
-<div class="testimonials-clean bg-gradient-warning text-white">
+<div class="testimonials-clean text-black">
     <div class="container">
         <div class="intro">
-            <h2 class="text-center text-white" style="color: white!important;">Testimonials </h2>
-            <p class="text-center text-white">Our customers love us! Read what they have to say below. We are pleased to
-                find that
-                our service is such a success and can be beneficial to so many organizations.</p>
+            <h2 class="text-center">Testimonials </h2>
+            <p class="text-center text-dark" style="font-weight: bolder;
+            font-size: large;">Our customers love us! Read what
+                they have to say below. We are pleased to find that
+                our service is such a success and can be beneficial to so many
+                organizations.</p>
         </div>
         <div class="row people">
             <div class="col-md-6 col-lg-4 item">
                 <div class="box">
-                    <p class="description" style="color: #7d8285">Crystal has simplified and enhanced our asset and
-                        inventory tracking capabilities, all while seamlessly integrating into our complex
+                    <p class="description">Crystal has simplified
+                        and enhanced our asset and
+                        inventory tracking capabilities, all while seamlessly
+                        integrating into our complex
                         environment.</p>
                 </div>
-                <div class="author"><img class="rounded-circle" src="{% static 'img/1.jpg' %}">
-                    <h5 class="name" style="color: white!important;">Ben Johnson</h5>
-                    <p class="title text-white">CEO of CS Dojo</p>
+                <div class="author"><img class="rounded-circle"
+                                         src="{% static 'img/1.jpg' %}">
+                    <h5 class="name">Ben Johnson</h5>
+                    <p class="title">CEO of CS Dojo</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4 item">
                 <div class="box">
-                    <p class="description" style="color: #7d8285">I would recommend Crystal Inventory Management System
-                        to anyone because of the customer service, configurability and ease-of-use.</p>
+                    <p class="description">I would recommend Crystal Inventory
+                        Management System
+                        to anyone because of the customer service,
+                        configurability and ease-of-use.</p>
                 </div>
-                <div class="author"><img class="rounded-circle" src="{% static 'img/3.jpg' %}">
-                    <h5 class="name" style="color: white!important;">Carl Kent</h5>
-                    <p class="title text-white">Founder of BAC Insurance Consultants</p>
+                <div class="author"><img class="rounded-circle"
+                                         src="{% static 'img/3.jpg' %}">
+                    <h5 class="name">Carl Kent</h5>
+                    <p class="title">Founder of BAC
+                        Insurance
+                        Consultants</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-4 item">
                 <div class="box">
-                    <p class="description" style="color: #7d8285">In the past, we have had tools come up missing, or
-                        supposedly broken, so this system gives us MUCH more information on tools from cradle to
+                    <p class="description">In the past, we have had tools come
+                        up missing, or
+                        supposedly broken, so this system gives us MUCH more
+                        information on tools from cradle to
                         grave.</p>
                 </div>
-                <div class="author"><img class="rounded-circle" src="{% static 'img/2.jpg' %}">
-                    <h5 class="name" style="color: white!important;">Emily Clark</h5>
-                    <p class="title text-white">Owner of Crystal Programming Institute</p>
+                <div class="author"><img class="rounded-circle"
+                                         src="{% static 'img/2.jpg' %}">
+                    <h5 class="name">Emily Clark</h5>
+                    <p class="title">Owner of Crystal Programming Institute</p>
                 </div>
             </div>
         </div>
@@ -202,7 +264,8 @@ cloud-based inventory management for organizations">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-4 col-md-3 item">
-                    <img height="120" src="{% static "img/crystal-ims white.png" %}">
+                    <img height="120"
+                         src="{% static "img/crystal-ims white.png" %}">
                     {#                    <h3>Services</h3>#}
                     {#                    <ul>#}
                     {#                        <li><a href="#">Web design</a></li>#}
@@ -226,11 +289,14 @@ cloud-based inventory management for organizations">
                         <li><a href="#">Benefits</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 item social"><a href="#"><i class="icon ion-social-facebook hover-blue"></i></a><a
+                <div class="col-lg-3 item social"><a href="#"><i
+                        class="icon ion-social-facebook hover-blue"></i></a><a
                         href="#"><i
-                        class="icon ion-social-twitter hover-blue"></i></a><a href="#"><i
+                        class="icon ion-social-twitter hover-blue"></i></a><a
+                        href="#"><i
                         class="icon ion-social-linkedin hover-blue"></i></a><a
-                        href="#"><i class="icon ion-social-instagram hover-blue"></i></a>
+                        href="#"><i
+                        class="icon ion-social-instagram hover-blue"></i></a>
                     <p class="copyright">Crystal © 2019</p>
                 </div>
             </div>

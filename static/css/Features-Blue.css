@@ -1,8 +1,8 @@
 .features-blue {
-  color: #fff;
-  background: linear-gradient(135deg, #172a74, #21a9af);
-  background-color: #184e8e;
-  padding-bottom: 30px;
+    color: #fff;
+    background: linear-gradient(-10deg, #0c0b0b, #e74c32);
+    background-color: #0c0b0b;
+    padding-bottom: 30px;
 }
 
 @media (max-width:767px) {
@@ -68,9 +68,9 @@
 }
 
 .features-blue .item .icon {
-  font-size: 40px;
-  color: #ffcc1e;
-  float: left;
-  margin-left: -65px;
+    font-size: 40px;
+    color: #f6f6f6;
+    float: left;
+    margin-left: -65px;
 }
 
