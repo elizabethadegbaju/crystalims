@@ -9,12 +9,13 @@
         <h3 class="text-dark mb-4">{{ company.name }} Assets</h3>
         <div class="card shadow">
             <div class="card-header py-3">
-                <p class="text-primary m-0 font-weight-bold">Equipment Info</p>
+                <p class="text-danger m-0 font-weight-bold">Equipment Info</p>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                        <div id="dataTable_length" class="dataTables_length"
+                             aria-controls="dataTable">
                             <form method="get" action="{% url 'equipments' %}">
                                 <label>Show&nbsp;<select name="num" onchange="this.form.submit()"
                                                          class="form-control form-control-sm custom-select custom-select-sm">

@@ -41,11 +41,13 @@ EMAIL_PORT = 587
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'crystal-ims.appspot.com'
 GS_FILE_OVERWRITE = False
-GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR, 'crystal-eba453ba4522.json')
+GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR,
+                                              'crystal-eba453ba4522.json')
 GOOGLE_CLOUD_PROJECT = 'crystalims'
 GS_PROJECT_ID = 'crystal-ims'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'crystalinventorymanagementsystem-env.zx3sytpbnp.us-east-2.elasticbeanstalk.com',
+ALLOWED_HOSTS = ['127.0.0.1',
+                 'crystalinventorymanagementsystem-env.zx3sytpbnp.us-east-2.elasticbeanstalk.com',
                  'crystal-ims.appspot.com', 'staging.crystal-ims.appspot.com']
 
 ADMINS = [('Elizabeth', 'adeotunadegbaju@gmail.com')]
@@ -128,24 +130,24 @@ else:
     # to Cloud SQL via the proxy.  To start the proxy via command line:
     #    $ vcloud_sql_proxy -instances=crystal-ims:us-central1:crystal=tcp:3306
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.mysql',
+    #         'HOST': '127.0.0.1',
+    #         'PORT': '3306',
+    #         'NAME': 'crystal',
+    #         'USER': 'adeotun',
+    #         'PASSWORD': '',
+    #     }
+    # }
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'NAME': 'crystal',
-            'USER': 'adeotun',
-            'PASSWORD': '',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
 # [END db_setup]
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -188,8 +190,8 @@ USE_TZ = True
 # STATIC_ROOT = 'static'
 MEDIA_ROOT = 'media'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 if os.getenv('GAE_APPLICATION', None):
-    STATIC_ROOT = 'static'
+    MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'
 else:
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
-MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'
+    MEDIA_URL = "/media/"
