@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <body class="bg-gradient-danger">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-12 col-xl-10">
+                <div class="card shadow-lg o-hidden border-0 my-5"
+                     style="background-color: #f6f6f6">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-flex">
+                                <div class="flex-grow-1 bg-password-image"
+                                     style="background-image: url({% static 'img/smiley.jpg' %});"></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div><img
+                                        src="{% static 'img/crystal-ims white.png' %}"
+                                        class="d-block m-auto"
+                                        style="height:8vw">
+                                </div>
+                                <div class="pl-5 pr-5 pb-5">
+                                    <div class="text-center">
+                                        <h4 class="text-dark mb-2">One
+                                            Last Step!</h4>
+                                        <p class="mb-4">To complete you
+                                            registration please select your
+                                            company from the list below:
+                                        </p>
+                                    </div>
+                                    <form class="user" method="post"
+                                          action="{% url 'register_social' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <select class="custom-select form-control"
+                                                    required=""
+                                                    autofocus=""
+                                                    name="company_id">
+                                                {% for company in companies %}
+                                                    <option value="{{ company.id }}">{{ company.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <button
+                                                class="btn btn-outline-primary
+                                                btn-block btn-user"
+                                                type="submit">
+                                            Finish
+                                        </button>
+                                    </form>
+                                    <div class="text-center">
+                                        <hr>
+                                        <a class="small"
+                                           href="{% url 'register' %}">Create
+                                            an Account!</a></div>
+                                    <div class="text-center"><a class="small"
+                                                                href="{% url 'login' %}">Already
+                                        have an
+                                        account?
+                                        Login!</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="../../static/js/bs-charts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="../../static/js/theme.js"></script>
+    </body>
+{% endblock %}

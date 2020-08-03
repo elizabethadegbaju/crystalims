@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
@@ -27,33 +28,50 @@ def dashboard(request):
     user = request.user
     company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
-        most_requested = Equipment.objects.filter(location__company=company).annotate(
+        most_requested = Equipment.objects.filter(
+            location__company=company).annotate(
             num_allocations=Count('allocation')).order_by('-num_allocations')[
                          :10]
-        assets_value = Equipment.objects.filter(location__company=company).aggregate(Sum('price'))
-        pending_requests = Allocation.objects.filter(equipment__location__company=company,
-                                                     approver_id=1).count()
-        pending_equipments = Allocation.objects.filter(equipment__location__company=company,
-                                                       approver_id=1).order_by(
+        assets_value = Equipment.objects.filter(
+            location__company=company).aggregate(Sum('price'))
+        pending_requests = Allocation.objects.filter(
+            equipment__location__company=company,
+            approver_id=1).count()
+        pending_equipments = Allocation.objects.filter(
+            equipment__location__company=company,
+            approver_id=1).order_by(
             'equipment_id').distinct().count()  # there can be multiple requests on one equipment
-        allocated_equipments = Allocation.objects.filter(equipment__location__company=company, approved=True,
-                                                         checked_in=False,
-                                                         start_date__lte=timezone.now().date()).count()
-        equipments_count = Equipment.objects.filter(location__company=company).count()
-        free_equipments = equipments_count - (pending_equipments + allocated_equipments)
-        categories = Category.objects.filter(company=company).annotate(Count('equipment'))
+        allocated_equipments = Allocation.objects.filter(
+            equipment__location__company=company, approved=True,
+            checked_in=False,
+            start_date__lte=timezone.now().date()).count()
+        equipments_count = Equipment.objects.filter(
+            location__company=company).count()
+        free_equipments = equipments_count - (
+                pending_equipments + allocated_equipments)
+        categories = Category.objects.filter(company=company).annotate(
+            Count('equipment'))
         categories_count = categories.count()
         alerts, unread_messages = unread_messages_notification(user)
-        assets_monthly_value = company.assetlog_set.filter(year=timezone.now().year)
-        excellent_condition = Equipment.objects.filter(location__company=company, condition='E').count()
-        good_condition = Equipment.objects.filter(location__company=company, condition='G').count()
-        fair_condition = Equipment.objects.filter(location__company=company, condition='F').count()
-        very_poor_condition = Equipment.objects.filter(location__company=company, condition='VP').count()
+        assets_monthly_value = company.assetlog_set.filter(
+            year=timezone.now().year)
+        excellent_condition = Equipment.objects.filter(
+            location__company=company, condition='E').count()
+        good_condition = Equipment.objects.filter(location__company=company,
+                                                  condition='G').count()
+        fair_condition = Equipment.objects.filter(location__company=company,
+                                                  condition='F').count()
+        very_poor_condition = Equipment.objects.filter(
+            location__company=company, condition='VP').count()
         if equipments_count != 0:
-            excellent_condition_percentage = round((excellent_condition / equipments_count) * 100, 1)
-            good_condition_percentage = round((good_condition / equipments_count) * 100, 1)
-            fair_condition_percentage = round((fair_condition / equipments_count) * 100, 1)
-            very_poor_condition_percentage = round((very_poor_condition / equipments_count) * 100, 1)
+            excellent_condition_percentage = round(
+                (excellent_condition / equipments_count) * 100, 1)
+            good_condition_percentage = round(
+                (good_condition / equipments_count) * 100, 1)
+            fair_condition_percentage = round(
+                (fair_condition / equipments_count) * 100, 1)
+            very_poor_condition_percentage = round(
+                (very_poor_condition / equipments_count) * 100, 1)
         else:
             excellent_condition_percentage = 0
             good_condition_percentage = 0
@@ -89,7 +107,8 @@ def dashboard(request):
 def signup(request):
     if request.method == "GET":
         companies = Company.objects.all().order_by('name')
-        return render(request, 'registration/register.html', {'companies': companies})
+        return render(request, 'registration/register.html',
+                      {'companies': companies})
     elif request.method == "POST":
         email = request.POST['email']
         first_name = request.POST['first_name']
@@ -105,7 +124,8 @@ def signup(request):
         user.is_active = False
         user.save()
         current_site = get_current_site(request)
-        mail_subject = 'Verify your {0} employee account on Crystal.'.format(company.name)
+        mail_subject = 'Verify your {0} employee account on Crystal.'.format(
+            company.name)
         message = render_to_string('acc_activate_email.html', {
             'user': user,
             'domain': current_site.domain,
@@ -113,7 +133,8 @@ def signup(request):
             'token': account_activation_token.make_token(user),
         })
         to_email = email
-        send_mail(mail_subject, message, from_email="admin@crystalims.com", recipient_list=[to_email],
+        send_mail(mail_subject, message, from_email="admin@crystalims.com",
+                  recipient_list=[to_email],
                   fail_silently=False, )
         user.employee.location = company.location_set.first()
         user.employee.username = first_name[:3] + "_" + last_name[:3]
@@ -123,6 +144,16 @@ def signup(request):
             'Account has been created successfully. Look out for the verification link sent to your email address.')
 
 
+def social_signup(request):
+    if request.method == "GET":
+        companies = Company.objects.all().order_by('name')
+        return render(request, 'registration/register_social.html',
+                      {'companies': companies})
+    elif request.method == "POST":
+        request.session['company_id'] = request.POST['company_id']
+        return redirect(reverse('social:complete', args=("google-oauth2",)))
+
+
 @login_required
 def equipments(request):
     if request.method == "GET":
@@ -130,11 +161,13 @@ def equipments(request):
         alerts, unread_messages = unread_messages_notification(user)
         company = user.employee.location.company
 
-        equipments_list = Equipment.objects.filter(location__company=company).order_by(
+        equipments_list = Equipment.objects.filter(
+            location__company=company).order_by(
             'description')
         equipments = pager(equipments_list, request)
         return render(request, 'equipments.html',
-                      {'company': company, 'equipments': equipments, 'unread_messages': unread_messages,
+                      {'company': company, 'equipments': equipments,
+                       'unread_messages': unread_messages,
                        'alerts': alerts})
 
 
@@ -150,8 +183,11 @@ def pager(list, request):
 
 
 def unread_messages_notification(user):
-    unread_messages = user.inbox_messages.filter(from_user_id__gte=2, read=False).order_by('-date_sent')
-    alerts = user.inbox_messages.filter(from_user_id=1, read=False).order_by('-date_sent')
+    unread_messages = user.inbox_messages.filter(from_user_id__gte=2,
+                                                 read=False).order_by(
+        '-date_sent')
+    alerts = user.inbox_messages.filter(from_user_id=1, read=False).order_by(
+        '-date_sent')
     return alerts, unread_messages
 
 
@@ -162,7 +198,8 @@ def equipment(request, pk):
         allocations = equipment.allocation_set.all()
         alerts, unread_messages = unread_messages_notification(user)
         return render(request, 'equipment.html',
-                      {'equipment': equipment, 'allocations': allocations, 'unread_messages': unread_messages,
+                      {'equipment': equipment, 'allocations': allocations,
+                       'unread_messages': unread_messages,
                        'alerts': alerts})
 
 
@@ -172,7 +209,8 @@ def profile(request):
         user = request.user
         alerts, unread_messages = unread_messages_notification(user)
         allocations = user.equipment_allocations.all()
-        return render(request, 'profile.html', {'allocations': allocations, 'unread_messages': unread_messages,
+        return render(request, 'profile.html', {'allocations': allocations,
+                                                'unread_messages': unread_messages,
                                                 'alerts': alerts})
 
 
@@ -192,8 +230,11 @@ def create(request):
 
         company = Company.objects.create(name=company_name)
         company.save()
-        location = Location.objects.create(company=company, address=company_address, city=company_city,
-                                           country=company_country, name=company_city)
+        location = Location.objects.create(company=company,
+                                           address=company_address,
+                                           city=company_city,
+                                           country=company_country,
+                                           name=company_city)
         location.save()
         user = User.objects.create_user(email, password)
         user.first_name = first_name
@@ -214,10 +255,13 @@ def team(request):
     user = request.user
     alerts, unread_messages = unread_messages_notification(user)
 
-    team_list = Employee.objects.filter(location__company=user.employee.location.company).order_by('-user__last_login')
+    team_list = Employee.objects.filter(
+        location__company=user.employee.location.company).order_by(
+        '-user__last_login')
     team = pager(team_list, request)
-    return render(request, 'team.html', {'team': team, 'unread_messages': unread_messages,
-                                         'alerts': alerts})
+    return render(request, 'team.html',
+                  {'team': team, 'unread_messages': unread_messages,
+                   'alerts': alerts})
 
 
 def activate(request, uidb64, token):
@@ -231,7 +275,8 @@ def activate(request, uidb64, token):
         user.save()
         user.groups.set([3])
         login(request, user, 'django.contrib.auth.backends.ModelBackend')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return HttpResponse(
+            'Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Activation link is invalid!')
 
@@ -244,8 +289,10 @@ def team_member(request, pk):
         alerts, unread_messages = unread_messages_notification(user)
         if user.employee.location.company_id == logged_in_user.employee.location.company_id:
             allocations = user.equipment_allocations.all()
-            return render(request, 'profile.html', {'allocations': allocations, 'unread_messages': unread_messages,
-                                                    'alerts': alerts, 'user': user})
+            return render(request, 'profile.html', {'allocations': allocations,
+                                                    'unread_messages': unread_messages,
+                                                    'alerts': alerts,
+                                                    'user': user})
         else:
             return redirect('page_not_found')
 
@@ -253,7 +300,8 @@ def team_member(request, pk):
 def error(request):
     user = request.user
     alerts, unread_messages = unread_messages_notification(user)
-    return render(request, '404.html', {'unread_messages': unread_messages, 'alerts': alerts})
+    return render(request, '404.html',
+                  {'unread_messages': unread_messages, 'alerts': alerts})
 
 
 @login_required
@@ -269,6 +317,7 @@ def image_upload(request):
 def error_404_view(request, exception):
     data = {"name": "crystal-ims.appspot.com"}
     return render(request, '404.html', data)
+
 
 @login_required
 def edit_user(request):
@@ -295,8 +344,10 @@ def add_employee(request):
             alerts, unread_messages = unread_messages_notification(user)
             company = user.employee.location.company
             locations = company.location_set.all()
-            return render(request, 'add_employee.html', {'locations': locations, 'unread_messages': unread_messages,
-                                                         'alerts': alerts})
+            return render(request, 'add_employee.html',
+                          {'locations': locations,
+                           'unread_messages': unread_messages,
+                           'alerts': alerts})
         elif request.method == "POST":
             email = request.POST['email']
             location = request.POST['location']
@@ -315,7 +366,8 @@ def add_equipment(request):
             locations = company.location_set.all()
             categories = company.category_set.all()
             return render(request, 'add_equipment.html',
-                          {'locations': locations, 'categories': categories, 'unread_messages': unread_messages,
+                          {'locations': locations, 'categories': categories,
+                           'unread_messages': unread_messages,
                            'alerts': alerts})
         elif request.method == "POST":
             serial = request.POST['serial']
@@ -324,8 +376,12 @@ def add_equipment(request):
             vendor = request.POST['vendor']
             category = request.POST['category']
             location = request.POST['location']
-            equipment = Equipment.objects.create(serial=serial, description=description, price=price, vendor=vendor,
-                                                 condition='E', category_id=category, location_id=location)
+            equipment = Equipment.objects.create(serial=serial,
+                                                 description=description,
+                                                 price=price, vendor=vendor,
+                                                 condition='E',
+                                                 category_id=category,
+                                                 location_id=location)
             equipment.save()
             return redirect('equipments')
     else:
@@ -337,8 +393,10 @@ def allocations(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         alerts, unread_messages = unread_messages_notification(user)
-        allocations = Allocation.objects.filter(equipment__location__company=user.employee.location.company)
-        return render(request, 'allocations.html', {'allocations': allocations, 'unread_messages': unread_messages,
+        allocations = Allocation.objects.filter(
+            equipment__location__company=user.employee.location.company)
+        return render(request, 'allocations.html', {'allocations': allocations,
+                                                    'unread_messages': unread_messages,
                                                     'alerts': alerts})
     else:
         return redirect('dashboard')
@@ -356,12 +414,16 @@ def add_category(request):
 @login_required
 def messages(request):
     user = request.user
-    employees = Employee.objects.filter(location__company=user.employee.location.company).order_by('user__first_name')
+    employees = Employee.objects.filter(
+        location__company=user.employee.location.company).order_by(
+        'user__first_name')
     alerts, unread_messages = unread_messages_notification(user)
-    inbox = user.inbox_messages.filter(from_user_id__gte=2).order_by('-date_sent')
+    inbox = user.inbox_messages.filter(from_user_id__gte=2).order_by(
+        '-date_sent')
     sent = user.sent_messages.all()
     return render(request, 'messages.html',
-                  {'inbox': inbox, 'sent': sent, 'unread_messages': unread_messages, 'alerts': alerts,
+                  {'inbox': inbox, 'sent': sent,
+                   'unread_messages': unread_messages, 'alerts': alerts,
                    'employees': employees})
 
 
@@ -372,7 +434,8 @@ def add_location(request):
     address = request.POST['address']
     city = request.POST['city']
     country = request.POST['country']
-    location = Location.objects.create(name=name, address=address, city=city, country=country, company=company)
+    location = Location.objects.create(name=name, address=address, city=city,
+                                       country=country, company=company)
     location.save()
     return redirect('add_equipment')
 
@@ -381,30 +444,46 @@ def add_location(request):
 def pdf(request):
     user = request.user
     company = user.employee.location.company
-    most_requested = Equipment.objects.filter(location__company=company).annotate(
+    most_requested = Equipment.objects.filter(
+        location__company=company).annotate(
         num_allocations=Count('allocation')).order_by('-num_allocations')[
                      :10]
-    assets_value = Equipment.objects.filter(location__company=company).aggregate(Sum('price'))
-    pending_requests = Allocation.objects.filter(equipment__location__company=company,
-                                                 approver__isnull=True).count()
-    pending_equipments = Allocation.objects.filter(equipment__location__company=company,
-                                                   approver__isnull=True).order_by(
+    assets_value = Equipment.objects.filter(
+        location__company=company).aggregate(Sum('price'))
+    pending_requests = Allocation.objects.filter(
+        equipment__location__company=company,
+        approver__isnull=True).count()
+    pending_equipments = Allocation.objects.filter(
+        equipment__location__company=company,
+        approver__isnull=True).order_by(
         'equipment_id').distinct().count()
-    allocated_equipments = Allocation.objects.filter(equipment__location__company=company, approved=True,
-                                                     checked_in=False,
-                                                     start_date__lte=timezone.now().date()).count()
-    equipments_count = Equipment.objects.filter(location__company=company).count()
-    free_equipments = equipments_count - (pending_equipments + allocated_equipments)
+    allocated_equipments = Allocation.objects.filter(
+        equipment__location__company=company, approved=True,
+        checked_in=False,
+        start_date__lte=timezone.now().date()).count()
+    equipments_count = Equipment.objects.filter(
+        location__company=company).count()
+    free_equipments = equipments_count - (
+            pending_equipments + allocated_equipments)
     categories_count = Category.objects.filter(company=company).count()
-    assets_monthly_value = AssetLog.objects.filter(company=company, year=timezone.now().year)
-    excellent_condition = Equipment.objects.filter(location__company=company, condition='E').count()
-    excellent_condition_percentage = round((excellent_condition / equipments_count) * 100, 1)
-    good_condition = Equipment.objects.filter(location__company=company, condition='G').count()
-    good_condition_percentage = round((good_condition / equipments_count) * 100, 1)
-    fair_condition = Equipment.objects.filter(location__company=company, condition='F').count()
-    fair_condition_percentage = round((fair_condition / equipments_count) * 100, 1)
-    very_poor_condition = Equipment.objects.filter(location__company=company, condition='VP').count()
-    very_poor_condition_percentage = round((very_poor_condition / equipments_count) * 100, 1)
+    assets_monthly_value = AssetLog.objects.filter(company=company,
+                                                   year=timezone.now().year)
+    excellent_condition = Equipment.objects.filter(location__company=company,
+                                                   condition='E').count()
+    excellent_condition_percentage = round(
+        (excellent_condition / equipments_count) * 100, 1)
+    good_condition = Equipment.objects.filter(location__company=company,
+                                              condition='G').count()
+    good_condition_percentage = round(
+        (good_condition / equipments_count) * 100, 1)
+    fair_condition = Equipment.objects.filter(location__company=company,
+                                              condition='F').count()
+    fair_condition_percentage = round(
+        (fair_condition / equipments_count) * 100, 1)
+    very_poor_condition = Equipment.objects.filter(location__company=company,
+                                                   condition='VP').count()
+    very_poor_condition_percentage = round(
+        (very_poor_condition / equipments_count) * 100, 1)
     assets_mv = {}
     for monthly_value in assets_monthly_value:
         assets_mv[monthly_value.month] = monthly_value.assets
@@ -467,7 +546,8 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Your password was successfully updated!')
+            messages.success(request,
+                             'Your password was successfully updated!')
             return redirect('change_password')
         else:
             messages.error(request, 'Please correct the error below.')

@@ -27,6 +27,8 @@ urlpatterns = [
                   path('register/', views.signup, name="register"),
                   path('register-company/', views.create,
                        name="register_company"),
+                  path('register-social/', views.social_signup,
+                       name="register_social"),
                   path('password/', views.change_password,
                        name="change_password"),
                   path('oauth/', include('social_django.urls')),
