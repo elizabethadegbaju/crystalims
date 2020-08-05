@@ -1,15 +1,24 @@
 {% extends 'base_nav.html' %}
+{% load static %}
 {% block title %}
     404 Error - Crystal
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
+        <a href="{% url 'home' %}">
+            <div class="d-flex align-items-center justify-content-center
+                                    p-4">
+                <img height="70vh"
+                     src="{% static 'img/logos/logo_brand.svg' %}">
+            </div>
+        </a>
         <div class="text-center mt-5">
             <div class="error mx-auto" data-text="404">
                 <p class="m-0">404</p>
             </div>
             <p class="text-dark mb-5 lead">End of the Line</p>
-            <p class="text-black-50 mb-0">It looks like you found a glitch in the matrix...</p><a
+            <p class="text-black-50 mb-0">It looks like you found a glitch in
+                the matrix...</p><a
                 href="{% url 'dashboard' %}">← Get me out of here</a>
         </div>
     </div>

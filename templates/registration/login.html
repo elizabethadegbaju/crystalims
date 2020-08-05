@@ -19,10 +19,10 @@
                             </div>
                             <div class="col-lg-6">
                                 <a href="{% url 'home' %}">
-                                    <div><img src=
-                                                      "{% static 'img/crystal-ims white.png' %}"
-                                              class="d-block m-auto"
-                                              style="height:8vw">
+                                    <div class="d-flex align-items-center justify-content-center
+                                    p-4">
+                                        <img height="70vh"
+                                             src="{% static 'img/logos/logo_brand_dark.svg' %}">
                                     </div>
                                 </a>
                                 <div class="pl-5 pr-5 pb-5">
@@ -45,52 +45,79 @@
                                     {% endif %}
                                     {% if next %}
                                         {% if user.is_authenticated %}
-                                            <div class="alert alert-danger alert-dismissable" role="alert">
-                                                <button type="button" class="close" data-dismiss="alert">&times;
+                                            <div class="alert alert-danger alert-dismissable"
+                                                 role="alert">
+                                                <button type="button"
+                                                        class="close"
+                                                        data-dismiss="alert">
+                                                    &times;
                                                 </button>
-                                                Your account doesn't have access to this page. To proceed, please login
+                                                Your account doesn't have
+                                                access to this page. To
+                                                proceed, please login
                                                 with an
                                                 account that has access.
                                             </div>
                                         {% else %}
-                                            <div class="alert alert-danger alert-dismissable" role="alert">
-                                                <button type="button" class="close" data-dismiss="alert">&times;
+                                            <div class="alert alert-danger alert-dismissable"
+                                                 role="alert">
+                                                <button type="button"
+                                                        class="close"
+                                                        data-dismiss="alert">
+                                                    &times;
                                                 </button>
                                                 Please login to see this page.
                                             </div>
                                         {% endif %}
                                     {% endif %}
-                                    <form class="user" method="POST" action="{% url 'login' %}">
+                                    <form class="user" method="POST"
+                                          action="{% url 'login' %}">
                                         {% csrf_token %}
-                                        <div class="form-group"><input class="form-control form-control-user"
-                                                                       type="email" id="exampleInputEmail"
-                                                                       aria-describedby="emailHelp"
-                                                                       placeholder="Email Address" name="username">
+                                        <div class="form-group"><input
+                                                class="form-control form-control-user"
+                                                type="email"
+                                                id="exampleInputEmail"
+                                                aria-describedby="emailHelp"
+                                                placeholder="Email Address"
+                                                name="username">
                                         </div>
-                                        <div class="form-group"><input class="form-control form-control-user"
-                                                                       type="password" id="exampleInputPassword"
-                                                                       placeholder="Password"
-                                                                       name="password"></div>
+                                        <div class="form-group"><input
+                                                class="form-control form-control-user"
+                                                type="password"
+                                                id="exampleInputPassword"
+                                                placeholder="Password"
+                                                name="password"></div>
                                         <button class="btn btn-outline-primary btn-block btn-user"
-                                                type="submit" value="login">Login
+                                                type="submit" value="login">
+                                            Login
                                         </button>
-                                        <input type="hidden" name="next" value="{{ next }}">
+                                        <input type="hidden" name="next"
+                                               value="{{ next }}">
                                         <hr>
                                         <a class="btn btn-primary btn-block text-white btn-google btn-user"
-                                           role="button" href="{% url 'social:begin' 'google-oauth2' %}"><i
-                                                class="fab fa-google"></i>&nbsp; Login with Google</a>
+                                           role="button"
+                                           href="{% url 'social:begin' 'google-oauth2' %}"><i
+                                                class="fab fa-google"></i>&nbsp;
+                                            Login with Google</a>
                                         <a class="btn btn-primary btn-block text-white btn-facebook btn-user"
-                                           role="button" href="{% url 'social:begin' 'facebook' %}"><i
-                                                class="fab fa-facebook-f"></i>&nbsp; Login with
+                                           role="button"
+                                           href="{% url 'social:begin' 'facebook' %}"><i
+                                                class="fab fa-facebook-f"></i>&nbsp;
+                                            Login with
                                             Facebook</a>
                                         <a class="btn btn-primary btn-block text-white btn-twitter btn-user"
-                                           role="button" href="{% url 'social:begin' 'twitter' %}"><i
-                                                class="fab fa-twitter"></i>&nbsp; Login with Twitter</a>
+                                           role="button"
+                                           href="{% url 'social:begin' 'twitter' %}"><i
+                                                class="fab fa-twitter"></i>&nbsp;
+                                            Login with Twitter</a>
                                         <hr>
                                     </form>
-                                    <div class="text-center"><a class="small" href="{% url 'password_reset' %}">Forgot
+                                    <div class="text-center"><a class="small"
+                                                                href="{% url 'password_reset' %}">Forgot
                                         Password?</a></div>
-                                    <div class="text-center"><a class="small" href="{% url 'register' %}">Create an
+                                    <div class="text-center"><a class="small"
+                                                                href="{% url 'register' %}">Create
+                                        an
                                         Account!</a></div>
                                 </div>
                             </div>

@@ -48,7 +48,7 @@
                         </thead>
                         <tbody>
                         {% for equipment in equipments %}
-                            <tr class="position-relative">
+                            <tr style="transform: rotate(0)">
                                 <td>
                                     <a class="stretched-link text-gray-600" style="text-decoration: none"
                                        href="{% url 'equipment' equipment.serial %}">{{ equipment.serial }}</a>
