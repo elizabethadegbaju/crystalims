@@ -58,10 +58,10 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_PIPELINE = (
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'adeotunadegbaju@gmail.com'
-EMAIL_HOST_PASSWORD = 'flowerpothead981'
-EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'postmaster@sandbox4ea32e534f5b45aea37dc52c33a8ddb7.mailgun.org'
+EMAIL_HOST_PASSWORD = '19e4f5482909c4c49e9919b533814957-7fba8a4e-f8402762'
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'crystal-ims.appspot.com'
@@ -144,7 +144,7 @@ if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/crystal-ims:us-central1:crystal',
+            'HOST': '/cloudsql/crystal-ims:us-east1:crystal',
             'USER': 'adeotun',
             'PASSWORD': '',
             'NAME': 'crystal',
@@ -153,22 +153,16 @@ if os.getenv('GAE_APPLICATION', None):
 else:
     # Running locally so connect to either a local MySQL instance or connect
     # to Cloud SQL via the proxy.  To start the proxy via command line:
-    #    $ vcloud_sql_proxy -instances=crystal-ims:us-central1:crystal=tcp:3306
+    #    $ vcloud_sql_proxy -instances=crystal-ims:us-east1:crystal=tcp:3306
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.mysql',
-    #         'HOST': '127.0.0.1',
-    #         'PORT': '3306',
-    #         'NAME': 'crystal',
-    #         'USER': 'adeotun',
-    #         'PASSWORD': '',
-    #     }
-    # }
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+            'NAME': 'crystal',
+            'USER': 'adeotun',
+            'PASSWORD': '',
         }
     }
 # [END db_setup]

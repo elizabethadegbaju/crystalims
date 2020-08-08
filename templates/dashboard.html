@@ -323,13 +323,33 @@
                                     data-bs-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[{% for category in categories %}&quot;{{ category.name }}&quot;
 
 
+
+
+
+
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[
                                             {% for category in categories %}&quot;{% cycle '#5bc0de' '#894f62' '#f6c23e' '#e74a3b' '#1cc88a' as bgcolors %}&quot;
+
+
+
+
+
 
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;borderColor&quot;:[
                                             {% for category in categories %}&quot;{% cycle '#ffffff' '#ffffff' as bordercolors %}&quot;
 
+
+
+
+
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;data&quot;:[{% for category in categories %}&quot;{{ category.equipment__count }}&quot;
+
+
+
+
+
 
 
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>

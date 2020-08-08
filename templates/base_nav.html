@@ -6,16 +6,18 @@
     accordion p-0" style="background-color: #0c0b0b"
          id="page-top">
         <div class="container-fluid d-flex flex-column p-0">
-            <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand mt-3 mb-3"
-               href="{% url 'home' %}">
-                <img src="{% static "img/logos/logo.svg" %}"
-                     style="height: 5vw">
-            </a>
+            <div style="width: 100%">
+                <a class="d-flex justify-content-center align-items-center sidebar-brand mt-3 mb-3"
+                   href="{% url 'home' %}">
+                    <img src="{% static "img/logos/logo.svg" %}"
+                         style="width: 50%">
+                </a>
+            </div>
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
                 {% if request.user|has_group:"Company Superusers" %}
                     <li class="nav-item" role="presentation"><a
-                            class="nav-link active"
+                            class="nav-link"
                             href="{% url 'dashboard' %}"><i
                             class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
                     </li>
@@ -42,8 +44,18 @@
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link"
+                            href="{% url 'add_category' %}"><i
+                            class="fas fa-list"></i><span>Add Category</span></a>
+                    </li>
+                    <li class="nav-item" role="presentation"><a
+                            class="nav-link"
                             href="{% url 'add_equipment' %}"><i
                             class="fas fa-cog"></i><span>Add Equipment</span></a>
+                    </li>
+                    <li class="nav-item" role="presentation"><a
+                            class="nav-link"
+                            href="{% url 'add_location' %}"><i
+                            class="fas fa-map-marked"></i><span>Add Location</span></a>
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link" href="{% url 'allocations' %}"><i
@@ -66,38 +78,38 @@
                     id="sidebarToggleTop"
                     type="button"><i class="fas fa-bars"></i></button>
             <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                <div class="input-group"><input
-                        class="bg-light form-control border-0 small"
-                        type="text"
-                        placeholder="Search for ...">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary py-0" type="button"><i
-                                class="fas fa-search"></i></button>
-                    </div>
-                </div>
+                {#                <div class="input-group"><input#}
+                {#                        class="bg-light form-control border-0 small"#}
+                {#                        type="text"#}
+                {#                        placeholder="Search for ...">#}
+                {#                    <div class="input-group-append">#}
+                {#                        <button class="btn btn-primary py-0" type="button"><i#}
+                {#                                class="fas fa-search"></i></button>#}
+                {#                    </div>#}
+                {#                </div>#}
             </form>
             <ul class="nav navbar-nav flex-nowrap ml-auto">
-                <li class="nav-item dropdown d-sm-none no-arrow"><a
-                        class="dropdown-toggle nav-link"
-                        data-toggle="dropdown" aria-expanded="false"
-                        href="#"><i class="fas fa-search"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in"
-                         role="menu"
-                         aria-labelledby="searchDropdown">
-                        <form class="form-inline mr-auto navbar-search w-100">
-                            <div class="input-group"><input
-                                    class="bg-light form-control border-0 small"
-                                    type="text"
-                                    placeholder="Search for ...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary py-0"
-                                            type="button"><i
-                                            class="fas fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </li>
+                {#                <li class="nav-item dropdown d-sm-none no-arrow"><a#}
+                {#                        class="dropdown-toggle nav-link"#}
+                {#                        data-toggle="dropdown" aria-expanded="false"#}
+                {#                        href="#"><i class="fas fa-search"></i></a>#}
+                {#                    <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in"#}
+                {#                         role="menu"#}
+                {#                         aria-labelledby="searchDropdown">#}
+                {#                        <form class="form-inline mr-auto navbar-search w-100">#}
+                {#                            <div class="input-group"><input#}
+                {#                                    class="bg-light form-control border-0 small"#}
+                {#                                    type="text"#}
+                {#                                    placeholder="Search for ...">#}
+                {#                                <div class="input-group-append">#}
+                {#                                    <button class="btn btn-primary py-0"#}
+                {#                                            type="button"><i#}
+                {#                                            class="fas fa-search"></i></button>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </form>#}
+                {#                    </div>#}
+                {#                </li>#}
                 <li class="nav-item dropdown no-arrow mx-1"
                     role="presentation">
                     <div class="nav-item dropdown no-arrow"><a
@@ -179,9 +191,6 @@
                             src="
 
 
-
-
-
                                     {{ MEDIA_URL }}{{ request.user.employee.image|urlencode }}"></a>
                         <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"
                              role="menu">
@@ -189,12 +198,9 @@
                                href="{% url 'profile' %}"><i
                                     class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a
                                 class="dropdown-item" role="presentation"
-                                href="#"><i
-                                class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
-                            <a class="dropdown-item" role="presentation"
-                               href="#"><i
-                                    class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Activity
-                                log</a>
+                                href="{% url 'home' %}"><i
+                                class="fas fa-home fa-sm fa-fw mr-2
+                                text-gray-400"></i>Home</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" role="presentation"
                                href="{% url 'logout' %}"><i
@@ -208,21 +214,19 @@
 {% endblock %}
 {% block scripts %}
     <script type="application/javascript">
-        $(function () {
-            setNavigation();
-        });
-
-        function setNavigation() {
-            var path = window.location.pathname;
-            path = path.replace(/\/$/, "");
-            path = decodeURIComponent(path);
-
-            $(".nav a").each(function () {
-                var href = $(this).attr('href');
-                if (path.substring(0, href.length) === href) {
-                    $(this).closest('li').addClass('active');
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+            var onDomain = true;
+            $("#page-top div ul li a").each(function () {
+                var href = $(this).attr("href");
+                if (href !== undefined && pathname.indexOf(href) >= 0) {
+                    $(this).addClass("active");
+                    onDomain = false;
                 }
             });
-        }
+            if (onDomain) {
+                $("#page-top div ul li:first-child a").addClass("active");
+            }
+        });
     </script>
 {% endblock %}
