@@ -26,6 +26,7 @@ class UserAdmin(DjangoUserAdmin):
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
 
+
 admin.site.register(Equipment)
 admin.site.register(Employee)
 admin.site.register(Allocation)
@@ -34,3 +35,5 @@ admin.site.register(Company)
 admin.site.register(Location)
 admin.site.register(AssetLog)
 admin.site.register(Message)
+admin.site.register(Supplier)
+admin.site.register(PurchaseLog)

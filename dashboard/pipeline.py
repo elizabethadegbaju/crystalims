@@ -20,12 +20,13 @@ def identify_company(strategy, backend, request, details, *args, **kwargs):
     if not company_id:
         return redirect('register_social')
 
-    user = User.objects.get(email=kwargs['response']['email'])
-    company = Company.objects.get(id=company_id)
-    user.employee.location = company.location_set.first()
-    user.employee.username = kwargs['username']
-    file_name = 'user_{0}.jpg'.format(user.id)
-    user.employee.image.save(file_name, File(
-        retrieve_image(kwargs['response']['picture'])))
-    user.employee.save()
+    if request.user is None:
+        user = User.objects.get(email=kwargs['response']['email'])
+        company = Company.objects.get(id=company_id)
+        user.employee.location = company.location_set.first()
+        user.employee.username = kwargs['username']
+        file_name = 'user_{0}.jpg'.format(user.id)
+        user.employee.image.save(file_name, File(
+            retrieve_image(kwargs['response']['picture'])))
+        user.employee.save()
     return

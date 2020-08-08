@@ -1,15 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load profile_extras %}
+{% block styles %}
+    <style>
+        .nav-item .active {
+            background-color: #e74c32 !important;
+        }
+    </style>
+{% endblock %}
 {% block sidenav %}
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark
     accordion p-0" style="background-color: #0c0b0b"
          id="page-top">
         <div class="container-fluid d-flex flex-column p-0">
             <div style="width: 100%">
-                <a class="d-flex justify-content-center align-items-center sidebar-brand mt-3 mb-3"
+                <a class="d-flex justify-content-center align-items-center
+                sidebar-brand mt-4 mb-4"
                    href="{% url 'home' %}">
-                    <img src="{% static "img/logos/logo.svg" %}"
+                    <img src="{% static "img/logos/logo_alt.svg" %}"
                          style="width: 50%">
                 </a>
             </div>
@@ -61,6 +69,16 @@
                             class="nav-link" href="{% url 'allocations' %}"><i
                             class="fas fa-calendar"></i><span>Allocations</span></a>
                     </li>
+                    <li class="nav-item" role="presentation"><a
+                            class="nav-link" href="#"><i
+                            class="fas
+                            fa-money-check"></i><span>Purchase Orders</span></a>
+                    </li>
+                    <li class="nav-item" role="presentation"><a
+                            class="nav-link" href="#"><i
+                            class="fas
+                            fa-truck"></i><span>Suppliers</span></a>
+                    </li>
                 {% endif %}
             </ul>
             <div class="text-center d-none d-md-inline">
@@ -74,7 +92,7 @@
 {% block topnav %}
     <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
         <div class="container-fluid">
-            <button class="btn btn-link d-md-none rounded-circle mr-3"
+            <button class="btn btn-link d-md-none rounded-circle mr-3 text-danger"
                     id="sidebarToggleTop"
                     type="button"><i class="fas fa-bars"></i></button>
             <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -189,6 +207,9 @@
                         {{ request.user.last_name }}</span><img
                             class="border rounded-circle img-profile"
                             src="
+
+
+
 
 
                                     {{ MEDIA_URL }}{{ request.user.employee.image|urlencode }}"></a>

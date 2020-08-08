@@ -42,7 +42,6 @@
                             <th>Description</th>
                             <th>Condition</th>
                             <th>Category</th>
-                            <th>Location</th>
                             <th>Quantity</th>
                         </tr>
                         </thead>
@@ -56,7 +55,6 @@
                                 <td>{{ equipment.description }}</td>
                                 <td>{{ equipment.condition }}</td>
                                 <td>{{ equipment.category.name }}</td>
-                                <td>{{ equipment.location.name }}</td>
                                 <td>{{ equipment.quantity }}</td>
                             </tr>
                         {% empty %}
@@ -69,7 +67,6 @@
                             <td><strong>Description</strong></td>
                             <td><strong>Condition</strong></td>
                             <td><strong>Category</strong></td>
-                            <td><strong>Location</strong></td>
                             <td><strong>Quantity</strong></td>
                         </tr>
                         </tfoot>

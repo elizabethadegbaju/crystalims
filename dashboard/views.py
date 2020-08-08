@@ -5,10 +5,12 @@ from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -28,24 +30,24 @@ def dashboard(request):
     company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         most_requested = Equipment.objects.filter(
-            location__company=company).annotate(
+            company=company).annotate(
             num_allocations=Count('allocation')).order_by('-num_allocations')[
                          :10]
         assets_value = Equipment.objects.filter(
-            location__company=company).aggregate(Sum('price'))
+            company=company).aggregate(Sum('price'))
         pending_requests = Allocation.objects.filter(
-            equipment__location__company=company,
+            equipment__company=company,
             approver_id=1).count()
         pending_equipments = Allocation.objects.filter(
-            equipment__location__company=company,
+            equipment__company=company,
             approver_id=1).order_by(
             'equipment_id').distinct().count()  # there can be multiple requests on one equipment
         allocated_equipments = Allocation.objects.filter(
-            equipment__location__company=company, approved=True,
+            equipment__company=company, approved=True,
             checked_in=False,
             start_date__lte=timezone.now().date()).count()
         equipments_count = Equipment.objects.filter(
-            location__company=company).count()
+            company=company).count()
         free_equipments = equipments_count - (
                 pending_equipments + allocated_equipments)
         categories = Category.objects.filter(company=company).annotate(
@@ -55,13 +57,13 @@ def dashboard(request):
         assets_monthly_value = company.assetlog_set.filter(
             year=timezone.now().year)
         excellent_condition = Equipment.objects.filter(
-            location__company=company, condition='E').count()
-        good_condition = Equipment.objects.filter(location__company=company,
+            company=company, condition='E').count()
+        good_condition = Equipment.objects.filter(company=company,
                                                   condition='G').count()
-        fair_condition = Equipment.objects.filter(location__company=company,
+        fair_condition = Equipment.objects.filter(company=company,
                                                   condition='F').count()
         very_poor_condition = Equipment.objects.filter(
-            location__company=company, condition='VP').count()
+            company=company, condition='VP').count()
         if equipments_count != 0:
             excellent_condition_percentage = round(
                 (excellent_condition / equipments_count) * 100, 1)
@@ -165,7 +167,7 @@ def equipments(request):
         company = user.employee.location.company
 
         equipments_list = Equipment.objects.filter(
-            location__company=company).order_by(
+            company=company).order_by(
             'description')
         equipments = pager(equipments_list, request)
         return render(request, 'equipments.html',
@@ -376,25 +378,28 @@ def add_equipment(request):
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
             alerts, unread_messages = unread_messages_notification(user)
-            locations = company.location_set.all()
             categories = company.category_set.all()
+            suppliers = company.supplier_set.all()
             return render(request, 'add_equipment.html',
-                          {'locations': locations, 'categories': categories,
+                          {'categories': categories, 'suppliers': suppliers,
                            'unread_messages': unread_messages,
                            'alerts': alerts})
         elif request.method == "POST":
             serial = request.POST['serial']
             description = request.POST['description']
             price = request.POST['price']
-            vendor = request.POST['vendor']
+            quantity = request.POST['quantity']
+            supplier = request.POST['supplier']
             category = request.POST['category']
-            location = request.POST['location']
+            company = request.user.employee.location.company
             equipment = Equipment.objects.create(serial=serial,
                                                  description=description,
-                                                 price=price, vendor=vendor,
+                                                 price=price,
+                                                 supplier_id=supplier,
+                                                 quantity=quantity,
                                                  condition='E',
                                                  category_id=category,
-                                                 location_id=location)
+                                                 company=company)
             equipment.save()
             return redirect('equipments')
     else:
@@ -407,7 +412,7 @@ def allocations(request):
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         alerts, unread_messages = unread_messages_notification(user)
         allocations = Allocation.objects.filter(
-            equipment__location__company=user.employee.location.company)
+            equipment__company=user.employee.location.company)
         return render(request, 'allocations.html', {'allocations': allocations,
                                                     'unread_messages': unread_messages,
                                                     'alerts': alerts})

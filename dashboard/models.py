@@ -1,10 +1,8 @@
 import factory.django
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.core.mail import send_mail
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -119,37 +117,54 @@ class Category(models.Model):
         return self.name + " - " + self.company.name
 
 
+class Supplier(models.Model):
+    name = models.CharField(max_length=100)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    description = models.TextField()
+    email = models.EmailField()
+
+    def __str__(self):
+        return "{0} ({1})".format(self.name, self.company)
+
+
+class PurchaseLog(models.Model):
+    ORDER_STATUS = [
+        ('Queued', 'Q'),
+        ('Sent', 'S'),
+        ('Cancelled', 'C'),
+        ('Fulfilled', 'F')
+    ]
+    equipment = models.ForeignKey('Equipment', on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField(default=1)
+    status = models.CharField(max_length=20, choices=ORDER_STATUS)
+
+    def __str__(self):
+        return "{0} ({1})".format(self.status, self.equipment)
+
+
 class Equipment(models.Model):
     """This represents an equipment in our system."""
     POSSIBLE_EQUIPMENT_CONDITIONS = [
-        ('VP', 'Very Poor'),
-        ('F', 'Fair'),
-        ('G', 'Good'),
-        ('E', 'Excellent'),
+        ('Very Poor', 'VP'),
+        ('Fair', 'F'),
+        ('Good', 'G'),
+        ('Excellent', 'E'),
     ]
     serial = models.CharField(max_length=20, primary_key=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     description = models.TextField(help_text="Enter details on equipment")
     price = models.IntegerField()
-    vendor = models.EmailField(help_text="Enter Vendor's email address")
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     condition = models.CharField(max_length=20,
                                  choices=POSSIBLE_EQUIPMENT_CONDITIONS)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-
-    def order(self, quantity):
-        company = self.location.company.name
-        mail_subject = 'Order placement for {0}.'.format(company)
-        message = render_to_string('acc_activate_email.html', {
-            'upc': self.serial,
-            'description': self.description,
-            'quantity': quantity,
-            'company': company
-        })
-        to_email = self.vendor
-        send_mail(mail_subject, message, from_email="admin@crystalims.com",
-                  recipient_list=[to_email],
-                  fail_silently=False, )
+    maximum_daily_usage = models.IntegerField(default=0)
+    maximum_lead_time = models.TextField(default=1)
+    average_daily_usage = models.IntegerField(default=0)
+    average_lead_time = models.TextField(default=1)
+    reorder_point = models.IntegerField(default=1)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -158,7 +173,7 @@ class Equipment(models.Model):
         year = timezone.now().year
         month = months[timezone.now().month - 1]
         month_asset = \
-            AssetLog.objects.get_or_create(company=self.location.company,
+            AssetLog.objects.get_or_create(company=self.company,
                                            year=year, month=month)[0]
         assets = month_asset.assets + float(self.price)
         month_asset.assets = assets
@@ -258,6 +273,13 @@ class LocationFactory(factory.django.DjangoModelFactory):
     address = factory.Faker('address')
     city = factory.Faker('city')
     country = factory.Faker('country')
+    company = factory.SubFactory(CompanyFactory)
+
+
+class SupplierFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Supplier
+
     company = factory.SubFactory(CompanyFactory)
 
 

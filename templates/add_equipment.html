@@ -23,7 +23,8 @@
                     <div class="form-row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="serial"><strong>Serial Number</strong></label>
+                                <label for="serial"><strong>Serial
+                                    Number</strong></label>
                                 <input
                                         class="form-control"
                                         type="text"
@@ -32,13 +33,11 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="location"><strong>Office Location</strong></label><select
-                                    class="custom-select form-control" required=""
-                                    autofocus="" name="location">
-                                {% for location in locations %}
-                                    <option value="{{ location.id }}">{{ location.name }}</option>
-                                {% endfor %}
-                            </select>
+                                <label for="location"><strong>Quantity</strong></label>
+                                <input class="form-control"
+                                       type="text"
+                                       placeholder="Quantity in stock"
+                                       name="quantity" required="">
                             </div>
                         </div>
                     </div>
@@ -54,24 +53,29 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="category"><strong>Category</strong></label><select
-                                    class="custom-select form-control" required=""
-                                    autofocus="" name="category">
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
+                                <label for="category"><strong>Category</strong></label>
+                                <select class="custom-select form-control"
+                                        required=""
+                                        autofocus="" name="category">
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="vendor"><strong>Vendor</strong></label>
-                        <input class="form-control"
-                               type="email"
-                               placeholder="Email Address of Vendor (Optional)"
-                               name="vendor"></div>
+                        <label for="vendor"><strong>Supplier</strong></label>
+                        <select class="custom-select form-control"
+                                required=""
+                                autofocus="" name="supplier">
+                            {% for supplier in suppliers %}
+                                <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-sm"
+                        <button class="btn btn-primary btn-md"
                                 type="submit">Submit
                         </button>
                     </div>
