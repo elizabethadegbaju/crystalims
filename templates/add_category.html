@@ -1,0 +1,32 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% load profile_extras %}
+{% block title %}
+    New Equipment Category - Crystal
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="card shadow mb-3">
+            <div class="card-header py-3">
+                <p class="text-danger m-0 font-weight-bold">Add a New
+                    Equipment Category</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'add_category' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="category"><strong>Name</strong></label>
+                        <input class="form-control"
+                               type="text"
+                               placeholder="Enter New Equipment Category"
+                               name="category" required=""></div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm"
+                                type="submit">Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

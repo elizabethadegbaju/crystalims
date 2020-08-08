@@ -1,8 +1,7 @@
 from builtins import ValueError, TypeError, OverflowError
 
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
@@ -123,25 +122,29 @@ def signup(request):
         user.last_name = last_name
         user.is_active = False
         user.save()
-        current_site = get_current_site(request)
-        mail_subject = 'Verify your {0} employee account on Crystal.'.format(
-            company.name)
-        message = render_to_string('acc_activate_email.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user),
-        })
-        to_email = email
-        send_mail(mail_subject, message, from_email="admin@crystalims.com",
-                  recipient_list=[to_email],
-                  fail_silently=False, )
+        send_activation_email(company, email, request, user)
         user.employee.location = company.location_set.first()
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
         return HttpResponse(
             'Account has been created successfully. Look out for the verification link sent to your email address.')
+
+
+def send_activation_email(company, email, request, user):
+    current_site = get_current_site(request)
+    mail_subject = 'Verify your {0} employee account on Crystal.'.format(
+        company.name)
+    message = render_to_string('acc_activate_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+    })
+    to_email = email
+    send_mail(mail_subject, message, from_email="no-reply@crystalims.com",
+              recipient_list=[to_email],
+              fail_silently=False, )
 
 
 def social_signup(request):
@@ -245,7 +248,7 @@ def create(request):
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
-        user.groups.set([3])
+        user.groups.set([1])
 
         return redirect('login')
 
@@ -271,12 +274,11 @@ def activate(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
+        user.groups.set([3])
         user.is_active = True
         user.save()
-        user.groups.set([3])
         login(request, user, 'django.contrib.auth.backends.ModelBackend')
-        return HttpResponse(
-            'Thank you for your email confirmation. Now you can login your account.')
+        return redirect(profile)
     else:
         return HttpResponse('Activation link is invalid!')
 
@@ -339,18 +341,29 @@ def edit_user(request):
 @login_required
 def add_employee(request):
     user = request.user
+    company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         if request.method == "GET":
             alerts, unread_messages = unread_messages_notification(user)
-            company = user.employee.location.company
             locations = company.location_set.all()
             return render(request, 'add_employee.html',
                           {'locations': locations,
                            'unread_messages': unread_messages,
                            'alerts': alerts})
         elif request.method == "POST":
+            f_name = request.POST['first_name']
+            l_name = request.POST['last_name']
             email = request.POST['email']
             location = request.POST['location']
+            new_user = User.objects.create_user(email=email,
+                                                password="{0}%{1}".format(
+                                                    f_name, l_name))
+            new_user.first_name = f_name
+            new_user.last_name = l_name
+            new_user.save()
+            new_user.employee.location = location
+            new_user.employee.save()
+            send_activation_email(company, email, request, new_user)
             return redirect('team')
     else:
         return redirect('team')
@@ -404,11 +417,19 @@ def allocations(request):
 
 @login_required
 def add_category(request):
-    company = request.user.employee.location.company
-    name = request.POST['category']
-    category = Category.objects.create(name=name, company=company)
-    category.save()
-    return redirect('add_equipment')
+    user = request.user
+    company = user.employee.location.company
+    if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
+        if request.method == "GET":
+            alerts, unread_messages = unread_messages_notification(user)
+            return render(request, 'add_category.html',
+                          {'unread_messages': unread_messages,
+                           'alerts': alerts})
+        elif request.method == "POST":
+            name = request.POST['category']
+            category = Category.objects.create(name=name, company=company)
+            category.save()
+            return redirect('add_category')
 
 
 @login_required
@@ -429,15 +450,25 @@ def messages(request):
 
 @login_required
 def add_location(request):
-    company = request.user.employee.location.company
-    name = request.POST['name']
-    address = request.POST['address']
-    city = request.POST['city']
-    country = request.POST['country']
-    location = Location.objects.create(name=name, address=address, city=city,
-                                       country=country, company=company)
-    location.save()
-    return redirect('add_equipment')
+    user = request.user
+    company = user.employee.location.company
+    if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
+        if request.method == "GET":
+            alerts, unread_messages = unread_messages_notification(user)
+            return render(request, 'add_location.html',
+                          {'unread_messages': unread_messages,
+                           'alerts': alerts})
+        elif request.method == "POST":
+            name = request.POST['name']
+            address = request.POST['address']
+            city = request.POST['city']
+            country = request.POST['country']
+            location = Location.objects.create(name=name, address=address,
+                                               city=city,
+                                               country=country,
+                                               company=company)
+            location.save()
+            return redirect('add_location')
 
 
 @login_required
