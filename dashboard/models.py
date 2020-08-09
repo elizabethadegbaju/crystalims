@@ -127,23 +127,7 @@ class Supplier(models.Model):
         return "{0} ({1})".format(self.name, self.company)
 
 
-class PurchaseLog(models.Model):
-    ORDER_STATUS = [
-        ('Queued', 'Q'),
-        ('Sent', 'S'),
-        ('Cancelled', 'C'),
-        ('Fulfilled', 'F')
-    ]
-    equipment = models.ForeignKey('Equipment', on_delete=models.DO_NOTHING)
-    created_at = models.DateTimeField(auto_now_add=True)
-    quantity = models.IntegerField(default=1)
-    status = models.CharField(max_length=20, choices=ORDER_STATUS)
-
-    def __str__(self):
-        return "{0} ({1})".format(self.status, self.equipment)
-
-
-class Equipment(models.Model):
+class Item(models.Model):
     """This represents an equipment in our system."""
     POSSIBLE_EQUIPMENT_CONDITIONS = [
         ('Very Poor', 'VP'),
@@ -151,7 +135,7 @@ class Equipment(models.Model):
         ('Good', 'G'),
         ('Excellent', 'E'),
     ]
-    serial = models.CharField(max_length=20, primary_key=True)
+    SKU = models.CharField(max_length=20, primary_key=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     description = models.TextField(help_text="Enter details on equipment")
     price = models.IntegerField()
@@ -183,12 +167,28 @@ class Equipment(models.Model):
         return self.description
 
 
+class PurchaseLog(models.Model):
+    ORDER_STATUS = [
+        ('Queued', 'Q'),
+        ('Sent', 'S'),
+        ('Cancelled', 'C'),
+        ('Fulfilled', 'F')
+    ]
+    item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField(default=1)
+    status = models.CharField(max_length=20, choices=ORDER_STATUS)
+
+    def __str__(self):
+        return "{0} ({1})".format(self.status, self.item)
+
+
 class Allocation(models.Model):
-    """This represents an equipment allocation to a user in our system."""
-    equipment = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING)
+    """This represents an item allocation to a user in our system."""
+    item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User,
                              on_delete=models.DO_NOTHING,
-                             related_name='equipment_allocations')
+                             related_name='item_allocations')
     start_date = models.DateField()
     end_date = models.DateField()
     date_applied = models.DateTimeField(auto_now=True)
@@ -207,7 +207,7 @@ class Allocation(models.Model):
             status = "Not approved"
         else:
             status = "Pending"
-        return status + " - " + self.equipment.serial + " - " + self.user.email
+        return status + " - " + self.item.SKU + " - " + self.user.email
 
 
 class AssetLog(models.Model):
@@ -298,11 +298,11 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     company = factory.SubFactory(CompanyFactory)
 
 
-class EquipmentFactory(factory.django.DjangoModelFactory):
+class ItemFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Equipment
+        model = Item
 
-    serial = factory.Faker('ean')
+    SKU = factory.Faker('ean')
     description = factory.Faker('sentence')
     condition = factory.Faker('word', ext_word_list=['E', 'VP', 'G', 'F'])
     price = factory.Faker('pyint', min_value=10000, max_value=10000000,
@@ -315,7 +315,7 @@ class AllocationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Allocation
 
-    equipment = factory.SubFactory(EquipmentFactory)
+    item = factory.SubFactory(ItemFactory)
     user = factory.SubFactory(UserFactory)
     approver = factory.SubFactory(UserFactory)
     start_date = factory.Faker('date')

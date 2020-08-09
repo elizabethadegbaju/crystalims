@@ -11,14 +11,16 @@
             <div class="card-header py-3 d-inline-flex">
                 <a href="{% url 'team_member' message.from_user.id %}">
                     <img class="rounded-circle mr-2" width="50" height="50"
-                         src="{{ MEDIA_URL }}{{ message.from_user.employee.image|urlencode }}"></a>
+                         src="
+                                 {{ MEDIA_URL }}{{ message.from_user.employee.image|urlencode }}"></a>
                 <div class="ml-2">
-                    <a style="text-decoration: none" href="{% url 'team_member' message.from_user.id %}">
-                        <h6
-                                class="text-danger font-weight-bold">
-                            {{ message.from_user.first_name }}{{ message.from_user.last_name }}
+                    <a style="text-decoration: none"
+                       href="{% url 'team_member' message.from_user.id %}"><h6
+                            class="text-danger font-weight-bold">
+                        {{ message.from_user.first_name }}{{ message.from_user.last_name }}
                         ({{ message.from_user.email }})</h6></a>
-                    <p class="m-0">Sent on {{ message.date_sent.astimezone }} to {{ message.to_user }}</p>
+                    <p class="m-0">Sent on {{ message.date_sent.astimezone }}
+                        to {{ message.to_user }}</p>
                 </div>
             </div>
             <div class="card-body">

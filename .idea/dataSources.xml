@@ -9,5 +9,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\User\PycharmProjects\crystalims\db.sqlite3</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="cloud sql" uuid="85858e51-01ce-4a7e-bf19-01ee8991ea21">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/crystal</jdbc-url>
+    </data-source>
   </component>
 </project>

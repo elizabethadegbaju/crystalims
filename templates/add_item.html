@@ -8,11 +8,11 @@
     <div class="container">
         <div class="card shadow mb-3">
             <div class="card-header py-3">
-                <p class="text-danger m-0 font-weight-bold">Add a New
-                    Equipment</p>
+                <p class="text-danger m-0 font-weight-bold">Add Item to
+                    Inventory</p>
             </div>
             <div class="card-body">
-                <form method="POST" action="{% url 'add_equipment' %}">
+                <form method="POST" action="{% url 'add_item' %}">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="description"><strong>Description</strong></label>
@@ -23,13 +23,12 @@
                     <div class="form-row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="serial"><strong>Serial
-                                    Number</strong></label>
+                                <label for="SKU"><strong>SKU</strong></label>
                                 <input
                                         class="form-control"
                                         type="text"
-                                        placeholder="Enter Serial Number"
-                                        name="serial" required=""></div>
+                                        placeholder="Enter SKU"
+                                        name="SKU" required=""></div>
                         </div>
                         <div class="col">
                             <div class="form-group">

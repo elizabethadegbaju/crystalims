@@ -29,50 +29,50 @@ def dashboard(request):
     user = request.user
     company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
-        most_requested = Equipment.objects.filter(
+        most_requested = Item.objects.filter(
             company=company).annotate(
             num_allocations=Count('allocation')).order_by('-num_allocations')[
                          :10]
-        assets_value = Equipment.objects.filter(
+        assets_value = Item.objects.filter(
             company=company).aggregate(Sum('price'))
         pending_requests = Allocation.objects.filter(
-            equipment__company=company,
+            item__company=company,
             approver_id=1).count()
-        pending_equipments = Allocation.objects.filter(
-            equipment__company=company,
+        pending_items = Allocation.objects.filter(
+            item__company=company,
             approver_id=1).order_by(
-            'equipment_id').distinct().count()  # there can be multiple requests on one equipment
-        allocated_equipments = Allocation.objects.filter(
-            equipment__company=company, approved=True,
+            'item_id').distinct().count()  # there can be multiple requests on one item
+        allocated_items = Allocation.objects.filter(
+            item__company=company, approved=True,
             checked_in=False,
             start_date__lte=timezone.now().date()).count()
-        equipments_count = Equipment.objects.filter(
+        items_count = Item.objects.filter(
             company=company).count()
-        free_equipments = equipments_count - (
-                pending_equipments + allocated_equipments)
+        free_items = items_count - (
+                pending_items + allocated_items)
         categories = Category.objects.filter(company=company).annotate(
-            Count('equipment'))
+            Count('item'))
         categories_count = categories.count()
         alerts, unread_messages = unread_messages_notification(user)
         assets_monthly_value = company.assetlog_set.filter(
             year=timezone.now().year)
-        excellent_condition = Equipment.objects.filter(
+        excellent_condition = Item.objects.filter(
             company=company, condition='E').count()
-        good_condition = Equipment.objects.filter(company=company,
-                                                  condition='G').count()
-        fair_condition = Equipment.objects.filter(company=company,
-                                                  condition='F').count()
-        very_poor_condition = Equipment.objects.filter(
+        good_condition = Item.objects.filter(company=company,
+                                             condition='G').count()
+        fair_condition = Item.objects.filter(company=company,
+                                             condition='F').count()
+        very_poor_condition = Item.objects.filter(
             company=company, condition='VP').count()
-        if equipments_count != 0:
+        if items_count != 0:
             excellent_condition_percentage = round(
-                (excellent_condition / equipments_count) * 100, 1)
+                (excellent_condition / items_count) * 100, 1)
             good_condition_percentage = round(
-                (good_condition / equipments_count) * 100, 1)
+                (good_condition / items_count) * 100, 1)
             fair_condition_percentage = round(
-                (fair_condition / equipments_count) * 100, 1)
+                (fair_condition / items_count) * 100, 1)
             very_poor_condition_percentage = round(
-                (very_poor_condition / equipments_count) * 100, 1)
+                (very_poor_condition / items_count) * 100, 1)
         else:
             excellent_condition_percentage = 0
             good_condition_percentage = 0
@@ -87,11 +87,11 @@ def dashboard(request):
                    'alerts': alerts,
                    'most_requested': most_requested,
                    'assets_value': assets_value,
-                   'equipments_count': equipments_count,
+                   'items_count': items_count,
                    'pending_requests': pending_requests,
-                   'pending_equipments': pending_equipments,
-                   'allocated_equipments': allocated_equipments,
-                   'free_equipments': free_equipments,
+                   'pending_items': pending_items,
+                   'allocated_items': allocated_items,
+                   'free_items': free_items,
                    'categories': categories,
                    'categories_count': categories_count,
                    'assets_mv': assets_mv,
@@ -160,18 +160,18 @@ def social_signup(request):
 
 
 @login_required
-def equipments(request):
+def items(request):
     if request.method == "GET":
         user = request.user
         alerts, unread_messages = unread_messages_notification(user)
         company = user.employee.location.company
 
-        equipments_list = Equipment.objects.filter(
+        items_list = Item.objects.filter(
             company=company).order_by(
             'description')
-        equipments = pager(equipments_list, request)
-        return render(request, 'equipments.html',
-                      {'company': company, 'equipments': equipments,
+        items = pager(items_list, request)
+        return render(request, 'items.html',
+                      {'company': company, 'items': items,
                        'unread_messages': unread_messages,
                        'alerts': alerts})
 
@@ -183,8 +183,8 @@ def pager(list, request):
         number = 10
     paginator = Paginator(list, number)
     page = request.GET.get('page')
-    equipments = paginator.get_page(page)
-    return equipments
+    items = paginator.get_page(page)
+    return items
 
 
 def unread_messages_notification(user):
@@ -196,16 +196,19 @@ def unread_messages_notification(user):
     return alerts, unread_messages
 
 
-def equipment(request, pk):
+def item(request, pk):
     user = request.user
+    company = request.user.employee.location.company
     if request.method == "GET":
-        equipment = Equipment.objects.get(serial=pk)
-        allocations = equipment.allocation_set.all()
+        item = Item.objects.get(SKU=pk)
+        allocations = item.allocation_set.all()
+        categories = company.category_set.all()
+        suppliers = company.supplier_set.all()
         alerts, unread_messages = unread_messages_notification(user)
-        return render(request, 'equipment.html',
-                      {'equipment': equipment, 'allocations': allocations,
-                       'unread_messages': unread_messages,
-                       'alerts': alerts})
+        return render(request, 'item.html',
+                      {'item': item, 'allocations': allocations,
+                       'unread_messages': unread_messages, 'alerts': alerts,
+                       'categories': categories, 'suppliers': suppliers})
 
 
 @login_required
@@ -213,7 +216,7 @@ def profile(request):
     if request.method == "GET":
         user = request.user
         alerts, unread_messages = unread_messages_notification(user)
-        allocations = user.equipment_allocations.all()
+        allocations = user.item_allocations.all()
         return render(request, 'profile.html', {'allocations': allocations,
                                                 'unread_messages': unread_messages,
                                                 'alerts': alerts})
@@ -292,7 +295,7 @@ def team_member(request, pk):
         logged_in_user = request.user
         alerts, unread_messages = unread_messages_notification(user)
         if user.employee.location.company_id == logged_in_user.employee.location.company_id:
-            allocations = user.equipment_allocations.all()
+            allocations = user.item_allocations.all()
             return render(request, 'profile.html', {'allocations': allocations,
                                                     'unread_messages': unread_messages,
                                                     'alerts': alerts,
@@ -372,7 +375,7 @@ def add_employee(request):
 
 
 @login_required
-def add_equipment(request):
+def add_item(request):
     user = request.user
     company = user.employee.location.company
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
@@ -380,30 +383,30 @@ def add_equipment(request):
             alerts, unread_messages = unread_messages_notification(user)
             categories = company.category_set.all()
             suppliers = company.supplier_set.all()
-            return render(request, 'add_equipment.html',
+            return render(request, 'add_item.html',
                           {'categories': categories, 'suppliers': suppliers,
                            'unread_messages': unread_messages,
                            'alerts': alerts})
         elif request.method == "POST":
-            serial = request.POST['serial']
+            SKU = request.POST['SKU']
             description = request.POST['description']
             price = request.POST['price']
             quantity = request.POST['quantity']
             supplier = request.POST['supplier']
             category = request.POST['category']
             company = request.user.employee.location.company
-            equipment = Equipment.objects.create(serial=serial,
-                                                 description=description,
-                                                 price=price,
-                                                 supplier_id=supplier,
-                                                 quantity=quantity,
-                                                 condition='E',
-                                                 category_id=category,
-                                                 company=company)
-            equipment.save()
-            return redirect('equipments')
+            item = Item.objects.create(SKU=SKU,
+                                       description=description,
+                                       price=price,
+                                       supplier_id=supplier,
+                                       quantity=quantity,
+                                       condition='E',
+                                       category_id=category,
+                                       company=company)
+            item.save()
+            return redirect('items')
     else:
-        return redirect('equipments')
+        return redirect('items')
 
 
 @login_required
@@ -412,7 +415,7 @@ def allocations(request):
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         alerts, unread_messages = unread_messages_notification(user)
         allocations = Allocation.objects.filter(
-            equipment__company=user.employee.location.company)
+            item__company=user.employee.location.company)
         return render(request, 'allocations.html', {'allocations': allocations,
                                                     'unread_messages': unread_messages,
                                                     'alerts': alerts})
@@ -480,46 +483,46 @@ def add_location(request):
 def pdf(request):
     user = request.user
     company = user.employee.location.company
-    most_requested = Equipment.objects.filter(
+    most_requested = Item.objects.filter(
         location__company=company).annotate(
         num_allocations=Count('allocation')).order_by('-num_allocations')[
                      :10]
-    assets_value = Equipment.objects.filter(
+    assets_value = Item.objects.filter(
         location__company=company).aggregate(Sum('price'))
     pending_requests = Allocation.objects.filter(
-        equipment__location__company=company,
+        item__location__company=company,
         approver__isnull=True).count()
-    pending_equipments = Allocation.objects.filter(
-        equipment__location__company=company,
+    pending_items = Allocation.objects.filter(
+        item__location__company=company,
         approver__isnull=True).order_by(
-        'equipment_id').distinct().count()
-    allocated_equipments = Allocation.objects.filter(
-        equipment__location__company=company, approved=True,
+        'item_id').distinct().count()
+    allocated_items = Allocation.objects.filter(
+        item__location__company=company, approved=True,
         checked_in=False,
         start_date__lte=timezone.now().date()).count()
-    equipments_count = Equipment.objects.filter(
+    items_count = Item.objects.filter(
         location__company=company).count()
-    free_equipments = equipments_count - (
-            pending_equipments + allocated_equipments)
+    free_items = items_count - (
+            pending_items + allocated_items)
     categories_count = Category.objects.filter(company=company).count()
     assets_monthly_value = AssetLog.objects.filter(company=company,
                                                    year=timezone.now().year)
-    excellent_condition = Equipment.objects.filter(location__company=company,
-                                                   condition='E').count()
+    excellent_condition = Item.objects.filter(location__company=company,
+                                              condition='E').count()
     excellent_condition_percentage = round(
-        (excellent_condition / equipments_count) * 100, 1)
-    good_condition = Equipment.objects.filter(location__company=company,
-                                              condition='G').count()
+        (excellent_condition / items_count) * 100, 1)
+    good_condition = Item.objects.filter(location__company=company,
+                                         condition='G').count()
     good_condition_percentage = round(
-        (good_condition / equipments_count) * 100, 1)
-    fair_condition = Equipment.objects.filter(location__company=company,
-                                              condition='F').count()
+        (good_condition / items_count) * 100, 1)
+    fair_condition = Item.objects.filter(location__company=company,
+                                         condition='F').count()
     fair_condition_percentage = round(
-        (fair_condition / equipments_count) * 100, 1)
-    very_poor_condition = Equipment.objects.filter(location__company=company,
-                                                   condition='VP').count()
+        (fair_condition / items_count) * 100, 1)
+    very_poor_condition = Item.objects.filter(location__company=company,
+                                              condition='VP').count()
     very_poor_condition_percentage = round(
-        (very_poor_condition / equipments_count) * 100, 1)
+        (very_poor_condition / items_count) * 100, 1)
     assets_mv = {}
     for monthly_value in assets_monthly_value:
         assets_mv[monthly_value.month] = monthly_value.assets
@@ -527,11 +530,11 @@ def pdf(request):
               'company': company,
               'most_requested': most_requested,
               'assets_value': assets_value,
-              'equipments_count': equipments_count,
+              'items_count': items_count,
               'pending_requests': pending_requests,
-              'pending_equipments': pending_equipments,
-              'allocated_equipments': allocated_equipments,
-              'free_equipments': free_equipments,
+              'pending_items': pending_items,
+              'allocated_items': allocated_items,
+              'free_items': free_items,
               'categories_count': categories_count,
               'assets_mv': assets_mv,
               'excellent_condition_percentage': excellent_condition_percentage,
@@ -570,9 +573,9 @@ def send_message(request):
 @login_required
 def place_order(request):
     quantity = request.GET['quantity']
-    equipment_id = request.GET['equipment']
-    equipment = Equipment.objects.get(id=equipment_id)
-    equipment.order(quantity)
+    item_id = request.GET['item']
+    item = Item.objects.get(id=item_id)
+    item.order(quantity)
     return None
 
 

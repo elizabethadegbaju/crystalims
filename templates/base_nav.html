@@ -42,8 +42,8 @@
                                                             href="{% url 'team' %}"><i
                         class="fas fa-users"></i><span>Team</span></a></li>
                 <li class="nav-item" role="presentation"><a class="nav-link"
-                                                            href="{% url 'equipments' %}"><i
-                        class="fas fa-cogs"></i><span>Equipment</span></a></li>
+                                                            href="{% url 'items' %}"><i
+                        class="fas fa-cogs"></i><span>Items</span></a></li>
 
                 {% if request.user|has_group:"Company Admins" or request.user|has_group:"Company Superusers" %}
                     <li class="nav-item" role="presentation"><a
@@ -57,8 +57,8 @@
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link"
-                            href="{% url 'add_equipment' %}"><i
-                            class="fas fa-cog"></i><span>Add Equipment</span></a>
+                            href="{% url 'add_item' %}"><i
+                            class="fas fa-cog"></i><span>Add Item</span></a>
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link"
