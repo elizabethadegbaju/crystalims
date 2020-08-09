@@ -1,0 +1,37 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% load humanize %}
+{% load profile_extras %}
+{% block title %}
+    Requests - Crystal
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <h3 class="text-dark mb-4">Inventory Requests</h3>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="text-danger font-weight-bold m-0">Pending
+                    Inventory Requests</h6>
+            </div>
+            <div class="card-body">
+                {% if requests %}
+                    {% for request in requests %}
+                        {% if request.status == 'P' %}
+                            <div class="d-flex text-dark
+                                    justify-content-between">
+                                <p>{{ request.item }}</p>
+                                <p>{{ request.created_at|naturaltime }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                {% else %}
+                    <div class="text-gray-600">
+                        <p>There are no pending requests.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -201,8 +201,8 @@ def profile(request):
     if request.method == "GET":
         user = request.user
         alerts, unread_messages = unread_messages_notification(user)
-        allocations = user.item_requests.all()
-        return render(request, 'profile.html', {'allocations': allocations,
+        requests = user.item_requests.all()
+        return render(request, 'profile.html', {'requests': requests,
                                                 'unread_messages': unread_messages,
                                                 'alerts': alerts})
 
@@ -280,8 +280,8 @@ def team_member(request, pk):
         logged_in_user = request.user
         alerts, unread_messages = unread_messages_notification(user)
         if user.employee.location.company_id == logged_in_user.employee.location.company_id:
-            allocations = user.item_allocations.all()
-            return render(request, 'profile.html', {'allocations': allocations,
+            requests = user.item_requests.all()
+            return render(request, 'profile.html', {'requests': requests,
                                                     'unread_messages': unread_messages,
                                                     'alerts': alerts,
                                                     'user': user})
@@ -351,7 +351,8 @@ def add_employee(request):
             new_user.first_name = f_name
             new_user.last_name = l_name
             new_user.save()
-            new_user.employee.location = location
+            new_user.employee.location_id = location
+            new_user.username = "{0}{1}".format(f_name, l_name)
             new_user.employee.save()
             send_activation_email(company, email, request, new_user)
             return redirect('team')
@@ -395,15 +396,15 @@ def add_item(request):
 
 
 @login_required
-def allocations(request):
+def pending_requests(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         alerts, unread_messages = unread_messages_notification(user)
-        allocations = ItemRequest.objects.filter(
-            item__company=user.employee.location.company)
-        return render(request, 'allocations.html', {'allocations': allocations,
-                                                    'unread_messages': unread_messages,
-                                                    'alerts': alerts})
+        requests = ItemRequest.objects.filter(
+            item__company=user.employee.location.company, status='P')
+        return render(request, 'pending_requests.html', {'requests': requests,
+                                                         'unread_messages': unread_messages,
+                                                         'alerts': alerts})
     else:
         return redirect('dashboard')
 
@@ -536,7 +537,7 @@ def purchase_orders(request):
 @login_required
 def suppliers(request):
     company = request.user.employee.location.company
-    suppliers_list = Supplier.objects.filter(company=company).order_by('name')
+    suppliers_list = Supplier.objects.filter(company=company).order_by('id')
     suppliers = pager(suppliers_list, request)
     return render(request, 'suppliers.html', {'suppliers': suppliers})
 
@@ -554,8 +555,10 @@ def add_supplier(request):
         name = request.POST['name']
         email = request.POST['email']
         description = request.POST['description']
+        company = request.user.employee.location.company
         supplier = Supplier.objects.create(name=name, email=email,
-                                           description=description)
+                                           description=description,
+                                           company=company)
         supplier.save()
         return redirect('supplier', supplier.id)
 

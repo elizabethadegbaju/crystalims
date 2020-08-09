@@ -13,9 +13,13 @@
                 <div class="card shadow mb-3">
                     <div class="card-body text-center shadow">
                         <img class="rounded-circle mb-3 mt-4"
-                             src="{{ MEDIA_URL }}{{ user.employee.image|urlencode }}"
+                             src="
+
+
+                                     {{ MEDIA_URL }}{{ user.employee.image|urlencode }}"
                              width="160" height="160">
-                        <form method="POST" action="{% url 'image_upload' %}" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'image_upload' %}"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="form-group">
                                 <input class="form-control form-control-file"
@@ -38,41 +42,20 @@
                             Requests</h6>
                     </div>
                     <div class="card-body">
-                        {% if allocations %}
-                            {% for allocation in allocations %}
-                                <h4 class="small font-weight-bold">{{ allocation.equipment|truncatechars:30 }}<span
-                                        class="float-right">End Date: {{ allocation.end_date|naturalday }}</span></h4>
-                                <div class="progress progress-sm mb-3">
-                                    {% if allocation.start_date|percent_date:allocation.end_date < 50 %}
-                                        <div class="progress-bar bg-success"
-                                             aria-valuenow="{{ allocation.start_date|percent_date:allocation.end_date }}"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100"
-                                             style="width: {{ allocation.start_date|percent_date:allocation.end_date }}%;">
-                                            <span class="sr-only">{{ allocation.start_date|percent_date:allocation.end_date }}%</span>
-                                        </div>
-                                    {% elif allocation.start_date|percent_date:allocation.end_date < 80 %}
-                                        <div class="progress-bar bg-warning"
-                                             aria-valuenow="{{ allocation.start_date|percent_date:allocation.end_date }}"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100"
-                                             style="width: {{ allocation.start_date|percent_date:allocation.end_date }}%;">
-                                            <span class="sr-only">{{ allocation.start_date|percent_date:allocation.end_date }}%</span>
-                                        </div>
-                                    {% else %}
-                                        <div class="progress-bar bg-danger"
-                                             aria-valuenow="{{ allocation.start_date|percent_date:allocation.end_date }}"
-                                             aria-valuemin="0"
-                                             aria-valuemax="100"
-                                             style="width: {{ allocation.start_date|percent_date:allocation.end_date }}%;">
-                                            <span class="sr-only">{{ allocation.start_date|percent_date:allocation.end_date }}%</span>
-                                        </div>
-                                    {% endif %}
-                                </div>
+                        {% if requests %}
+                            {% for request in requests %}
+                                {% if request.status == 'P' %}
+                                    <div class="d-flex text-dark
+                                    justify-content-between">
+                                        <p>{{ request.item }}</p>
+                                        <p>{{ request.created_at|naturaltime }}</p>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
+
                         {% else %}
                             <div class="text-gray-600">
-                                <p>You have not requested for any Item.</p>
+                                <p>No Pending requests.</p>
                             </div>
                         {% endif %}
                     </div>
@@ -87,38 +70,50 @@
                                     User</p>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{% url 'edit_user' %}">
+                                <form method="POST"
+                                      action="{% url 'edit_user' %}">
                                     {% csrf_token %}
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group"><label
                                                     for="username"><strong>Username</strong></label><input
-                                                    class="form-control" type="text"
+                                                    class="form-control"
+                                                    type="text"
                                                     value="{{ user.employee.username }}"
-                                                    name="username" required></div>
+                                                    name="username" required>
+                                            </div>
                                         </div>
                                         <div class="col">
-                                            <div class="form-group"><label for="email"><strong>Email
-                                                Address</strong></label><input class="form-control"
-                                                                               type="email"
-                                                                               value="{{ user.email }}"
-                                                                               name="email" required></div>
+                                            <div class="form-group"><label
+                                                    for="email"><strong>Email
+                                                Address</strong></label><input
+                                                    class="form-control"
+                                                    type="email"
+                                                    value="{{ user.email }}"
+                                                    name="email" required>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col">
-                                            <div class="form-group"><label for="first_name"><strong>First
-                                                Name</strong></label><input class="form-control"
-                                                                            type="text"
-                                                                            value="{{ user.first_name }}"
-                                                                            name="first_name" required></div>
+                                            <div class="form-group"><label
+                                                    for="first_name"><strong>First
+                                                Name</strong></label><input
+                                                    class="form-control"
+                                                    type="text"
+                                                    value="{{ user.first_name }}"
+                                                    name="first_name" required>
+                                            </div>
                                         </div>
                                         <div class="col">
-                                            <div class="form-group"><label for="last_name"><strong>Last
-                                                Name</strong></label><input class="form-control"
-                                                                            type="text"
-                                                                            value="{{ user.last_name }}"
-                                                                            name="last_name" required></div>
+                                            <div class="form-group"><label
+                                                    for="last_name"><strong>Last
+                                                Name</strong></label><input
+                                                    class="form-control"
+                                                    type="text"
+                                                    value="{{ user.last_name }}"
+                                                    name="last_name" required>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -145,16 +140,20 @@
                                         <div class="col">
                                             <div class="form-group"><label
                                                     for="city"><strong>City</strong></label><input
-                                                    class="form-control" type="text"
-                                                    value="{{ user.employee.location.city }}" name="city" disabled="">
+                                                    class="form-control"
+                                                    type="text"
+                                                    value="{{ user.employee.location.city }}"
+                                                    name="city" disabled="">
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="form-group"><label
                                                     for="country"><strong>Country</strong></label><input
-                                                    class="form-control" type="text"
+                                                    class="form-control"
+                                                    type="text"
                                                     value="{{ user.employee.location.country }}"
-                                                    name="country" disabled=""></div>
+                                                    name="country" disabled="">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">

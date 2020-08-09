@@ -162,7 +162,7 @@
                     <div class="card-body">
                         <div class="chart-area">
                             <canvas
-                                    data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Assets Value&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;{{ assets_mv.Jan }}&quot;,&quot;{{ assets_mv.Feb }}&quot;,&quot;{{ assets_mv.Mar }}&quot;,&quot;{{ assets_mv.Apr }}&quot;,&quot;{{ assets_mv.May }}&quot;,&quot;{{ assets_mv.Jun }}&quot;,&quot;{{ assets_mv.Jul }}&quot;,&quot;{{ assets_mv.Aug }}&quot;,&quot;{{ assets_mv.Sep }}&quot;,&quot;{{ assets_mv.Oct }}&quot;,&quot;{{ assets_mv.Nov }}&quot;,&quot;{{ assets_mv.Dec }}&quot;],&quot;backgroundColor&quot;:&quot;rgba(240, 173, 78, 0.2)&quot;,&quot;borderColor&quot;:&quot;rgba(240, 173, 78, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
+                                    data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Assets Value&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;{{ assets_mv.Jan }}&quot;,&quot;{{ assets_mv.Feb }}&quot;,&quot;{{ assets_mv.Mar }}&quot;,&quot;{{ assets_mv.Apr }}&quot;,&quot;{{ assets_mv.May }}&quot;,&quot;{{ assets_mv.Jun }}&quot;,&quot;{{ assets_mv.Jul }}&quot;,&quot;{{ assets_mv.Aug }}&quot;,&quot;{{ assets_mv.Sep }}&quot;,&quot;{{ assets_mv.Oct }}&quot;,&quot;{{ assets_mv.Nov }}&quot;,&quot;{{ assets_mv.Dec }}&quot;],&quot;backgroundColor&quot;:&quot;rgb(231,76,50,0.2)&quot;,&quot;borderColor&quot;:&quot;rgb(231,76,50)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
                         </div>
                     </div>
                 </div>
@@ -216,87 +216,52 @@
             <div class="col-lg-6 mb-4">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="text-danger font-weight-bold m-0">Condition
-                            of Equipments</h6>
+                        <h6 class="text-danger font-weight-bold
+                        m-0">Inactive Stock</h6>
                     </div>
                     <div class="card-body">
-                        <h4 class="small font-weight-bold">Very Poor<span
-                                class="float-right">{{ very_poor_condition_percentage }}%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-danger"
-                                 aria-valuenow="{{ very_poor_condition_percentage }}"
-                                 aria-valuemin="0"
-                                 aria-valuemax="100"
-                                 style="width: {{ very_poor_condition_percentage }}%;"><span
-                                    class="sr-only">{{ very_poor_condition_percentage }}%</span>
-                            </div>
-                        </div>
-                        <h4 class="small font-weight-bold">Fair<span
-                                class="float-right">{{ fair_condition_percentage }}%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-warning"
-                                 aria-valuenow="{{ fair_condition_percentage }}"
-                                 aria-valuemin="0"
-                                 aria-valuemax="100"
-                                 style="width: {{ fair_condition_percentage }}%;"><span
-                                    class="sr-only">{{ fair_condition_percentage }}%</span>
-                            </div>
-                        </div>
-                        <h4 class="small font-weight-bold">Good<span
-                                class="float-right">{{ good_condition_percentage }}%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-info"
-                                 aria-valuenow="{{ good_condition_percentage }}"
-                                 aria-valuemin="0"
-                                 aria-valuemax="100"
-                                 style="width: {{ good_condition_percentage }}%;"><span
-                                    class="sr-only">{{ good_condition_percentage }}%</span>
-                            </div>
-                        </div>
-                        <h4 class="small font-weight-bold">Excellent<span
-                                class="float-right">{{ excellent_condition_percentage }}%</span>
-                        </h4>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-success"
-                                 aria-valuenow="{{ excellent_condition_percentage }}"
-                                 aria-valuemin="0"
-                                 aria-valuemax="100"
-                                 style="width: {{ excellent_condition_percentage }}%;"><span
-                                    class="sr-only">{{ excellent_condition_percentage }}%</span>
-                            </div>
-                        </div>
+                        <h4 class="small font-weight-bold">There is no
+                            inactive stock.</h4>
                     </div>
                 </div>
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="text-danger font-weight-bold m-0">Verify New
-                            Users</h6>
+                        <h6 class="text-danger font-weight-bold
+                        m-0">Returns-to-Inventory</h6>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="row align-items-center no-gutters">
-                                <div class="col mr-2">
-                                    <h6 class="mb-0"><strong>Ewoma
-                                        Ebarighe</strong></h6><span
-                                        class="text-xs">Lagos Mainland</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="custom-control custom-checkbox">
-                                        <input
-                                                class="custom-control-input"
-                                                type="checkbox"
-                                                id="formCheck-1"><label
-                                            class="custom-control-label"
-                                            for="formCheck-1"></label>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">No Item has
+                            been returned to the Storeroom.</h4>
+                    </div>
                 </div>
+                {#                <div class="card shadow mb-4">#}
+                {#                    <div class="card-header py-3">#}
+                {#                        <h6 class="text-danger font-weight-bold m-0">Verify#}
+                {#                            New#}
+                {#                            Users</h6>#}
+                {#                    </div>#}
+                {#                    <ul class="list-group list-group-flush">#}
+                {#                        <li class="list-group-item">#}
+                {#                            <div class="row align-items-center no-gutters">#}
+                {#                                <div class="col mr-2">#}
+                {#                                    <h6 class="mb-0"><strong>Ewoma#}
+                {#                                        Ebarighe</strong></h6><span#}
+                {#                                        class="text-xs">Lagos Mainland</span>#}
+                {#                                </div>#}
+                {#                                <div class="col-auto">#}
+                {#                                    <div class="custom-control custom-checkbox">#}
+                {#                                        <input#}
+                {#                                                class="custom-control-input"#}
+                {#                                                type="checkbox"#}
+                {#                                                id="formCheck-1"><label#}
+                {#                                            class="custom-control-label"#}
+                {#                                            for="formCheck-1"></label>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </li>#}
+                {#                    </ul>#}
+                {#                </div>#}
             </div>
             <div class="col-lg-6 mb-4">
                 <div class="card shadow mb-4">
@@ -305,10 +270,12 @@
                             Requested Items</p>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive table mt-2" id="dataTable"
+                        <div class="table-responsive table mt-2"
+                             id="dataTable"
                              role="grid"
                              aria-describedby="dataTable_info">
-                            <table class="table dataTable my-0" id="dataTable">
+                            <table class="table dataTable my-0"
+                                   id="dataTable">
                                 <thead>
                                 <tr>
                                     <th>SKU</th>
@@ -330,7 +297,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info" class="dataTables_info"
+                                <p id="dataTable_info"
+                                   class="dataTables_info"
                                    role="status" aria-live="polite">
                                     Showing Top Ten Equipments</p>
                             </div>
@@ -339,7 +307,8 @@
                 </div>
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="text-danger font-weight-bold m-0">Equipments
+                        <h6 class="text-danger font-weight-bold m-0">
+                            Equipments
                             by Category</h6>
                         <div class="dropdown no-arrow">
                             <button class="btn btn-link btn-sm dropdown-toggle"
@@ -349,11 +318,14 @@
                             </button>
                             <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in"
                                  role="menu">
-                                <p class="text-center dropdown-header">dropdown
+                                <p class="text-center dropdown-header">
+                                    dropdown
                                     header:</p><a
-                                    class="dropdown-item" role="presentation"
+                                    class="dropdown-item"
+                                    role="presentation"
                                     href="#">&nbsp;Action</a><a
-                                    class="dropdown-item" role="presentation"
+                                    class="dropdown-item"
+                                    role="presentation"
                                     href="#">&nbsp;Another
                                 action</a>
                                 <div class="dropdown-divider"></div>
@@ -370,43 +342,15 @@
 
 
 
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[{% for category in categories %}&quot;{% cycle '#5bc0de' '#894f62' '#f6c23e' '#e74a3b' '#1cc88a' as bgcolors %}&quot;
 
 
 
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;borderColor&quot;:[{% for category in categories %}&quot;{% cycle '#ffffff' '#ffffff' as bordercolors %}&quot;
 
 
 
-
-                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[
-                                            {% for category in categories %}&quot;{% cycle '#5bc0de' '#894f62' '#f6c23e' '#e74a3b' '#1cc88a' as bgcolors %}&quot;
-
-
-
-
-
-
-
-
-
-                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;borderColor&quot;:[
-                                            {% for category in categories %}&quot;{% cycle '#ffffff' '#ffffff' as bordercolors %}&quot;
-
-
-
-
-
-
-
-
-
-                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;data&quot;:[{% for category in categories %}&quot;{{ category.equipment__count }}&quot;
-
-
-
-
-
-
-
+                                        {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;data&quot;:[{% for category in categories %}&quot;{{ category.item__count }}&quot;
 
 
 

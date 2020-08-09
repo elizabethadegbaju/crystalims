@@ -12,7 +12,7 @@
                 <p class="text-danger m-0 font-weight-bold">Equipment Info</p>
             </div>
             <div class="card-body">
-                <form method="POST">
+                <form method="POST" action="{% url 'edit_item' item.SKU %}">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col">
@@ -131,18 +131,17 @@
                     </div>
                     <div class="d-flex form-group justify-content-end">
                         <button class="btn btn-primary btn-md"
-                                type="submit"
-                                href="{% url 'edit_item' item.SKU %}">Update
-                            Item
+                                type="submit">Update Item
                         </button>
                         <button class="btn btn-primary btn-md ml-3"
                                 type="submit"
-                                href="
-{% url 'request_item' item.SKU %}">Request Item
+                                formaction="{% url 'request_item' item.SKU %}">
+                            Request Item
                         </button>
                         <button class="btn btn-danger btn-md ml-3"
-                                type="submit" href="
-{% url 'delete_item' item.SKU %}">Delete Item
+                                type="submit"
+                                formaction="{% url 'delete_item' item.SKU %}">
+                            Delete Item
                         </button>
                     </div>
                 </form>

@@ -72,8 +72,10 @@
                             class="fas fa-map-marked"></i><span>Add Location</span></a>
                     </li>
                     <li class="nav-item" role="presentation"><a
-                            class="nav-link" href="{% url 'allocations' %}"><i
-                            class="fas fa-calendar"></i><span>Allocations</span></a>
+                            class="nav-link"
+                            href="{% url 'pending_requests' %}">
+                        <i class="fas fa-calendar-week"></i>
+                        <span>Pending Requests</span></a>
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link"
@@ -214,6 +216,7 @@
                         {{ request.user.last_name }}</span><img
                             class="border rounded-circle img-profile"
                             src="
+
 
 
 
