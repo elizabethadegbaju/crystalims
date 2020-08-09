@@ -1,22 +1,24 @@
 {% extends 'base_nav.html' %}
+{% load humanize %}
 {% load static %}
 {% load profile_extras %}
 {% block title %}
-    Equipments - Crystal
+    Purchase Orders - Crystal
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
-        <h3 class="text-dark mb-4">{{ company.name }} Inventory Items</h3>
+        {#        <h3 class="text-dark mb-4">{{ company.name }} Assets</h3>#}
         <div class="card shadow">
             <div class="card-header py-3">
-                <p class="text-danger m-0 font-weight-bold">Equipment Info</p>
+                <p class="text-danger m-0 font-weight-bold">Purchase Orders</p>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
                         <div id="dataTable_length" class="dataTables_length"
                              aria-controls="dataTable">
-                            <form method="get" action="{% url 'items' %}">
+                            <form method="get"
+                                  action="{% url 'purchase_orders' %}">
                                 <label>Show&nbsp;<select name="num"
                                                          onchange="this.form.submit()"
                                                          class="form-control form-control-sm custom-select custom-select-sm">
@@ -29,66 +31,57 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input
-                                type="search" class="form-control form-control-sm"
-                                aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-right dataTables_filter"
+                             id="dataTable_filter"><label><input
+                                type="search"
+                                class="form-control form-control-sm"
+                                aria-controls="dataTable" placeholder="Search"></label>
+                        </div>
                     </div>
                 </div>
-                <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                <div class="table-responsive table mt-2" id="dataTable"
+                     role="grid"
                      aria-describedby="dataTable_info">
                     <table class="table dataTable my-0" id="dataTable">
                         <thead>
                         <tr>
-                            <th>Serial</th>
-                            <th>Description</th>
-                            <th>Condition</th>
-                            <th>Category</th>
+                            <th>S/N</th>
+                            <th>Item</th>
                             <th>Quantity</th>
+                            <th>Created at</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for item in items %}
+                        {% for purchase_order in purchase_orders %}
                             <tr style="transform: rotate(0)">
-                                <td>
-                                    <a class="stretched-link text-gray-600"
-                                       style="text-decoration: none"
-                                       href="{% url 'item' item.SKU %}">{{ item.SKU }}</a>
-                                </td>
-                                <td>{{ item.description }}</td>
-                                <td>{{ item.condition }}</td>
-                                <td>{{ item.category.name }}</td>
-                                <td>{{ item.quantity }}</td>
+                                <td>{{ purchase_order.id }}</td>
+                                <td>{{ purchase_order.item }}</td>
+                                <td>{{ purchase_order.quantity }}</td>
+                                <td>{{ purchase_order.created_at|naturaltime }}</td>
+                                <td>{{ purchase_order.status }}</td>
                             </tr>
                         {% empty %}
-                            <p>There are no items in this company.</p>
+                            <p>No purchase order has been made.</p>
                         {% endfor %}
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td><strong>Serial</strong></td>
-                            <td><strong>Description</strong></td>
-                            <td><strong>Condition</strong></td>
-                            <td><strong>Category</strong></td>
-                            <td><strong>Quantity</strong></td>
-                        </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">
                     <div class="col-md-6 align-self-center">
                         <p id="dataTable_info" class="dataTables_info"
                            role="status" aria-live="polite">
-                            Showing 1 to {{ items|count }}
-                            of {{ items.paginator.count }}</p>
+                            Showing 1 to {{ purchase_orders|count }}
+                            of {{ purchase_orders.paginator.count }}</p>
                     </div>
                     <div class="col-md-6">
                         <nav
                                 class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                             <ul class="pagination">
-                                {% if items.has_previous %}
+                                {% if purchase_orders.has_previous %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="?page={{ items.previous_page_number }}"
+                                           href="?page={{ purchase_orders.previous_page_number }}"
                                            aria-label="Previous">
                                             {% else %}
                                     <li class="page-item disabled">
@@ -98,13 +91,13 @@
                                 </a></li>
                                 <li class="page-item"><p class="page-link"
                                                          style="background-color: white!important;">
-                                    Page {{ items.number }}
-                                    of {{ items.paginator.num_pages }}.</p>
+                                    Page {{ purchase_orders.number }}
+                                    of {{ purchase_orders.paginator.num_pages }}.</p>
                                 </li>
-                                {% if items.has_next %}
+                                {% if purchase_orders.has_next %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="?page={{ items.next_page_number }}"
+                                           href="?page={{ purchase_orders.next_page_number }}"
                                            aria-label="Next">
                                             {% else %}
                                     <li class="page-item disabled">

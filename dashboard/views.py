@@ -601,3 +601,37 @@ def verify(request, pk):
     user = User.objects.get(id=pk)
     user.groups.set([3])
     return redirect(dashboard)
+
+
+@login_required
+def purchase_orders(request):
+    company = request.user.employee.location.company
+    purchase_orders = PurchaseOrder.objects.filter(item__company=company)
+    return render(request, 'purchase_orders.html',
+                  {'purchase_orders': purchase_orders})
+
+
+@login_required
+def suppliers(request):
+    company = request.user.employee.location.company
+    suppliers = Supplier.objects.filter(company=company)
+    return render(request, 'suppliers.html', {'suppliers': suppliers})
+
+
+@login_required
+def supplier(request, pk):
+    supplier = Supplier.objects.get(id=pk)
+    return render(request, 'supplier.html', {'supplier': supplier})
+
+
+def add_supplier(request):
+    if request.method == 'GET':
+        return render(request, 'add_supplier.html')
+    elif request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        description = request.POST['description']
+        supplier = Supplier.objects.create(name=name, email=email,
+                                           description=description)
+        supplier.save()
+        return redirect('supplier', supplier.id)

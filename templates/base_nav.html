@@ -57,6 +57,12 @@
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link"
+                            href="{% url 'add_supplier' %}"><i
+                            class="fas fa-truck-loading"></i><span>Add
+                        Supplier</span></a>
+                    </li>
+                    <li class="nav-item" role="presentation"><a
+                            class="nav-link"
                             href="{% url 'add_item' %}"><i
                             class="fas fa-cog"></i><span>Add Item</span></a>
                     </li>
@@ -70,12 +76,13 @@
                             class="fas fa-calendar"></i><span>Allocations</span></a>
                     </li>
                     <li class="nav-item" role="presentation"><a
-                            class="nav-link" href="#"><i
+                            class="nav-link"
+                            href="{% url 'purchase_orders' %}"><i
                             class="fas
                             fa-money-check"></i><span>Purchase Orders</span></a>
                     </li>
                     <li class="nav-item" role="presentation"><a
-                            class="nav-link" href="#"><i
+                            class="nav-link" href="{% url 'suppliers' %}"><i
                             class="fas
                             fa-truck"></i><span>Suppliers</span></a>
                     </li>
@@ -207,6 +214,8 @@
                         {{ request.user.last_name }}</span><img
                             class="border rounded-circle img-profile"
                             src="
+
+
 
 
 

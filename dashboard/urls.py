@@ -25,4 +25,8 @@ urlpatterns = [
     path('user-not-found/', views.error, name='page_not_found'),
     path('place-order/', views.place_order, name='place_order'),
     path('verify/<int:pk>/', views.verify, name='verify'),
+    path('purchase-orders/', views.purchase_orders, name='purchase_orders'),
+    path('suppliers/list/', views.suppliers, name='suppliers'),
+    path('suppliers/<int:pk>/', views.supplier, name='supplier'),
+    path('suppliers/new/', views.add_supplier, name='add_supplier')
 ]
