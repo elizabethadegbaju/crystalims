@@ -129,21 +129,14 @@ class Supplier(models.Model):
 
 class Item(models.Model):
     """This represents an equipment in our system."""
-    POSSIBLE_EQUIPMENT_CONDITIONS = [
-        ('Very Poor', 'VP'),
-        ('Fair', 'F'),
-        ('Good', 'G'),
-        ('Excellent', 'E'),
-    ]
     SKU = models.CharField(max_length=20, primary_key=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     description = models.TextField(help_text="Enter details on equipment")
     price = models.IntegerField()
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
-    condition = models.CharField(max_length=20,
-                                 choices=POSSIBLE_EQUIPMENT_CONDITIONS)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
+    quantity_purchased = models.IntegerField(default=1)
+    quantity_available = models.IntegerField(default=0)
     maximum_daily_usage = models.IntegerField(default=0)
     maximum_lead_time = models.TextField(default=1)
     average_daily_usage = models.IntegerField(default=0)
@@ -167,7 +160,7 @@ class Item(models.Model):
         return self.description
 
 
-class PurchaseLog(models.Model):
+class PurchaseOrder(models.Model):
     ORDER_STATUS = [
         ('Queued', 'Q'),
         ('Sent', 'S'),
@@ -183,31 +176,22 @@ class PurchaseLog(models.Model):
         return "{0} ({1})".format(self.status, self.item)
 
 
-class Allocation(models.Model):
+class ItemRequest(models.Model):
     """This represents an item allocation to a user in our system."""
+    REQUEST_STATUS = [
+        ('Pending', 'P'),
+        ('Fulfilled', 'F'),
+        ('Stock Out', 'S')
+    ]
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User,
                              on_delete=models.DO_NOTHING,
-                             related_name='item_allocations')
-    start_date = models.DateField()
-    end_date = models.DateField()
-    date_applied = models.DateTimeField(auto_now=True)
-    checked_in = models.BooleanField(default=False)
-    approved = models.BooleanField(default=False)
-    approver = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='allocations_overseen',
-        default=1)
+                             related_name='item_requests')
+    created_at = models.DateField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=REQUEST_STATUS)
 
     def __str__(self):
-        if self.approved:
-            status = "Approved"
-        elif self.approver:
-            status = "Not approved"
-        else:
-            status = "Pending"
-        return status + " - " + self.item.SKU + " - " + self.user.email
+        return self.status + " - " + self.item.SKU + " - " + self.user.email
 
 
 class AssetLog(models.Model):
@@ -311,9 +295,9 @@ class ItemFactory(factory.django.DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
 
 
-class AllocationFactory(factory.django.DjangoModelFactory):
+class ItemRequestFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Allocation
+        model = ItemRequest
 
     item = factory.SubFactory(ItemFactory)
     user = factory.SubFactory(UserFactory)

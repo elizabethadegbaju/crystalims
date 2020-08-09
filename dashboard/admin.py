@@ -29,11 +29,11 @@ class UserAdmin(DjangoUserAdmin):
 
 admin.site.register(Item)
 admin.site.register(Employee)
-admin.site.register(Allocation)
+admin.site.register(ItemRequest)
 admin.site.register(Category)
 admin.site.register(Company)
 admin.site.register(Location)
 admin.site.register(AssetLog)
 admin.site.register(Message)
 admin.site.register(Supplier)
-admin.site.register(PurchaseLog)
+admin.site.register(PurchaseOrder)
