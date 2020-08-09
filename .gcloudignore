@@ -17,5 +17,6 @@
 venv/
 # Python pycache:
 __pycache__/
+.idea/
 # Ignored by the build system
 /setup.cfg

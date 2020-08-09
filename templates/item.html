@@ -12,7 +12,7 @@
                 <p class="text-danger m-0 font-weight-bold">Equipment Info</p>
             </div>
             <div class="card-body">
-                <form method="POST" action="{% url 'add_item' %}">
+                <form method="POST">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="col">
@@ -27,9 +27,26 @@
                             <div class="form-group">
                                 <label for="location"><strong>Quantity</strong></label>
                                 <input class="form-control" type="text"
-                                       value="{{ item.quantity }}"
+                                       value="{{ item.quantity_available }}"
                                        placeholder="Quantity in stock"
-                                       name="quantity" required="">
+                                       name="quantity" disabled>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="vendor"><strong>Supplier</strong></label>
+                                <select class="custom-select form-control"
+                                        required=""
+                                        autofocus="" name="supplier">
+                                    {% for supplier in suppliers %}
+                                        <option
+                                                {% if item.supplier_id == supplier.id %}
+                                                    selected
+                                                {% endif %}
+                                                    value="{{ supplier.id }}"
+                                        >{{ supplier.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -41,6 +58,17 @@
                                        value="{{ item.price }}"
                                        placeholder="Price of Equipment"
                                        name="price" required=""></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="reorder_point"><strong>Reorder
+                                    Point
+                                </strong></label>
+                                <input class="form-control" type="text"
+                                       value="{{ item.reorder_point }}"
+                                       placeholder="Quantity at which
+                                       purchase order is made."
+                                       name="reorder_point" required=""></div>
                         </div>
                         <div class="col">
                             <div class="form-group">
@@ -59,23 +87,62 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="vendor"><strong>Supplier</strong></label>
-                        <select class="custom-select form-control"
-                                required=""
-                                autofocus="" name="supplier">
-                            {% for supplier in suppliers %}
-                                <option
-                                        {% if item.supplier_id == supplier.id %}
-                                            selected
-                                        {% endif %}  value="{{ supplier.id }}"
-                                >{{ supplier.name }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="max_daily_usage">
+                                    <strong>Max. Daily Usage</strong></label>
+                                <input class="form-control" type="text"
+                                       value="{{ item.maximum_daily_usage }}"
+                                       placeholder="Maximum requests per day"
+                                       name="max_daily_usage"
+                                       required=""></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="avg_daily_usage">
+                                    <strong>Avg. Daily Usage</strong></label>
+                                <input class="form-control" type="text"
+                                       value="{{ item.average_daily_usage }}"
+                                       placeholder="Average requests per day"
+                                       name="avg_daily_usage"
+                                       required=""></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="max_lead_time">
+                                    <strong>Max. Lead Time</strong></label>
+                                <input class="form-control" type="text"
+                                       value="{{ item.maximum_lead_time }}"
+                                       placeholder="Maximum time between
+                                       purchase order placement and shipment"
+                                       name="max_lead_time" required=""></div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="avg_lead_time">
+                                    <strong>Avg. Lead Time</strong></label>
+                                <input class="form-control" type="text"
+                                       value="{{ item.average_lead_time }}"
+                                       placeholder="Average time between
+                                       purchase order placement and shipment"
+                                       name="avg_lead_time" required=""></div>
+                        </div>
                     </div>
-                    <div class="form-group">
+                    <div class="d-flex form-group justify-content-end">
                         <button class="btn btn-primary btn-md"
-                                type="submit">Submit
+                                type="submit"
+                                href="{% url 'edit_item' item.SKU %}">Update
+                            Item
+                        </button>
+                        <button class="btn btn-primary btn-md ml-3"
+                                type="submit"
+                                href="
+{% url 'request_item' item.SKU %}">Request Item
+                        </button>
+                        <button class="btn btn-danger btn-md ml-3"
+                                type="submit" href="
+{% url 'delete_item' item.SKU %}">Delete Item
                         </button>
                     </div>
                 </form>
@@ -89,6 +156,34 @@
                         m-0">Purchase History</h6>
                     </div>
                     <div class="card-body">
+                        <div class="table-responsive table mt-2" id="dataTable"
+                             role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table dataTable my-0" id="dataTable">
+                                <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Quantity</th>
+                                    <th>Created at</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for purchase_order in purchase_orders %}
+                                    <tr style="transform: rotate(0)">
+                                        <td>{{ purchase_order.id }}</td>
+                                        <td>{{ purchase_order.quantity }}</td>
+                                        <td>
+                                            {{ purchase_order.created_at|naturaltime }}</td>
+                                        <td>{{ purchase_order.status }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <p>This item's purchase history is
+                                        empty.</p>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,6 +196,34 @@
                                     Usage History</p>
                             </div>
                             <div class="card-body">
+                                <div class="table-responsive table mt-2"
+                                     id="dataTable" role="grid"
+                                     aria-describedby="dataTable_info">
+                                    <table class="table dataTable my-0"
+                                           id="dataTable">
+                                        <thead>
+                                        <tr>
+                                            <th>S/N</th>
+                                            <th>User</th>
+                                            <th>Created at</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for usage in usage_history %}
+                                            <tr style="transform: rotate(0)">
+                                                <td>{{ usage.id }}</td>
+                                                <td>{{ usage.user }}</td>
+                                                <td>{{ usage.created_at }}</td>
+                                                <td>{{ usage.status }}</td>
+                                            </tr>
+                                        {% empty %}
+                                            <p>This item's request history
+                                                is empty.</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

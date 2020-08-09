@@ -34,16 +34,16 @@
                                 aria-controls="dataTable" placeholder="Search"></label></div>
                     </div>
                 </div>
-                <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                <div class="table-responsive table mt-2" id="dataTable"
+                     role="grid"
                      aria-describedby="dataTable_info">
                     <table class="table dataTable my-0" id="dataTable">
                         <thead>
                         <tr>
                             <th>Serial</th>
                             <th>Description</th>
-                            <th>Condition</th>
                             <th>Category</th>
-                            <th>Quantity</th>
+                            <th>Quantity in Stock</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -55,23 +55,13 @@
                                        href="{% url 'item' item.SKU %}">{{ item.SKU }}</a>
                                 </td>
                                 <td>{{ item.description }}</td>
-                                <td>{{ item.condition }}</td>
                                 <td>{{ item.category.name }}</td>
-                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.quantity_available }}</td>
                             </tr>
                         {% empty %}
                             <p>There are no items in this company.</p>
                         {% endfor %}
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td><strong>Serial</strong></td>
-                            <td><strong>Description</strong></td>
-                            <td><strong>Condition</strong></td>
-                            <td><strong>Category</strong></td>
-                            <td><strong>Quantity</strong></td>
-                        </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">

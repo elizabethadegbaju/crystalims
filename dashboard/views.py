@@ -16,7 +16,6 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from .models import *
-from .render import Render
 from .tokens import account_activation_token
 
 
@@ -31,53 +30,40 @@ def dashboard(request):
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         most_requested = Item.objects.filter(
             company=company).annotate(
-            num_allocations=Count('allocation')).order_by('-num_allocations')[
+            requests=Count('itemrequest')).order_by('-requests')[
                          :10]
         assets_value = Item.objects.filter(
             company=company).aggregate(Sum('price'))
-        pending_requests = Allocation.objects.filter(
-            item__company=company,
-            approver_id=1).count()
-        pending_items = Allocation.objects.filter(
-            item__company=company,
-            approver_id=1).order_by(
-            'item_id').distinct().count()  # there can be multiple requests on one item
-        allocated_items = Allocation.objects.filter(
-            item__company=company, approved=True,
-            checked_in=False,
-            start_date__lte=timezone.now().date()).count()
+        pending_requests = ItemRequest.objects.filter(
+            item__company=company, status='P').count()
+        total_quantity_purchased = Item.objects.aggregate(Sum(
+            'quantity_purchased'))['quantity_purchased__sum']
+        total_quantity_available = Item.objects.aggregate(Sum(
+            'quantity_available'))['quantity_available__sum']
+        if total_quantity_available > 0:
+            inventory_turns = round(
+                total_quantity_purchased / total_quantity_available, 2)
+        else:
+            inventory_turns = 0
         items_count = Item.objects.filter(
             company=company).count()
-        free_items = items_count - (
-                pending_items + allocated_items)
+        requests = ItemRequest.objects.all().count()
+        if requests > 0:
+            percent_stockout = ItemRequest.objects.filter(status='SO').count()
+            percent_fulfilled = ItemRequest.objects.filter(status='F').count()
+            percent_pending = ItemRequest.objects.filter(status='P').count()
+            percent_stockouts = ((percent_stockout) / requests) * 100
+        else:
+            percent_stockout = 0
+            percent_fulfilled = 0
+            percent_pending = 0
+            percent_stockouts = 0
         categories = Category.objects.filter(company=company).annotate(
             Count('item'))
         categories_count = categories.count()
         alerts, unread_messages = unread_messages_notification(user)
         assets_monthly_value = company.assetlog_set.filter(
             year=timezone.now().year)
-        excellent_condition = Item.objects.filter(
-            company=company, condition='E').count()
-        good_condition = Item.objects.filter(company=company,
-                                             condition='G').count()
-        fair_condition = Item.objects.filter(company=company,
-                                             condition='F').count()
-        very_poor_condition = Item.objects.filter(
-            company=company, condition='VP').count()
-        if items_count != 0:
-            excellent_condition_percentage = round(
-                (excellent_condition / items_count) * 100, 1)
-            good_condition_percentage = round(
-                (good_condition / items_count) * 100, 1)
-            fair_condition_percentage = round(
-                (fair_condition / items_count) * 100, 1)
-            very_poor_condition_percentage = round(
-                (very_poor_condition / items_count) * 100, 1)
-        else:
-            excellent_condition_percentage = 0
-            good_condition_percentage = 0
-            fair_condition_percentage = 0
-            very_poor_condition_percentage = 0
         year = timezone.now().year
         assets_mv = {}
         for monthly_value in assets_monthly_value:
@@ -89,16 +75,14 @@ def dashboard(request):
                    'assets_value': assets_value,
                    'items_count': items_count,
                    'pending_requests': pending_requests,
-                   'pending_items': pending_items,
-                   'allocated_items': allocated_items,
-                   'free_items': free_items,
                    'categories': categories,
                    'categories_count': categories_count,
                    'assets_mv': assets_mv,
-                   'excellent_condition_percentage': excellent_condition_percentage,
-                   'good_condition_percentage': good_condition_percentage,
-                   'fair_condition_percentage': fair_condition_percentage,
-                   'very_poor_condition_percentage': very_poor_condition_percentage,
+                   'percent_stockout': percent_stockout,
+                   'percent_fulfilled': percent_fulfilled,
+                   'percent_pending': percent_pending,
+                   'inventory_turns': inventory_turns,
+                   'percent_stockouts': percent_stockouts,
                    'year': year}
         return render(request, 'dashboard.html', context)
     else:
@@ -199,16 +183,17 @@ def unread_messages_notification(user):
 def item(request, pk):
     user = request.user
     company = request.user.employee.location.company
-    if request.method == "GET":
-        item = Item.objects.get(SKU=pk)
-        allocations = item.allocation_set.all()
-        categories = company.category_set.all()
-        suppliers = company.supplier_set.all()
-        alerts, unread_messages = unread_messages_notification(user)
-        return render(request, 'item.html',
-                      {'item': item, 'allocations': allocations,
-                       'unread_messages': unread_messages, 'alerts': alerts,
-                       'categories': categories, 'suppliers': suppliers})
+    item = Item.objects.get(SKU=pk)
+    usage_history = item.itemrequest_set.all()
+    purchase_orders = item.purchaseorder_set.all()
+    categories = company.category_set.all()
+    suppliers = company.supplier_set.all()
+    alerts, unread_messages = unread_messages_notification(user)
+    return render(request, 'item.html',
+                  {'item': item, 'usage_history': usage_history,
+                   'purchase_orders': purchase_orders,
+                   'unread_messages': unread_messages, 'alerts': alerts,
+                   'categories': categories, 'suppliers': suppliers})
 
 
 @login_required
@@ -216,7 +201,7 @@ def profile(request):
     if request.method == "GET":
         user = request.user
         alerts, unread_messages = unread_messages_notification(user)
-        allocations = user.item_allocations.all()
+        allocations = user.item_requests.all()
         return render(request, 'profile.html', {'allocations': allocations,
                                                 'unread_messages': unread_messages,
                                                 'alerts': alerts})
@@ -414,7 +399,7 @@ def allocations(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         alerts, unread_messages = unread_messages_notification(user)
-        allocations = Allocation.objects.filter(
+        allocations = ItemRequest.objects.filter(
             item__company=user.employee.location.company)
         return render(request, 'allocations.html', {'allocations': allocations,
                                                     'unread_messages': unread_messages,
@@ -480,71 +465,6 @@ def add_location(request):
 
 
 @login_required
-def pdf(request):
-    user = request.user
-    company = user.employee.location.company
-    most_requested = Item.objects.filter(
-        location__company=company).annotate(
-        num_allocations=Count('allocation')).order_by('-num_allocations')[
-                     :10]
-    assets_value = Item.objects.filter(
-        location__company=company).aggregate(Sum('price'))
-    pending_requests = Allocation.objects.filter(
-        item__location__company=company,
-        approver__isnull=True).count()
-    pending_items = Allocation.objects.filter(
-        item__location__company=company,
-        approver__isnull=True).order_by(
-        'item_id').distinct().count()
-    allocated_items = Allocation.objects.filter(
-        item__location__company=company, approved=True,
-        checked_in=False,
-        start_date__lte=timezone.now().date()).count()
-    items_count = Item.objects.filter(
-        location__company=company).count()
-    free_items = items_count - (
-            pending_items + allocated_items)
-    categories_count = Category.objects.filter(company=company).count()
-    assets_monthly_value = AssetLog.objects.filter(company=company,
-                                                   year=timezone.now().year)
-    excellent_condition = Item.objects.filter(location__company=company,
-                                              condition='E').count()
-    excellent_condition_percentage = round(
-        (excellent_condition / items_count) * 100, 1)
-    good_condition = Item.objects.filter(location__company=company,
-                                         condition='G').count()
-    good_condition_percentage = round(
-        (good_condition / items_count) * 100, 1)
-    fair_condition = Item.objects.filter(location__company=company,
-                                         condition='F').count()
-    fair_condition_percentage = round(
-        (fair_condition / items_count) * 100, 1)
-    very_poor_condition = Item.objects.filter(location__company=company,
-                                              condition='VP').count()
-    very_poor_condition_percentage = round(
-        (very_poor_condition / items_count) * 100, 1)
-    assets_mv = {}
-    for monthly_value in assets_monthly_value:
-        assets_mv[monthly_value.month] = monthly_value.assets
-    params = {'request': request,
-              'company': company,
-              'most_requested': most_requested,
-              'assets_value': assets_value,
-              'items_count': items_count,
-              'pending_requests': pending_requests,
-              'pending_items': pending_items,
-              'allocated_items': allocated_items,
-              'free_items': free_items,
-              'categories_count': categories_count,
-              'assets_mv': assets_mv,
-              'excellent_condition_percentage': excellent_condition_percentage,
-              'good_condition_percentage': good_condition_percentage,
-              'fair_condition_percentage': fair_condition_percentage,
-              'very_poor_condition_percentage': very_poor_condition_percentage}
-    return Render.render('dashboard.html', params)
-
-
-@login_required
 def message(request, pk):
     user = request.user
     alerts, unread_messages = unread_messages_notification(user)
@@ -606,7 +526,9 @@ def verify(request, pk):
 @login_required
 def purchase_orders(request):
     company = request.user.employee.location.company
-    purchase_orders = PurchaseOrder.objects.filter(item__company=company)
+    po_list = PurchaseOrder.objects.filter(
+        item__company=company).order_by('-created_at')
+    purchase_orders = pager(po_list, request)
     return render(request, 'purchase_orders.html',
                   {'purchase_orders': purchase_orders})
 
@@ -614,7 +536,8 @@ def purchase_orders(request):
 @login_required
 def suppliers(request):
     company = request.user.employee.location.company
-    suppliers = Supplier.objects.filter(company=company)
+    suppliers_list = Supplier.objects.filter(company=company).order_by('name')
+    suppliers = pager(suppliers_list, request)
     return render(request, 'suppliers.html', {'suppliers': suppliers})
 
 
@@ -635,3 +558,41 @@ def add_supplier(request):
                                            description=description)
         supplier.save()
         return redirect('supplier', supplier.id)
+
+
+def edit_item(request, pk):
+    SKU = request.POST['SKU']
+    price = request.POST['price']
+    supplier = request.POST['supplier']
+    category = request.POST['category']
+    reorder_point = request.POST['reorder_point']
+    max_daily_usage = request.POST['max_daily_usage']
+    avg_daily_usage = request.POST['avg_daily_usage']
+    max_lead_time = request.POST['max_lead_time']
+    avg_lead_time = request.POST['avg_lead_time']
+
+    item = Item.objects.get(SKU=pk)
+    item.SKU = SKU
+    item.price = price
+    item.supplier_id = supplier
+    item.category_id = category
+    item.reorder_point = reorder_point
+    item.maximum_lead_time = max_lead_time
+    item.average_lead_time = avg_lead_time
+    item.maximum_daily_usage = max_daily_usage
+    item.average_daily_usage = avg_daily_usage
+    item.save()
+    return redirect('item', pk)
+
+
+def request_item(request, pk):
+    item = Item.objects.get(SKU=pk)
+    item_request = ItemRequest.objects.create(item=item, user=request.user)
+    item_request.save()
+    return redirect('profile')
+
+
+def delete_item(request, pk):
+    item = Item.objects.get(SKU=pk)
+    item.delete()
+    return redirect('profile')

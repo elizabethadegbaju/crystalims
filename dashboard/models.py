@@ -181,14 +181,16 @@ class ItemRequest(models.Model):
     REQUEST_STATUS = [
         ('Pending', 'P'),
         ('Fulfilled', 'F'),
-        ('Stock Out', 'S')
+        ('Stock Out', 'S'),
+        ('Returned', 'R')
     ]
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User,
                              on_delete=models.DO_NOTHING,
                              related_name='item_requests')
     created_at = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=REQUEST_STATUS)
+    status = models.CharField(max_length=20, choices=REQUEST_STATUS,
+                              default='P')
 
     def __str__(self):
         return self.status + " - " + self.item.SKU + " - " + self.user.email

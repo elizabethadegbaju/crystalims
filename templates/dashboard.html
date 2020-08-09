@@ -6,7 +6,8 @@
 {% block content %}
     <div class="container-fluid">
         <div class="d-sm-flex justify-content-between align-items-center mb-4">
-            <h3 class="text-dark mb-0">{{ company.name }} Dashboard</h3><a
+            <h3 class="text-dark mb-0">{{ company.name }}
+                Inventory Dashboard</h3><a
                 class="btn btn-primary btn-sm d-none d-sm-inline-block"
                 role="button" onclick="this.parent.print()"
                 href="#"><i
@@ -14,16 +15,16 @@
             Report</a>
         </div>
         <div class="row">
-            <div class="col-md-6 col-xl-3 mb-4">
+            <div class="col-md-6 col-xl-2 mb-4">
                 <div class="card shadow border-left-primary py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-primary
                                 font-weight-bold text-xs mb-1">
-                                    <span>Equipments</span></div>
+                                    <span>Items</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0">
-                                    <span>{{ equipments_count|intcomma }}</span>
+                                    <span>{{ items_count|intcomma }}</span>
                                 </div>
                             </div>
                             <div class="col-auto"><i
@@ -33,13 +34,55 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-3 mb-4">
+            <div class="col-md-6 col-xl-2 mb-4">
+                <div class="card shadow border-left-danger py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase text-danger
+                                font-weight-bold text-xs mb-1">
+                                    <span>Inventory Turns</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>{{ inventory_turns }}</span>
+                                </div>
+                            </div>
+                            <div class="col-auto"><i
+                                    class="fas fa-clock fa-2x
+                                    text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-2 mb-4">
+                <div class="card shadow border-left-success py-2"
+                     style="border-left-color: mediumpurple!important;">
+                    <div class="card-body">
+                        <div class="row align-items-center no-gutters">
+                            <div class="col mr-2">
+                                <div class="text-uppercase
+                                font-weight-bold text-xs mb-1"
+                                     style="color: mediumpurple!important;">
+                                    <span>Stock-Outs (%)</span></div>
+                                <div class="text-dark font-weight-bold h5 mb-0">
+                                    <span>{{ percent_stockouts }}</span>
+                                </div>
+                            </div>
+                            <div class="col-auto"><i
+                                    class="fas fa-exclamation-triangle fa-2x
+                                    text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-2 mb-4">
                 <div class="card shadow border-left-success py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1">
-                                    <span>Value of Assets</span></div>
+                                    <span>Value of Inventory</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0">
                                     <span>&#8358;{{ assets_value.price__sum|intcomma }}</span>
                                 </div>
@@ -51,7 +94,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-3 mb-4">
+            <div class="col-md-6 col-xl-2 mb-4">
                 <div class="card shadow border-left-info py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
@@ -69,13 +112,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-3 mb-4">
+            <div class="col-md-6 col-xl-2 mb-4">
                 <div class="card shadow border-left-warning py-2">
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-warning font-weight-bold text-xs mb-1">
-                                    <span>Pending Requests</span></div>
+                                    <span>Requests</span></div>
                                 <div class="text-dark font-weight-bold h5 mb-0">
                                     <span>{{ pending_requests|intcomma }}</span>
                                 </div>
@@ -93,7 +136,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h6 class="text-danger font-weight-bold m-0">Overview
-                            of New Assets Value in {{ year }}</h6>
+                            of New Inventory Value in {{ year }}</h6>
                         <div class="dropdown no-arrow">
                             <button class="btn btn-link btn-sm dropdown-toggle"
                                     data-toggle="dropdown"
@@ -127,8 +170,8 @@
             <div class="col-lg-5 col-xl-4">
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="text-danger font-weight-bold m-0">Equipments
-                            Allocation Status</h6>
+                        <h6 class="text-danger font-weight-bold m-0">Items
+                            Request by Status</h6>
                         <div class="dropdown no-arrow">
                             <button class="btn btn-link btn-sm dropdown-toggle"
                                     data-toggle="dropdown"
@@ -154,12 +197,14 @@
                     <div class="card-body">
                         <div class="chart-area">
                             <canvas
-                                    data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Allocated&quot;,&quot;Free&quot;,&quot;Pending&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#e74a3b&quot;,&quot;#1cc88a&quot;,&quot;#f6c23e&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ allocated_equipments }}&quot;,&quot;{{ free_equipments }}&quot;,&quot;{{ pending_equipments }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
+                                    data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Stock-Out&quot;,&quot;Fulfilled&quot;,&quot;Pending&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#e74a3b&quot;,&quot;#1cc88a&quot;,&quot;#f6c23e&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;{{ percent_stockout }}&quot;,&quot;{{ percent_fulfilled }}&quot;,&quot;{{ percent_pending }}&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas>
                         </div>
                         <div class="text-center small mt-4"><span class="mr-2"><i
-                                class="fas fa-circle text-danger"></i>&nbsp;Allocated</span><span
+                                class="fas fa-circle text-danger"></i>&nbsp;
+                            Stock Out</span><span
                                 class="mr-2"><i
-                                class="fas fa-circle text-success"></i>&nbsp;Free</span><span
+                                class="fas fa-circle
+                                text-success"></i>&nbsp;Fulfilled</span><span
                                 class="mr-2"><i
                                 class="fas fa-circle text-warning"></i>&nbsp;Pending</span>
                         </div>
@@ -257,7 +302,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <p class="text-danger m-0 font-weight-bold">Most
-                            Requested Equipments</p>
+                            Requested Items</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable"
@@ -266,17 +311,17 @@
                             <table class="table dataTable my-0" id="dataTable">
                                 <thead>
                                 <tr>
-                                    <th>Serial</th>
+                                    <th>SKU</th>
                                     <th>Description</th>
                                     <th>Number of Requests</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for equipment in most_requested %}
+                                {% for item in most_requested %}
                                     <tr>
-                                        <td>{{ equipment.serial }}</td>
-                                        <td>{{ equipment.description|truncatechars:20 }}</td>
-                                        <td>{{ equipment.num_allocations }}</td>
+                                        <td>{{ item.SKU }}</td>
+                                        <td>{{ item.description|truncatechars:20 }}</td>
+                                        <td>{{ item.requests }}</td>
                                     </tr>
                                 {% endfor %}
 
@@ -329,8 +374,14 @@
 
 
 
+
+
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[
                                             {% for category in categories %}&quot;{% cycle '#5bc0de' '#894f62' '#f6c23e' '#e74a3b' '#1cc88a' as bgcolors %}&quot;
+
+
+
 
 
 
@@ -345,7 +396,13 @@
 
 
 
+
+
+
                                         {% if forloop.last %}{% else %},{% endif %}{% endfor %}],&quot;data&quot;:[{% for category in categories %}&quot;{{ category.equipment__count }}&quot;
+
+
+
 
 
 

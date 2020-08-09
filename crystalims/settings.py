@@ -63,7 +63,7 @@ EMAIL_PORT = '587'
 EMAIL_HOST_USER = 'postmaster@sandbox4ea32e534f5b45aea37dc52c33a8ddb7.mailgun.org'
 EMAIL_HOST_PASSWORD = '19e4f5482909c4c49e9919b533814957-7fba8a4e-f8402762'
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'crystal-ims.appspot.com'
 GS_FILE_OVERWRITE = False
 GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR,
@@ -209,8 +209,8 @@ USE_TZ = True
 # STATIC_ROOT = 'static'
 MEDIA_ROOT = 'media'
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 if os.getenv('GAE_APPLICATION', None):
-    MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'
+    STATIC_ROOT = 'static'
 else:
-    MEDIA_URL = "/media/"
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
+MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'
