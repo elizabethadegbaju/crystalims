@@ -1,6 +1,7 @@
 import factory.django
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.db.models import F
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -62,7 +63,9 @@ class Company(models.Model):
     """This represents a Company within our system"""
 
     name = models.CharField(max_length=50, help_text='Name of Company')
-    verbose_name_plural = 'Companies'
+
+    class Meta:
+        verbose_name_plural = 'Companies'
 
     def __str__(self):
         return self.name
@@ -97,21 +100,13 @@ class Employee(models.Model):
         return self.user.email
 
 
-@receiver(post_save, sender=User)
-def create_employee(sender, instance, created, **kwargs):
-    if created:
-        Employee.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_employee(sender, instance, **kwargs):
-    instance.employee.save()
-
-
 class Category(models.Model):
     """This represents an equipment category in our system."""
     name = models.CharField(max_length=20, help_text='New category')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name + " - " + self.company.name
@@ -143,18 +138,18 @@ class Item(models.Model):
     average_lead_time = models.TextField(default=1)
     reorder_point = models.IntegerField(default=1)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-                  'Oct', 'Nov', 'Dec']
-        year = timezone.now().year
-        month = months[timezone.now().month - 1]
-        month_asset = \
-            AssetLog.objects.get_or_create(company=self.company,
-                                           year=year, month=month)[0]
-        assets = month_asset.assets + float(self.price)
-        month_asset.assets = assets
-        month_asset.save()
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+    #               'Oct', 'Nov', 'Dec']
+    #     year = timezone.now().year
+    #     month = months[timezone.now().month - 1]
+    #     month_asset = \
+    #         AssetLog.objects.get_or_create(company=self.company,
+    #                                        year=year, month=month)[0]
+    #     assets = month_asset.assets + float(self.price)
+    #     month_asset.assets = assets
+    #     month_asset.save()
 
     def __str__(self):
         return self.description
@@ -162,10 +157,10 @@ class Item(models.Model):
 
 class PurchaseOrder(models.Model):
     ORDER_STATUS = [
-        ('Queued', 'Q'),
-        ('Sent', 'S'),
-        ('Cancelled', 'C'),
-        ('Fulfilled', 'F')
+        ('Q', 'Queued'),
+        ('S', 'Sent'),
+        ('C', 'Cancelled'),
+        ('F', 'Fulfilled')
     ]
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -179,10 +174,10 @@ class PurchaseOrder(models.Model):
 class ItemRequest(models.Model):
     """This represents an item allocation to a user in our system."""
     REQUEST_STATUS = [
-        ('Pending', 'P'),
-        ('Fulfilled', 'F'),
-        ('Stock Out', 'S'),
-        ('Returned', 'R')
+        ('P', 'Pending'),
+        ('F', 'Fulfilled'),
+        ('SO', 'Stock Out'),
+        ('R', 'Returned')
     ]
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User,
@@ -196,7 +191,7 @@ class ItemRequest(models.Model):
         return self.status + " - " + self.item.SKU + " - " + self.user.email
 
 
-class AssetLog(models.Model):
+class ItemLog(models.Model):
     """This represents the total assets value for a month in our system."""
     MONTHS = [
         ('Jan', 'January'),
@@ -215,7 +210,7 @@ class AssetLog(models.Model):
     company = models.ForeignKey(Company, models.CASCADE)
     month = models.CharField(max_length=20, choices=MONTHS)
     year = models.IntegerField()
-    assets = models.FloatField(default=0)
+    inventory_value = models.FloatField(default=0)
 
     def __str__(self):
         return self.company.name + " " + self.month + " " + str(self.year)
@@ -233,6 +228,31 @@ class Message(models.Model):
     def __str__(self):
         return str(
             self.date_sent) + " " + self.from_user.get_full_name() + ">" + self.to_user.get_full_name()
+
+
+@receiver(post_save, sender=User)
+def create_employee(sender, instance, created, **kwargs):
+    if created:
+        Employee.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_employee(sender, instance, **kwargs):
+    instance.employee.save()
+
+
+@receiver(post_save, sender=Item)
+def log_item(sender, instance, **kwargs):
+    months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+              'Oct', 'Nov', 'Dec']
+    year = timezone.now().year
+    month = months[timezone.now().month - 2]
+    month_asset = \
+        ItemLog.objects.get_or_create(company=instance.company,
+                                      year=year, month=month)[0]
+    month_asset.inventory_value = F('inventory_value') + (
+            float(instance.price) * float(instance.quantity_purchased))
+    month_asset.save()
 
 
 class UserFactory(factory.django.DjangoModelFactory):

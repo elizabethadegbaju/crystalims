@@ -32,8 +32,10 @@ def dashboard(request):
             company=company).annotate(
             requests=Count('itemrequest')).order_by('-requests')[
                          :10]
-        assets_value = Item.objects.filter(
-            company=company).aggregate(Sum('price'))
+        inventory_value = Item.objects.filter(
+            company=company).aggregate(total=
+                                       Sum(F('price') * F(
+                                           'quantity_available')))
         pending_requests = ItemRequest.objects.filter(
             item__company=company, status='P').count()
         total_quantity_purchased = Item.objects.aggregate(Sum(
@@ -62,22 +64,22 @@ def dashboard(request):
             Count('item'))
         categories_count = categories.count()
         alerts, unread_messages = unread_messages_notification(user)
-        assets_monthly_value = company.assetlog_set.filter(
+        inventory_monthly_value = company.itemlog_set.filter(
             year=timezone.now().year)
         year = timezone.now().year
-        assets_mv = {}
-        for monthly_value in assets_monthly_value:
-            assets_mv[monthly_value.month] = monthly_value.assets
+        inventory_mv = {}
+        for monthly_value in inventory_monthly_value:
+            inventory_mv[monthly_value.month] = monthly_value.inventory_value
         context = {'company': company,
                    'unread_messages': unread_messages,
                    'alerts': alerts,
                    'most_requested': most_requested,
-                   'assets_value': assets_value,
+                   'inventory_value': inventory_value,
                    'items_count': items_count,
                    'pending_requests': pending_requests,
                    'categories': categories,
                    'categories_count': categories_count,
-                   'assets_mv': assets_mv,
+                   'inventory_mv': inventory_mv,
                    'percent_stockout': percent_stockout,
                    'percent_fulfilled': percent_fulfilled,
                    'percent_pending': percent_pending,
@@ -385,8 +387,8 @@ def add_item(request):
                                        description=description,
                                        price=price,
                                        supplier_id=supplier,
-                                       quantity=quantity,
-                                       condition='E',
+                                       quantity_purchased=quantity,
+                                       quantity_available=quantity,
                                        category_id=category,
                                        company=company)
             item.save()

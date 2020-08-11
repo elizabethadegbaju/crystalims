@@ -34,5 +34,7 @@ urlpatterns = [
                   path('oauth/', include('social_django.urls')),
                   path('', include('django.contrib.auth.urls')),
                   path('', include('dashboard.urls')),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL,
+                         document_root=settings.MEDIA_ROOT) + static(
+    settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 handler404 = 'dashboard.views.error_404_view'
