@@ -31,5 +31,7 @@ urlpatterns = [
     path('purchase-orders/', views.purchase_orders, name='purchase_orders'),
     path('suppliers/list/', views.suppliers, name='suppliers'),
     path('suppliers/<int:pk>/', views.supplier, name='supplier'),
-    path('suppliers/new/', views.add_supplier, name='add_supplier')
+    path('suppliers/new/', views.add_supplier, name='add_supplier'),
+    path('ajax/load-locations/', views.load_locations,
+         name='ajax_load_locations'),
 ]
