@@ -91,18 +91,26 @@ def dashboard(request):
         return redirect('profile')
 
 
+def load_locations(request):
+    company_id = request.GET.get('company')
+    locations = Location.objects.filter(company_id=company_id).order_by('name')
+    return render(request, 'registration/company_dropdown_list_options.html',
+                  {'locations': locations})
+
+
 def signup(request):
     if request.method == "GET":
         companies = Company.objects.all().order_by('name')
+        locations = Location.objects.none()
         return render(request, 'registration/register.html',
-                      {'companies': companies})
+                      {'companies': companies, 'locations': locations})
     elif request.method == "POST":
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         password = request.POST['password']
-        company_id = request.POST['company']
-        company = Company.objects.get(id=company_id)
+        location_id = request.POST['location']
+        location = Location.objects.get(id=location_id)
         image = request.FILES['profile_pic']
 
         user = User.objects.create_user(email, password)
@@ -110,8 +118,8 @@ def signup(request):
         user.last_name = last_name
         user.is_active = False
         user.save()
-        send_activation_email(company, email, request, user)
-        user.employee.location = company.location_set.first()
+        send_activation_email(location.company, email, request, user)
+        user.employee.location = location
         user.employee.username = first_name[:3] + "_" + last_name[:3]
         user.employee.image = image
         user.employee.save()
@@ -138,10 +146,11 @@ def send_activation_email(company, email, request, user):
 def social_signup(request):
     if request.method == "GET":
         companies = Company.objects.all().order_by('name')
+        locations = Location.objects.none()
         return render(request, 'registration/register_social.html',
-                      {'companies': companies})
+                      {'companies': companies, 'locations': locations})
     elif request.method == "POST":
-        request.session['company_id'] = request.POST['company_id']
+        request.session['location_id'] = request.POST['location']
         return redirect(reverse('social:complete', args=("google-oauth2",)))
 
 

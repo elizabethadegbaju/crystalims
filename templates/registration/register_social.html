@@ -31,15 +31,34 @@
                                         </p>
                                     </div>
                                     <form class="user" method="post"
-                                          action="{% url 'register_social' %}">
+                                          id="employeeForm"
+                                          action="{% url 'register_social' %}"
+                                          data-locations-url=
+                                                  "{% url 'ajax_load_locations' %}">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <select class="custom-select form-control"
-                                                    required=""
+                                                    required="" id="id_company"
                                                     autofocus=""
                                                     name="company_id">
+                                                <option value="">Select Company
+                                                </option>
                                                 {% for company in companies %}
                                                     <option value="{{ company.id }}">{{ company.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <select class="custom-select form-control"
+                                                    required=""
+                                                    id="id_location"
+                                                    autofocus=""
+                                                    name="location">
+                                                <option value="">Select Branch
+                                                    Location
+                                                </option>
+                                                {% for location in locations %}
+                                                    <option value="{{ location.id }}">{{ location.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -71,8 +90,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="../../static/js/bs-charts.js"></script>
+    <script src="{% static 'js/bs-charts.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="../../static/js/theme.js"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    {% block scripts %}
+        <script>
+            $("#id_company").change(function () {
+                var url = $("#employeeForm").attr("data-locations-url");
+                var companyID = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'company': companyID
+                    },
+                    success: function (data) {
+                        $("#id_location").html(data);
+                    }
+                });
+
+            });
+        </script>
+    {% endblock %}
     </body>
 {% endblock %}

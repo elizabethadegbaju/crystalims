@@ -63,9 +63,11 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            <form class="user" method="POST"
+                            <form class="user" method="POST" id="employeeForm"
                                   action="{% url 'register' %}"
-                                  enctype="multipart/form-data">
+                                  enctype="multipart/form-data"
+                                  data-locations-url=
+                                          "{% url 'ajax_load_locations' %}">
                                 {% csrf_token %}
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0"><input
@@ -77,7 +79,7 @@
                                     <div class="col-sm-6"><input
                                             class="form-control form-control-user"
                                             type="text"
-                                            id="exampleFirstName"
+                                            id="exampleLastName"
                                             placeholder="Last Name"
                                             name="last_name" required="">
                                     </div>
@@ -106,10 +108,24 @@
                                 </div>
                                 <div class="form-group">
                                     <select class="custom-select form-control"
-                                            required=""
+                                            required="" id="id_company"
                                             autofocus="" name="company">
+                                        <option value="">Select Company
+                                        </option>
                                         {% for company in companies %}
                                             <option value="{{ company.id }}">{{ company.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="custom-select form-control"
+                                            required="" id="id_location"
+                                            autofocus="" name="location">
+                                        <option value="">Select Branch
+                                            Location
+                                        </option>
+                                        {% for location in locations %}
+                                            <option value="{{ location.id }}">{{ location.name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -160,6 +176,25 @@
     <script src="{% static 'js/bs-charts.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="{% static 'js/theme.js' %}"></script>
+    {% block scripts %}
+        <script>
+            $("#id_company").change(function () {
+                var url = $("#employeeForm").attr("data-locations-url");
+                var companyID = $(this).val();
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        'company': companyID
+                    },
+                    success: function (data) {
+                        $("#id_location").html(data);
+                    }
+                });
+
+            });
+        </script>
+    {% endblock %}
     </body>
 
 {% endblock %}

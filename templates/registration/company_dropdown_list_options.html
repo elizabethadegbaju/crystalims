@@ -1,0 +1,4 @@
+<option value="">Select Branch Location</option>
+{% for location in locations %}
+    <option value="{{ location.id }}">{{ location.name }}</option>
+{% endfor %}

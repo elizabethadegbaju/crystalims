@@ -38,7 +38,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'daaf3638224607798832c3be53f65a9a'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '336008437255-df9o38359lkk7n26jsslhas7dh9v2g25.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Z0e3jXZDhRmKWhYGOdCP0u3C'
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
-SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['company_id']
+SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['location_id']
 SOCIAL_AUTH_GOOGLE_OAUTH2_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
