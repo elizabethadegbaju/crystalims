@@ -8,4 +8,11 @@
 /venv/
 /.idea/
 
+# PyCharm
 *.pyc
+
+# Python decouple
+/.env
+
+# Google application credentials
+/sa.json
