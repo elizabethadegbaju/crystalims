@@ -5,17 +5,26 @@
     Messages - Crystal
 {% endblock %}
 {% block content %}
-    <div>
+    <div class="container">
         <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#alerts">Alerts</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#inbox">Inbox</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#sent">Sent</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#new">Compose</a></li>
+            <li class="nav-item"><a class="nav-link active" role="tab"
+                                    data-toggle="tab" href="#alerts">Alerts</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" role="tab"
+                                    data-toggle="tab" href="#inbox">Inbox</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" role="tab"
+                                    data-toggle="tab" href="#sent">Sent</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" role="tab"
+                                    data-toggle="tab" href="#new">Compose</a>
+            </li>
         </ul>
         <div class="tab-content bg-white">
             <div class="tab-pane active" role="tabpanel" id="alerts">
                 <div class="card-body">
-                    <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                    <div class="table-responsive table mt-2" id="dataTable"
+                         role="grid"
                          aria-describedby="dataTable_info">
                         <table class="table dataTable my-0" id="dataTable">
                             <thead>

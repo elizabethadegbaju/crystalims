@@ -132,9 +132,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-lg-7 col-xl-8">
-                <div class="card shadow mb-4">
+                <div class="card shadow">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h6 class="text-danger font-weight-bold m-0">Overview
                             of New Inventory Value in {{ year }}</h6>
@@ -162,14 +162,13 @@
                     </div>
                     <div class="card-body">
                         <div class="chart-area">
-                            <canvas
-                                    data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Inventory Value&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;{{ inventory_mv.Jan }}&quot;,&quot;{{ inventory_mv.Feb }}&quot;,&quot;{{ inventory_mv.Mar }}&quot;,&quot;{{ inventory_mv.Apr }}&quot;,&quot;{{ inventory_mv.May }}&quot;,&quot;{{ inventory_mv.Jun }}&quot;,&quot;{{ inventory_mv.Jul }}&quot;,&quot;{{ inventory_mv.Aug }}&quot;,&quot;{{ inventory_mv.Sep }}&quot;,&quot;{{ inventory_mv.Oct }}&quot;,&quot;{{ inventory_mv.Nov }}&quot;,&quot;{{ inventory_mv.Dec }}&quot;],&quot;backgroundColor&quot;:&quot;rgb(231,76,50,0.2)&quot;,&quot;borderColor&quot;:&quot;rgb(231,76,50)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
+                            <canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Inventory Value&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;{{ inventory_mv.Jan }}&quot;,&quot;{{ inventory_mv.Feb }}&quot;,&quot;{{ inventory_mv.Mar }}&quot;,&quot;{{ inventory_mv.Apr }}&quot;,&quot;{{ inventory_mv.May }}&quot;,&quot;{{ inventory_mv.Jun }}&quot;,&quot;{{ inventory_mv.Jul }}&quot;,&quot;{{ inventory_mv.Aug }}&quot;,&quot;{{ inventory_mv.Sep }}&quot;,&quot;{{ inventory_mv.Oct }}&quot;,&quot;{{ inventory_mv.Nov }}&quot;,&quot;{{ inventory_mv.Dec }}&quot;],&quot;backgroundColor&quot;:&quot;rgb(231,76,50,0.2)&quot;,&quot;borderColor&quot;:&quot;rgb(231,76,50)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-5 col-xl-4">
-                <div class="card shadow mb-4">
+                <div class="card shadow">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h6 class="text-danger font-weight-bold m-0">Items
                             Request by Status</h6>
@@ -286,8 +285,14 @@
                                 </thead>
                                 <tbody>
                                 {% for item in most_requested %}
-                                    <tr>
-                                        <td>{{ item.SKU }}</td>
+                                    <tr style="transform: rotate(0)">
+                                        <td>
+                                            <a class="stretched-link
+                                            text-gray-600"
+                                               style="text-decoration: none"
+                                               href="{% url 'item' item.SKU %}">
+                                                {{ item.SKU }}</a>
+                                        </td>
                                         <td>{{ item.description|truncatechars:20 }}</td>
                                         <td>{{ item.requests }}</td>
                                     </tr>
