@@ -12,10 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from decouple import config
-
-from .config import *
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,22 +19,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = 'qq21%w7$1yy5rv5zd%png$fzi)_&@5j%4lm63vem&!a4*yul3p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-SOCIAL_AUTH_TWITTER_KEY = config('TWITTER_KEY')
-SOCIAL_AUTH_TWITTER_SECRET = config('TWITTER_SECRET')
-SOCIAL_AUTH_FACEBOOK_KEY = config('FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = config('FACEBOOK_SECRET')
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_TWITTER_KEY = '8SvoFgdWewZmHgVyNRbc115yq'
+SOCIAL_AUTH_TWITTER_SECRET = '91rNgDAMylDXBUbOUDIOz6inyha2xwWQ5Ymi1UrTARC2RPrBVH'
+SOCIAL_AUTH_FACEBOOK_KEY = '896788630844040'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'daaf3638224607798832c3be53f65a9a'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '336008437255-df9o38359lkk7n26jsslhas7dh9v2g25.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Z0e3jXZDhRmKWhYGOdCP0u3C'
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['location_id']
 SOCIAL_AUTH_GOOGLE_OAUTH2_PIPELINE = (
@@ -61,16 +57,15 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_PIPELINE = (
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_HOST_USER = config('EMAIL_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'postmaster@sandbox4ea32e534f5b45aea37dc52c33a8ddb7.mailgun.org'
+EMAIL_HOST_PASSWORD = '19e4f5482909c4c49e9919b533814957-7fba8a4e-f8402762'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = config('BUCKET_NAME')
+GS_BUCKET_NAME = 'crystal-ims.appspot.com'
 GS_FILE_OVERWRITE = False
-GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR,
-                                              'sa.json')
-GOOGLE_CLOUD_PROJECT = 'crystalims'
+GOOGLE_APPLICATION_CREDENTIALS = os.path.join(BASE_DIR, 'sa.json')
+GOOGLE_CLOUD_PROJECT = 'crystal'
 GS_PROJECT_ID = 'crystal-ims'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'crystal-ims.appspot.com',
@@ -145,10 +140,10 @@ if os.getenv('GAE_APPLICATION', None):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': config('DB_HOST'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'NAME': config('DB_NAME'),
+            'HOST': '/cloudsql/crystal-ims:us-east1:crystal',
+            'USER': 'adeotun',
+            'PASSWORD': '',
+            'NAME': 'crystal',
         }
     }
 else:
@@ -161,9 +156,9 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '127.0.0.1',
             'PORT': '3306',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
+            'NAME': 'crystal',
+            'USER': 'adeotun',
+            'PASSWORD': '',
         }
     }
 # [END db_setup]
@@ -214,4 +209,4 @@ if os.getenv('GAE_APPLICATION', None):
     STATIC_ROOT = 'static'
 else:
     STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
-MEDIA_URL = config('MEDIA_URL')
+MEDIA_URL = 'https://storage.googleapis.com/crystal-ims.appspot.com/'
