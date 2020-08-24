@@ -137,6 +137,7 @@ class Item(models.Model):
     average_daily_usage = models.IntegerField(default=0)
     average_lead_time = models.TextField(default=1)
     reorder_point = models.IntegerField(default=1)
+    is_returnable = models.BooleanField(default=False)
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
@@ -176,8 +177,7 @@ class ItemRequest(models.Model):
     REQUEST_STATUS = [
         ('P', 'Pending'),
         ('F', 'Fulfilled'),
-        ('SO', 'Stock Out'),
-        ('R', 'Returned')
+        ('SO', 'Stock Out')
     ]
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
     user = models.ForeignKey(User,
@@ -189,6 +189,14 @@ class ItemRequest(models.Model):
 
     def __str__(self):
         return self.status + " - " + self.item.SKU + " - " + self.user.email
+
+
+class Return(models.Model):
+    request = models.ForeignKey(ItemRequest, on_delete=models.DO_NOTHING,
+                                related_name="returns_to_inventory")
+    is_returned = models.BooleanField(default=False)
+    return_date = models.DateTimeField(auto_now=True)
+    fulfil_date = models.DateTimeField(auto_now_add=True)
 
 
 class ItemLog(models.Model):

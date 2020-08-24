@@ -391,15 +391,15 @@ def add_item(request):
             quantity = request.POST['quantity']
             supplier = request.POST['supplier']
             category = request.POST['category']
+            is_returnable = bool(request.POST.get('returnable') == '1')
+
             company = request.user.employee.location.company
-            item = Item.objects.create(SKU=SKU,
-                                       description=description,
-                                       price=price,
-                                       supplier_id=supplier,
+            item = Item.objects.create(SKU=SKU, supplier_id=supplier,
+                                       description=description, price=price,
                                        quantity_purchased=quantity,
                                        quantity_available=quantity,
-                                       category_id=category,
-                                       company=company)
+                                       category_id=category, company=company,
+                                       is_returnable=is_returnable)
             item.save()
             return redirect('items')
     else:
@@ -584,6 +584,7 @@ def edit_item(request, pk):
     avg_daily_usage = request.POST['avg_daily_usage']
     max_lead_time = request.POST['max_lead_time']
     avg_lead_time = request.POST['avg_lead_time']
+    is_returnable = bool(request.POST.get('returnable') == '1')
 
     item = Item.objects.get(SKU=pk)
     item.SKU = SKU
@@ -595,6 +596,7 @@ def edit_item(request, pk):
     item.average_lead_time = avg_lead_time
     item.maximum_daily_usage = max_daily_usage
     item.average_daily_usage = avg_daily_usage
+    item.is_returnable = is_returnable
     item.save()
     return redirect('item', pk)
 
