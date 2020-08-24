@@ -606,6 +606,13 @@ def request_item(request, pk):
     return redirect('profile')
 
 
+def fulfil_item_request(request, pk):
+    item_request = ItemRequest.objects.get(id=pk)
+    item_request.status = 'F'
+    item_request.save()
+    return redirect(pending_requests)
+
+
 def delete_item(request, pk):
     item = Item.objects.get(SKU=pk)
     item.delete()

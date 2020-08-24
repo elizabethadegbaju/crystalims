@@ -22,6 +22,8 @@ urlpatterns = [
     path('items/<slug:pk>/request/', views.request_item, name='request_item'),
     path('items/<slug:pk>/delete/', views.delete_item, name='delete_item'),
     path('requests/pending/', views.pending_requests, name='pending_requests'),
+    path('requests/<int:pk>/fulfil/', views.fulfil_item_request,
+         name='fulfil_item_request'),
     path('categories/new/', views.add_category, name='add_category'),
     path('locations/new/', views.add_location, name='add_location'),
     # path('dashboard/export/', views.pdf, name='export_pdf'),
