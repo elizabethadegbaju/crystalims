@@ -615,6 +615,8 @@ def fulfil_item_request(request, pk):
     item_request = ItemRequest.objects.get(id=pk)
     item_request.status = 'F'
     item_request.save()
+    item_request.item.quantity_available -= 1
+    item_request.item.save()
     if item_request.item.is_returnable == True:
         item_return = ItemReturn.objects.create(request=item_request)
         item_return.save()
@@ -627,5 +629,10 @@ def delete_item(request, pk):
     return redirect('profile')
 
 
-def return_item(request):
-    return None
+def return_item(request, pk):
+    item_return = ItemReturn.objects.get(id=pk)
+    item_return.is_returned = True
+    item_return.save()
+    item_return.request.item.quantity_available += 1
+    item_return.request.item.save()
+    return redirect(item_requests)
