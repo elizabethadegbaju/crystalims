@@ -9,46 +9,50 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div class="card overflow-auto p-3">
+                <div class="card shadow p-3" style="height: 80vh;">
                     <h3 class="text-dark mb-4">Pending Requests</h3>
-                    {% if pending_requests %}
-                        {% for request in pending_requests %}
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between
+                    <div class="overflow-auto">
+                        {% if pending_requests %}
+                            {% for request in pending_requests %}
+                                <div class="card shadow-sm mb-4">
+                                    <div class="card-header d-flex justify-content-between
                     align-items-center">
-                                    <h6 class="text-danger font-weight-bold m-0">
-                                        {{ request.item }}
-                                    </h6>
-                                    <a href="{% url 'fulfil_item_request' request.id %}"
-                                       class="btn btn-primary">
-                                        <i class="fa fa-check"></i> Fulfil
-                                        Request
-                                    </a>
+                                        <h6 class="text-danger font-weight-bold m-0">
+                                            {{ request.item }}
+                                        </h6>
+                                        <a href="{% url 'fulfil_item_request' request.id %}"
+                                           class="btn btn-primary">
+                                            <i class="fa fa-check"></i> Fulfil
+                                            Request
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        {% if request.status == 'P' %}
+                                            <p class="text-gray-600">Request
+                                                made
+                                                by {{ request.user.get_full_name }}
+                                                in {{ request.user.employee.location.name }}
+                                            </p>
+                                            <p>{{ request.created_at|naturaltime }}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    {% if request.status == 'P' %}
-                                        <p class="text-gray-600">Request made
-                                            by {{ request.user.get_full_name }}
-                                            in {{ request.user.employee.location.name }}
-                                        </p>
-                                        <p>{{ request.created_at|naturaltime }}</p>
-                                    {% endif %}
-                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-gray-600">
+                                <p>There are no pending requests.</p>
                             </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="text-gray-600">
-                            <p>There are no pending requests.</p>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             <div class="col">
-                <div class="card overflow-auto p-3">
+                <div class="card shadow overflow-auto p-3"
+                     style="height: 80vh;">
                     <h3 class="text-dark mb-4">Pending Returns</h3>
                     {% if pending_returns %}
                         {% for item_return in pending_returns %}
-                            <div class="card shadow mb-4">
+                            <div class="card shadow-sm mb-4">
                                 <div class="card-header d-flex justify-content-between
                     align-items-center">
                                     <h6 class="text-danger font-weight-bold m-0">
@@ -66,7 +70,7 @@
                                     </p>
                                     <p>
                                         Request fulfilled
-                                        {{ item_return.request.created_at|naturaltime }}</p>
+                                        {{ item_return.fulfil_date|naturaltime }}</p>
                                 </div>
                             </div>
                         {% endfor %}
