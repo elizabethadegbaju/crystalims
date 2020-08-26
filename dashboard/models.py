@@ -177,6 +177,7 @@ class ItemRequest(models.Model):
     REQUEST_STATUS = [
         ('P', 'Pending'),
         ('F', 'Fulfilled'),
+        ('C', 'Cancelled'),
         ('SO', 'Stock Out')
     ]
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
@@ -191,7 +192,7 @@ class ItemRequest(models.Model):
         return self.status + " - " + self.item.SKU + " - " + self.user.email
 
 
-class Return(models.Model):
+class ItemReturn(models.Model):
     request = models.ForeignKey(ItemRequest, on_delete=models.DO_NOTHING,
                                 related_name="returns_to_inventory")
     is_returned = models.BooleanField(default=False)

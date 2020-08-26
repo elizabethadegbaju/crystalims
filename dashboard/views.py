@@ -407,15 +407,18 @@ def add_item(request):
 
 
 @login_required
-def pending_requests(request):
+def item_requests(request):
     user = request.user
     if user.groups.filter(name__in=["Company Admins", "Company Superusers"]):
         alerts, unread_messages = unread_messages_notification(user)
-        requests = ItemRequest.objects.filter(
+        pending_requests = ItemRequest.objects.filter(
             item__company=user.employee.location.company, status='P')
-        return render(request, 'pending_requests.html', {'requests': requests,
-                                                         'unread_messages': unread_messages,
-                                                         'alerts': alerts})
+        pending_returns = ItemReturn.objects.filter(is_returned=False)
+        return render(request, 'item_requests.html',
+                      {'pending_requests': pending_requests,
+                       'pending_returns': pending_returns,
+                       'unread_messages': unread_messages,
+                       'alerts': alerts})
     else:
         return redirect('dashboard')
 
@@ -612,10 +615,17 @@ def fulfil_item_request(request, pk):
     item_request = ItemRequest.objects.get(id=pk)
     item_request.status = 'F'
     item_request.save()
-    return redirect(pending_requests)
+    if item_request.item.is_returnable == True:
+        item_return = ItemReturn.objects.create(request=item_request)
+        item_return.save()
+    return redirect(item_requests)
 
 
 def delete_item(request, pk):
     item = Item.objects.get(SKU=pk)
     item.delete()
     return redirect('profile')
+
+
+def return_item(request):
+    return None

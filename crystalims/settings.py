@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qq21%w7$1yy5rv5zd%png$fzi)_&@5j%4lm63vem&!a4*yul3p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -149,7 +149,7 @@ if os.getenv('GAE_APPLICATION', None):
 else:
     # Running locally so connect to either a local MySQL instance or connect
     # to Cloud SQL via the proxy.
-
+    # vcloud_sql_proxy -instances crystal-ims:us-east1:crystal=tcp:3306
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
         'default': {

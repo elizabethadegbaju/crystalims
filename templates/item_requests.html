@@ -1,0 +1,83 @@
+{% extends 'base_nav.html' %}
+{% load static %}
+{% load humanize %}
+{% load profile_extras %}
+{% block title %}
+    Requests - Crystal
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card overflow-auto p-3">
+                    <h3 class="text-dark mb-4">Pending Requests</h3>
+                    {% if pending_requests %}
+                        {% for request in pending_requests %}
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between
+                    align-items-center">
+                                    <h6 class="text-danger font-weight-bold m-0">
+                                        {{ request.item }}
+                                    </h6>
+                                    <a href="{% url 'fulfil_item_request' request.id %}"
+                                       class="btn btn-primary">
+                                        <i class="fa fa-check"></i> Fulfil
+                                        Request
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    {% if request.status == 'P' %}
+                                        <p class="text-gray-600">Request made
+                                            by {{ request.user.get_full_name }}
+                                            in {{ request.user.employee.location.name }}
+                                        </p>
+                                        <p>{{ request.created_at|naturaltime }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-gray-600">
+                            <p>There are no pending requests.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="card overflow-auto p-3">
+                    <h3 class="text-dark mb-4">Pending Returns</h3>
+                    {% if pending_returns %}
+                        {% for item_return in pending_returns %}
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between
+                    align-items-center">
+                                    <h6 class="text-danger font-weight-bold m-0">
+                                        {{ item_return.request.item }}
+                                    </h6>
+                                    <a href="{% url 'return_item' item_return.id %}"
+                                       class="btn btn-primary">
+                                        <i class="fa fa-check"></i> Return Item
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-gray-600">Request made
+                                        by {{ item_return.request.user.get_full_name }}
+                                        in {{ item_return.request.user.employee.location.name }}
+                                    </p>
+                                    <p>
+                                        Request fulfilled
+                                        {{ item_return.request.created_at|naturaltime }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-gray-600">
+                            <p>There are no pending returns to inventory.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
