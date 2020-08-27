@@ -5,6 +5,20 @@
     <style>
         .nav-item .active {
             background-color: #e74c32 !important;
+            color: white !important;
+        }
+
+        .nav-item:hover {
+            background-color: #3a3b45 !important;
+        }
+
+        .collapse-item {
+            color: #ffffffcc !important;
+        }
+
+        .collapse-item:hover {
+            background-color: #3a3b45 !important;
+            color: white;
         }
     </style>
 {% endblock %}
@@ -24,69 +38,110 @@
             <hr class="sidebar-divider my-0">
             <ul class="nav navbar-nav text-light" id="accordionSidebar">
                 {% if request.user|has_group:"Company Superusers" %}
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link"
-                            href="{% url 'dashboard' %}"><i
-                            class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i
+                                    class="fas fa-tachometer-alt"></i>&nbsp;<span>Dashboard</span>
+                        </a>
                     </li>
                 {% endif %}
 
-                <li class="nav-item" role="presentation"><a class="nav-link"
-                                                            href="{% url 'profile' %}"><i
-                        class="fas fa-user"></i><span>Profile</span></a></li>
-                <li class="nav-item" role="presentation"><a class="nav-link"
-                                                            href="{% url 'messages' %}"><i
-                        class="fas fa-envelope"></i><span>Messages</span></a>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link"
+                       href="{% url 'profile' %}"><i
+                            class="fas fa-user"></i>&nbsp;<span>Profile</span></a>
                 </li>
-                <li class="nav-item" role="presentation"><a class="nav-link"
-                                                            href="{% url 'team' %}"><i
-                        class="fas fa-users"></i><span>Team</span></a></li>
-                <li class="nav-item" role="presentation"><a class="nav-link"
-                                                            href="{% url 'items' %}"><i
-                        class="fas fa-cogs"></i><span>Items</span></a></li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link"
+                       href="{% url 'messages' %}"><i
+                            class="fas fa-envelope"></i>&nbsp;<span>Messages</span></a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link"
+                       href="{% url 'team' %}"><i
+                            class="fas fa-users"></i>&nbsp;<span>Team</span></a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link"
+                       href="{% url 'items' %}"><i
+                            class="fas fa-cogs"></i>&nbsp;<span>Items</span></a>
+                </li>
 
                 {% if request.user|has_group:"Company Admins" or request.user|has_group:"Company Superusers" %}
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link" href="{% url 'add_employee' %}"><i
-                            class="fas fa-user-plus"></i><span>Add Employee</span></a>
+                    <li class="nav-item" role="presentation">
+                        <div>
+                            <a class="nav-link collapsed"
+                               data-toggle="collapse" aria-expanded="true"
+                               aria-controls="employeegroup"
+                               href="#employeegroup" style="">
+                                <i class="fas fa-users-cog"></i>&nbsp;
+                                <span>Manage Employees</span>
+                            </a>
+                            <div class="collapse" id="employeegroup"
+                                 data-parent="#accordionSidebar">
+                                <div class="rounded py-1 collapse-inner"
+                                     style="background-color: #0c0b0b">
+                                    <a class="collapse-item"
+                                       href="{% url 'add_employee' %}">Add
+                                        Employee</a>
+                                    <a class="collapse-item"
+                                       href="{% url 'add_location' %}">Add
+                                        Location</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link"
-                            href="{% url 'add_category' %}"><i
-                            class="fas fa-list"></i><span>Add Category</span></a>
+                    <li class="nav-item" role="presentation">
+                        <div>
+                            <a class="nav-link collapsed"
+                               data-toggle="collapse" aria-expanded="true"
+                               aria-controls="inventorygroup"
+                               href="#inventorygroup" style="">Manage Inventory
+                                Items
+                            </a>
+                            <div class="collapse" id="inventorygroup"
+                                 data-parent="#accordionSidebar">
+                                <div class="rounded py-1 collapse-inner"
+                                     style="background-color: #0c0b0b">
+                                    <a class="collapse-item"
+                                       href="{% url 'add_category' %}">Add
+                                        Category</a>
+                                    <a class="collapse-item"
+                                       href="{% url 'add_item' %}">Add Item</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link"
-                            href="{% url 'add_supplier' %}"><i
-                            class="fas fa-truck-loading"></i><span>Add
-                        Supplier</span></a>
-                    </li>
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link"
-                            href="{% url 'add_item' %}"><i
-                            class="fas fa-cog"></i><span>Add Item</span></a>
-                    </li>
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link"
-                            href="{% url 'add_location' %}"><i
-                            class="fas fa-map-marked"></i><span>Add Location</span></a>
+                    <li class="nav-item" role="presentation">
+                        <div>
+                            <a class="nav-link collapsed"
+                               data-toggle="collapse" aria-expanded="true"
+                               aria-controls="suppliergroup"
+                               href="#suppliergroup" style="">
+                                <i class="fas fa-road"></i>&nbsp;
+                                <span>Manage Suppliers</span>
+                            </a>
+                            <div class="collapse" id="suppliergroup"
+                                 data-parent="#accordionSidebar">
+                                <div class="rounded py-1 collapse-inner"
+                                     style="background-color: #0c0b0b">
+                                    <a class="collapse-item"
+                                       href="{% url 'add_supplier' %}">Add
+                                        Supplier</a>
+                                    <a class="collapse-item"
+                                       href="{% url 'suppliers' %}">Suppliers</a>
+                                    <a class="collapse-item"
+                                       href="{% url 'purchase_orders' %}">Purchase
+                                        Orders</a>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item" role="presentation"><a
                             class="nav-link"
                             href="{% url 'item_requests' %}">
-                        <i class="fas fa-calendar-week"></i>
+                        <i class="fas fa-calendar-week"></i>&nbsp;
                         <span>Item Requests</span></a>
-                    </li>
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link"
-                            href="{% url 'purchase_orders' %}"><i
-                            class="fas
-                            fa-money-check"></i><span>Purchase Orders</span></a>
-                    </li>
-                    <li class="nav-item" role="presentation"><a
-                            class="nav-link" href="{% url 'suppliers' %}"><i
-                            class="fas
-                            fa-truck"></i><span>Suppliers</span></a>
                     </li>
                 {% endif %}
             </ul>
@@ -116,27 +171,6 @@
                 {#                </div>#}
             </form>
             <ul class="nav navbar-nav flex-nowrap ml-auto">
-                {#                <li class="nav-item dropdown d-sm-none no-arrow"><a#}
-                {#                        class="dropdown-toggle nav-link"#}
-                {#                        data-toggle="dropdown" aria-expanded="false"#}
-                {#                        href="#"><i class="fas fa-search"></i></a>#}
-                {#                    <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in"#}
-                {#                         role="menu"#}
-                {#                         aria-labelledby="searchDropdown">#}
-                {#                        <form class="form-inline mr-auto navbar-search w-100">#}
-                {#                            <div class="input-group"><input#}
-                {#                                    class="bg-light form-control border-0 small"#}
-                {#                                    type="text"#}
-                {#                                    placeholder="Search for ...">#}
-                {#                                <div class="input-group-append">#}
-                {#                                    <button class="btn btn-primary py-0"#}
-                {#                                            type="button"><i#}
-                {#                                            class="fas fa-search"></i></button>#}
-                {#                                </div>#}
-                {#                            </div>#}
-                {#                        </form>#}
-                {#                    </div>#}
-                {#                </li>#}
                 <li class="nav-item dropdown no-arrow mx-1"
                     role="presentation">
                     <div class="nav-item dropdown no-arrow"><a
@@ -184,8 +218,19 @@
                                    href="{% url 'message' message.id %}">
                                     <div class="dropdown-list-image mr-3"><img
                                             class="rounded-circle"
-                                            src=
-                                            {{ MEDIA_URL }}{{ message.from_user.employee.image|urlencode }}>
+                                            alt="{{ message.from_user.get_full_name }} profile picture"
+                                            src="
+
+
+
+
+
+
+
+
+
+
+                                                    {{ MEDIA_URL }}{{ message.from_user.employee.image|urlencode }}">
                                         <div class="bg-success status-indicator"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -224,7 +269,10 @@
 
 
 
-                                    {{ MEDIA_URL }}{{ request.user.employee.image|urlencode }}"></a>
+
+
+                                    {{ MEDIA_URL }}{{ request.user.employee.image|urlencode }}"
+                            alt="{{ request.user.get_full_name }} profile picture"></a>
                         <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"
                              role="menu">
                             <a class="dropdown-item" role="presentation"
@@ -233,7 +281,7 @@
                                 class="dropdown-item" role="presentation"
                                 href="{% url 'home' %}"><i
                                 class="fas fa-home fa-sm fa-fw mr-2
-                                text-gray-400"></i>Home</a>
+                                text-gray-400"></i>&nbsp;Home</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" role="presentation"
                                href="{% url 'logout' %}"><i
@@ -254,6 +302,8 @@
                 var href = $(this).attr("href");
                 if (href !== undefined && pathname.indexOf(href) >= 0) {
                     $(this).addClass("active");
+                    $(this).parent().parent().addClass("show");
+                    $(this).parent().parent().siblings("a").removeClass("collapsed")
                     onDomain = false;
                 }
             });

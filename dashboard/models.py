@@ -139,19 +139,6 @@ class Item(models.Model):
     reorder_point = models.IntegerField(default=1)
     is_returnable = models.BooleanField(default=False)
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     months = ['Jan', 'Feb', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-    #               'Oct', 'Nov', 'Dec']
-    #     year = timezone.now().year
-    #     month = months[timezone.now().month - 1]
-    #     month_asset = \
-    #         AssetLog.objects.get_or_create(company=self.company,
-    #                                        year=year, month=month)[0]
-    #     assets = month_asset.assets + float(self.price)
-    #     month_asset.assets = assets
-    #     month_asset.save()
-
     def __str__(self):
         return self.description
 
